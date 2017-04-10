@@ -1,0 +1,35 @@
+{
+    "algorithm": "OPENSSL",
+    "alias": "ez.phar",
+    "banner": "eZ Launchpad",
+    "chmod": "0755",
+    "compression": "GZ",
+    "compactors": [
+        "Herrera\\Box\\Compactor\\Json",
+        "Herrera\\Box\\Compactor\\Php"
+    ],
+    "directories": [
+        "src",
+        "config",
+        "payload"
+    ],
+    "files": [
+        "LICENSE",
+        "cacert.pem"
+    ],
+    "finder": [
+        {
+            "name": "*.php",
+            "exclude": [
+                "tests",
+                "Tests"
+            ],
+            "in": "vendor"
+        }
+    ],
+    "git-commit": "package_version",
+    "main": "bin/ez-prod",
+    "key": ".travis/ezlaunchpad-private.pem",
+    "output": "ez.phar",
+    "stub": true
+}

@@ -1,0 +1,48 @@
+---
+services:
+
+    # Docker Actions
+    ez.launchpad.initialize:
+        class: eZ\Launchpad\Command\Initialize
+        tags:
+            - { name: ezlaunchpad.command }
+
+    ez.launchpad.create:
+        class: eZ\Launchpad\Command\Create
+        tags:
+            - { name: ezlaunchpad.command }
+
+    ez.launchpad.start:
+        class: eZ\Launchpad\Command\Start
+        tags:
+            - { name: ezlaunchpad.command }
+
+    ez.launchpad.stop:
+        class: eZ\Launchpad\Command\Start
+        tags:
+            - { name: ezlaunchpad.command }
+
+    ez.launchpad.clean:
+        class: eZ\Launchpad\Command\Clean
+        tags:
+            - { name: ezlaunchpad.command }
+
+    ez.launchpad.status:
+        class: eZ\Launchpad\Command\Status
+        tags:
+            - { name: ezlaunchpad.command }
+
+    ez.launchpad.enter:
+        class: eZ\Launchpad\Command\Enter
+        tags:
+            - { name: ezlaunchpad.command }
+
+    ez.launchpad.logs:
+        class: eZ\Launchpad\Command\Logs
+        tags:
+            - { name: ezlaunchpad.command }
+
+    ez.launchpad.sfrun:
+        class: eZ\Launchpad\Command\SymfonyRun
+        tags:
+            - { name: ezlaunchpad.command }

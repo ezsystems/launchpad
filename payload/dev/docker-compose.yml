@@ -1,0 +1,65 @@
+version: '2'
+
+services:
+    nginx:
+        image: nginx:stable-alpine
+        volumes:
+            - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro"
+            - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/nginx/entrypoint.bash:/entrypoint.bash:ro"
+            - "${PROJECTCOMPOSEPATH}/ezplatform/doc/nginx/ez_params.d:/etc/nginx/ez_params.d:ro"
+        depends_on:
+            - engine
+        volumes_from:
+            - engine:ro
+        entrypoint: /entrypoint.bash
+        ports:
+            - "${PROJECTPORTPREFIX}080:80"
+            - "${PROJECTPORTPREFIX}081:81"
+
+    engine:
+        build: ./engine/
+        volumes:
+            - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/engine/php.ini:/usr/local/etc/php/php.ini:ro"
+            - "${PROJECTCOMPOSEPATH}:/var/www/html/project:rw"
+            - "${HOST_COMPOSER_CACHE_DIR}:/var/www/composer_cache:rw"
+        shm_size: 754M
+        environment:
+            - "COMPOSER_CACHE_DIR=/var/www/composer_cache"
+            - "DATABASE_HOST=db"
+            - "SYMFONY_SECRET=eZlaunchpad20Secret09Dev83ModeZ"
+            - "DATABASE_NAME=ezplatform"
+            - "DATABASE_USER=root"
+            - "DATABASE_PASSWORD=ezplatform"
+            - "CUSTOM_CACHE_POOL=singlememcached"
+            - "CACHE_HOST=memcache"
+            - "CACHE_MEMCACHED_PORT=11211"
+
+    db:
+        image: mariadb:10.1
+        environment:
+            - "MYSQL_ROOT_PASSWORD=ezplatform"
+        ports:
+            - "${PROJECTPORTPREFIX}306:3306"
+
+    # Mailcatcher
+    mailcatcher:
+        image: schickling/mailcatcher
+        ports:
+            - "${PROJECTPORTPREFIX}180:1080"
+
+    # Adminer
+    adminer:
+        image: adminer:latest
+        ports:
+            - "${PROJECTPORTPREFIX}086:8080"
+
+    # MEMCACHE
+    memcache:
+        image: ilari/alpine-memcached
+        depends_on:
+            - engine
+
+    memcachedadmin:
+        image: plopix/docker-memcacheadmin
+        environment:
+            - "MEMCACHE_HOST=memcache"

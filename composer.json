@@ -1,0 +1,51 @@
+{
+    "name": "ezsystems/ezlaunchpad",
+    "description": "eZ Launchpad - Ultimate eZ Platform CLI Helper.",
+    "homepage": "https://github.com/ezsystems/launchpad",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/console-helpers/phar-updater"
+        }
+    ],
+    "require": {
+        "php": "^5.6 || ^7.0",
+        "symfony/console": "3.3.x-dev",
+        "symfony/yaml": "3.3.x-dev",
+        "symfony/dependency-injection": "3.3.x-dev",
+        "symfony/process": "3.3.x-dev",
+        "symfony/finder": "3.3.x-dev",
+        "symfony/config": "3.3.x-dev",
+        "symfony/filesystem": "3.3.x-dev",
+        "novactive/collection": "^1.0",
+        "symfony/options-resolver": "3.3.x-dev",
+        "padraic/phar-updater": "dev-use-curl",
+        "symfony/event-dispatcher": "3.3.x-dev",
+        "nesbot/carbon": "^1.22"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "3.3.x-dev",
+        "friendsofphp/php-cs-fixer": "^2.1",
+        "phpmd/phpmd": "^2.6",
+        "squizlabs/php_codesniffer": "^2.8",
+        "phpunit/phpunit": "^5.0",
+        "behat/behat": "^3.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "eZ\\Launchpad\\": "src/"
+        },
+        "files": [
+            "src/functions.php"
+        ]
+    },
+    "prefer-stable" : true,
+    "autoload-dev": {
+        "psr-4": {
+            "eZ\\Launchpad\\Tests\\": "tests/Tests"
+        }
+    },
+    "bin": [
+        "bin/ez"
+    ]
+}

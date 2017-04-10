@@ -1,0 +1,30 @@
+/composer.phar
+/box.phar
+/vendor/
+.php~
+.idea
+.DS_Store
+*~
+*.bak
+._*
+~*
+.php_cs.cache
+
+tests/coverage
+
+# Auto-update
+/docs/ez-old.phar
+
+# Tests
+/provisioning
+/ezplatform
+/.ezlaunchpad.yml
+
+# Travis stuff
+/.travis/ezlaunchpad-private.pem
+/.travis/secrets.tar
+
+
+# others
+/provisioning2ouf
+/provisioning2

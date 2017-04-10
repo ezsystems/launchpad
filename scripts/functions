@@ -1,0 +1,62 @@
+#-- Vars
+RESTORE=$(echo -en '\033[0m')
+RED=$(echo -en '\033[00;31m')
+GREEN=$(echo -en '\033[00;32m')
+YELLOW=$(echo -en '\033[00;33m')
+BLUE=$(echo -en '\033[00;34m')
+MAGENTA=$(echo -en '\033[00;35m')
+PURPLE=$(echo -en '\033[00;35m')
+CYAN=$(echo -en '\033[00;36m')
+LIGHTGRAY=$(echo -en '\033[00;37m')
+LRED=$(echo -en '\033[01;31m')
+LGREEN=$(echo -en '\033[01;32m')
+LYELLOW=$(echo -en '\033[01;33m')
+LBLUE=$(echo -en '\033[01;34m')
+LMAGENTA=$(echo -en '\033[01;35m')
+LPURPLE=$(echo -en '\033[01;35m')
+LCYAN=$(echo -en '\033[01;36m')
+WHITE=$(echo -en '\033[01;37m')
+BOLD=$(echo -en '\033[1m')
+
+
+#-- Functions
+
+f_startColor ()
+{
+    echo -en "$1"
+}
+
+f_resetColor ()
+{
+    echo -en "${RESTORE}"
+}
+
+echoInfo ()
+{
+    echo "${CYAN}[${RESTORE}${BOLD}*${CYAN}]${RESTORE} $1"
+}
+
+echoAction ()
+{
+    echo "${RED}[${LBLUE}ACTION${RESTORE}${RED}]${RESTORE} $1 ${RESTORE}"
+}
+
+echoSuccess ()
+{
+    echo "${LRED}[${BOLD}${LGREEN}OK${RESTORE}${LRED}]${RESTORE} $1 ${RESTORE}"
+}
+
+echoNothing ()
+{
+    echo "${LRED}[${BOLD}${LGREEN}-${RESTORE}${LRED}]${RESTORE} $1 ${RESTORE}"
+}
+
+echoTitle ()
+{
+    echo "${BOLD}${LPURPLE}====${RESTORE} ${LYELLOW}$1${RESTORE} ${BOLD}${LPURPLE}====${RESTORE}"
+}
+
+echoHelp ()
+{
+    echo "${BOLD}$1${RESTORE}: ${GREEN}$2${RESTORE}"
+}

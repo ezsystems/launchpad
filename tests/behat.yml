@@ -1,0 +1,10 @@
+default:
+    calls:
+        #php -r "echo E_ALL & ~E_USER_DEPRECATED;"
+        error_reporting: 16383
+    suites:
+        commands:
+            paths:
+                - Tests/Behat/Commands
+            contexts:
+                - eZ\Launchpad\Tests\Behat\Commands\Context
