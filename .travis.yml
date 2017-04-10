@@ -1,5 +1,4 @@
 sudo: false
-
 language: php
 
 cache:
@@ -10,16 +9,16 @@ cache:
 matrix:
   fast_finish: true
   include:
-  - php: 5.5
   - php: 5.6
     env:
     - EXECUTE_DEPLOYMENT=true
   - php: 7
   - php: 7.1
-  allow_failures:
-  - php: 5.5
+
 
 before_install:
+- openssl aes-256-cbc -K $encrypted_91e9470aafb9_key -iv $encrypted_91e9470aafb9_iv -in .travis/secrets.tar.enc -out .travis/secrets.tar -d
+- phpenv config-rm xdebug.ini
 - composer self-update
 
 install:
@@ -28,8 +27,9 @@ install:
 
 script:
 - php vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src/
-#- php vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php tests/Tests/
-#- php vendor/behat/behat/bin/behat
+- php vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php tests/Tests/
+- php vendor/bin/phpunit -c tests/ --exclude-group behat
+- php vendor/behat/behat/bin/behat -c tests/behat.yml
 
 after_success:
 - if [[ $EXECUTE_DEPLOYMENT == 'true' && $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then composer install --no-dev ; fi

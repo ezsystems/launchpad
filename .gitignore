@@ -21,6 +21,7 @@ tests/coverage
 /.ezlaunchpad.yml
 
 # Travis stuff
+/.travis/build-key.pem
 /.travis/ezlaunchpad-private.pem
 /.travis/secrets.tar
 

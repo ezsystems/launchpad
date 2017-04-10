@@ -16,6 +16,7 @@ class RequiredBoxFilesTest extends TestCase
 {
 
     const FILE = "assertFileExists";
+
     const DIRECTORY = "assertDirectoryExists";
 
     /**
@@ -34,7 +35,7 @@ class RequiredBoxFilesTest extends TestCase
         }
 
         $data[] = [$box->main, static::FILE];
-        $data[] = [$box->key, static::FILE];
+        $data[] = [".travis/secrets.tar", static::FILE];
 
         return $data;
     }
@@ -55,5 +56,4 @@ class RequiredBoxFilesTest extends TestCase
         $appDir = __DIR__."/../..";
         $this->$type("{$appDir}/{$file}");
     }
-
 }
