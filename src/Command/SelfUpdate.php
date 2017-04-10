@@ -42,9 +42,14 @@ class SelfUpdate extends Command
         $updater       = new Updater($localPharFile);
         $strategy      = $updater->getStrategy();
         if ($strategy instanceof ShaStrategy) {
-            $ez_phar         = $application->getContainer()->getParameter('ez_phar');
-            $ez_phar_version = $application->getContainer()->getParameter('ez_phar_version');
-            $result          = $updater->update();
+            if ($app_env == 'prod') {
+                $ez_phar         = $application->getContainer()->getParameter('ez_phar');
+                $ez_phar_version = $application->getContainer()->getParameter('ez_phar_version');
+                $strategy->setPharUrl($ez_phar);
+                $strategy->setVersionUrl($ez_phar_version);
+            }
+
+            $result = $updater->update();
             $this->io->section('eZ Launchpad Auto Update');
             if (!$result) {
                 $this->io->comment('No update is required! You have the last version!');
