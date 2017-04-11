@@ -41,16 +41,14 @@ class Initialize extends Command
         /* @var Application $application */
         $output->writeln($application->getLogo());
 
-        $payloadFolder      = "{$this->appDir}payload";
-        $provisioningName   = $this->projectConfiguration->get('provisioning.folder_name');
-        $provisioningFolder = "{$this->projectPath}/{$provisioningName}";
-        $composeFileName    = $this->projectConfiguration->get('docker.compose_filename');
-
+        $payloadFolder = "{$this->appDir}payload";
         // Get the Payload docker-compose.yml
         $compose = Yaml::parse(file_get_contents("{$payloadFolder}/dev/docker-compose.yml"));
-        $wizard  = new ProjectWizard($this->io);
+        $wizard  = new ProjectWizard($this->io, $this->projectConfiguration);
 
-        list($networkName, $networkPort, $selectedServices) = $wizard($compose);
+        list($networkName, $networkPort, $selectedServices, $provisioningName, $composeFileName) = $wizard($compose);
+
+        $provisioningFolder = "{$this->projectPath}/{$provisioningName}";
 
         // remove the mount on eZ Plaftorm as it is not installed yet.
         $selectedServicesFirstRun = $selectedServices;

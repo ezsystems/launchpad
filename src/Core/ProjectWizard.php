@@ -6,6 +6,7 @@
 
 namespace eZ\Launchpad\Core;
 
+use eZ\Launchpad\Configuration\Project as ProjectConfiguration;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -17,13 +18,20 @@ class ProjectWizard
     protected $io;
 
     /**
+     * @var ProjectConfiguration
+     */
+    protected $projectConfiguration;
+
+    /**
      * ProjectWizard constructor.
      *
-     * @param SymfonyStyle $io
+     * @param SymfonyStyle         $io
+     * @param ProjectConfiguration $configuration
      */
-    public function __construct(SymfonyStyle $io)
+    public function __construct(SymfonyStyle $io, ProjectConfiguration $configuration)
     {
-        $this->io = $io;
+        $this->io                   = $io;
+        $this->projectConfiguration = $configuration;
     }
 
     /**
@@ -37,7 +45,51 @@ class ProjectWizard
             $this->getNetworkName(),
             $this->getNetworkTCPPort(),
             $this->getSelectedServices($compose['services']),
+            $this->getProvisioningFolderName(),
+            $this->getComposeFileName(),
         ];
+    }
+
+    /**
+     * @return string
+     */
+    protected function getProvisioningFolderName()
+    {
+        $pattern = '^[a-zA-Z0-9]*$';
+
+        $validator = function ($value) use ($pattern) {
+            return preg_match("/{$pattern}/", $value);
+        };
+
+        $message      = 'What is your preferred name for the <fg=yellow;options=bold>provisioning folder</>?';
+        $errorMessage = "The name of the folder MUST respect {$pattern}.";
+        $default      = $this->projectConfiguration->get('provisioning.folder_name');
+        if (empty($default)) {
+            $default = 'provisioning';
+        }
+
+        return $this->io->askQuestion($this->getQuestion($message, $default, $validator, $errorMessage));
+    }
+
+    /**
+     * @return string
+     */
+    public function getComposeFileName()
+    {
+        $pattern = '^[a-zA-Z0-9]*\.yml$';
+
+        $validator = function ($value) use ($pattern) {
+            return preg_match("/{$pattern}/", $value);
+        };
+
+        $message      = 'What is your preferred filename for the <fg=yellow;options=bold>Docker Compose file</>?';
+        $errorMessage = "The name of the filename MUST respect {$pattern}.";
+        $default      = $this->projectConfiguration->get('docker.compose_file');
+        if (empty($default)) {
+            $default = 'docker-compose.yml';
+        }
+
+        return $this->io->askQuestion($this->getQuestion($message, $default, $validator, $errorMessage));
     }
 
     /**
