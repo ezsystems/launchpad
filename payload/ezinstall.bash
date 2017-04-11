@@ -10,6 +10,8 @@ while true ; do
 done
 echo ""
 sleep 2
+
+
 cd /var/www/html/project
 echo "Installation Composer in the container"
 curl -sS https://getcomposer.org/installer | php
@@ -31,3 +33,4 @@ php app/console doctrine:database:create
 php app/console ezplatform:install clean
 
 echo "Installation OK"
+
