@@ -29,7 +29,8 @@ class Initialize extends Command
         parent::configure();
         $this->setName('docker:initialize')->setDescription('Initialize the project and all the services.');
         $this->setAliases(['docker:init', 'initialize', 'init']);
-        $this->addArgument('version', InputArgument::OPTIONAL, 'eZ Platform version', '');
+        $this->addArgument('repository', InputArgument::OPTIONAL, 'eZ Platform Repository', 'ezsystems/ezplatform');
+        $this->addArgument('version', InputArgument::OPTIONAL, 'eZ Platform Version', '');
     }
 
     /**
@@ -107,8 +108,10 @@ class Initialize extends Command
         $dockerClient->up(['-d']);
 
         // eZ Install
+        $version    = $input->getArgument('version');
+        $repository = $input->getArgument('version');
         $dockerClient->exec(
-            '/var/www/html/project/ezinstall.bash '.$input->getArgument('version'),
+            "/var/www/html/project/ezinstall.bash {$repository} {$version}",
             ['--user', 'www-data'],
             'engine'
         );
