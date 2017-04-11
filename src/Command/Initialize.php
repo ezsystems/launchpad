@@ -76,6 +76,7 @@ class Initialize extends Command
             0755
         );
         $fs->copy("{$payloadFolder}/ezinstall.bash", "{$this->projectPath}/ezinstall.bash", true);
+        $fs->chmod("{$this->projectPath}/ezinstall.bash", 0755);
 
         // dump the temporary DockerCompose.yml without the mount on eZ Platform in the provisioning folder
         $this->dumpCompose($compose, $selectedServicesFirstRun, "{$provisioningFolder}/dev/{$composeFileName}");
@@ -103,9 +104,6 @@ class Initialize extends Command
         $dockerClient->build(['--no-cache']);
         $dockerClient->up(['-d']);
 
-        $installRecipe = "/var/www/html/project/ezinstall.bash";
-        $fs->chmod($installRecipe, 0755);
-        
         // eZ Install
         $dockerClient->exec('/var/www/html/project/ezinstall.bash', ['--user', 'www-data'], 'engine');
 
