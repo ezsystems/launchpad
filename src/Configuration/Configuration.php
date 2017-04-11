@@ -25,7 +25,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('docker')
                     ->children()
-                        ->scalarNode('composer_filename')->defaultValue('docker-compose.yml')->end()
+                        ->scalarNode('compose_filename')->defaultValue('docker-compose.yml')->end()
                         ->scalarNode('network_name')->defaultValue('default-ezlaunchpad')->end()
                         ->scalarNode('network_prefix_port')->defaultValue('42')->end()
                         ->scalarNode('host_machine_mapping')->defaultNull()->end()
@@ -43,18 +43,3 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 }
-
-//docker_composer_filename: "docker-compose.yml"
-//
-//# Default Network Name
-//docker_network_name: "default-ezlaunchpad"
-//
-//# Default Prefix Port
-//docker_network_prefix_port: 42
-//
-//# Docker Mapping (not have to be define in the default)
-//# Not Useful on linux
-//# Ex: "/Users/plop/DOCKFILES":/data/DOCKER_SOURCES"
-//docker_host_machine_mapping: ~
-//
-//docker_host_composer_cache_dir: ~

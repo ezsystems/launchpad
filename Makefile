@@ -24,6 +24,8 @@ list:
 	@echo "  $(YELLOW)tests$(RESTORE)        > run the tests"
 	@echo "  $(YELLOW)coverage$(RESTORE)     > generate the code coverage"
 	@echo ""
+	@echo "  $(YELLOW)docs(RESTORE)          > generate stuff for the documenation"
+	@echo ""
 	@echo "  $(YELLOW)install$(RESTORE)      > install vendors"
 	@echo "  $(YELLOW)clean$(RESTORE)        > removes the vendors, and caches"
 
@@ -35,6 +37,10 @@ codeclean:
 .PHONY: tests
 tests:
 	bash $(SCRIPS_DIR)/runtests.bash
+
+.PHONY: docs
+docs:
+	bash $(SCRIPS_DIR)/pumltoimages.bash
 
 .PHONY: install
 install:

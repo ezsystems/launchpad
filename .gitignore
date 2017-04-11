@@ -24,7 +24,7 @@ tests/coverage
 /.travis/build-key.pem
 /.travis/ezlaunchpad-private.pem
 /.travis/secrets.tar
-
+/plantuml.jar
 
 # others
 /provisioning2ouf

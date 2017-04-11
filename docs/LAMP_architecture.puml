@@ -1,0 +1,60 @@
+@startuml
+
+title "Development Mode - LAMP"
+
+cloud "Exposed Ports" {
+    () XX080 as SymfonyDevModePort
+    () XX081 as SymfonyProdModePort
+    () XX082 as SymfonyProdModeVarnishPort
+
+    () XX083 as MemcacheAdminPort
+    () XX084 as DatabaseAdminPort
+    () XX306 as DatabaseEnginePort
+    () XX180 as MailcatcherPort
+}
+
+node "Apache 2.4.x / PHP" as engine {
+    [PROD]
+    [DEV]
+    [PHP-CLI]
+    }
+
+
+node "MySQL or MariaDB" as db {
+    database "ezplatform" as StandardDB
+}
+
+node "Memcache/Redis" as appcache {
+}
+
+node "Varnish 4.x" as varnish {
+}
+
+node "Memcache/Redis Admin" as memcacheadmin {
+}
+
+node "Mailcatcher" as mailcatcher {
+}
+
+node "Adminer" as dbadmin {
+}
+
+
+MemcacheAdminPort -> memcacheadmin: Web Interface
+DatabaseEnginePort ---> db: TCP forward
+MailcatcherPort -> mailcatcher: Web Interface
+DatabaseAdminPort -> dbadmin: Web Interface
+
+SymfonyDevModePort --> DEV: Web
+SymfonyProdModePort --> PROD: Web
+SymfonyProdModeVarnishPort --> varnish: Web
+varnish --> PROD
+
+engine --> db
+engine --> appcache
+engine --> mailcatcher
+
+memcacheadmin --> appcache
+
+dbadmin --> db
+@enduml

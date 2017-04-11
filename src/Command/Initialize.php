@@ -44,7 +44,7 @@ class Initialize extends Command
         $payloadFolder      = "{$this->appDir}payload";
         $provisioningName   = $this->projectConfiguration->get('provisioning.folder_name');
         $provisioningFolder = "{$this->projectPath}/{$provisioningName}";
-        $composeFileName    = $this->projectConfiguration->get('docker.composer_filename');
+        $composeFileName    = $this->projectConfiguration->get('docker.compose_filename');
 
         // Get the Payload docker-compose.yml
         $compose = Yaml::parse(file_get_contents("{$payloadFolder}/dev/docker-compose.yml"));
@@ -85,7 +85,7 @@ class Initialize extends Command
         $this->projectConfiguration->setMultiLocal(
             [
                 'provisioning.folder_name'   => $provisioningName,
-                'docker.composer_filename'   => $composeFileName,
+                'docker.compose_filename'    => $composeFileName,
                 'docker.network_name'        => $networkName,
                 'docker.network_prefix_port' => $networkPort,
             ]

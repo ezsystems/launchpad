@@ -1,5 +1,2 @@
-- Need a github
-- Need a travis
-- Need a github for Docker enginerm
-- put mac os on Travis etc.
-
+- Manage the fact that maybe a DevA would use a TCP port different than someone else.
+- check the .ezlaunchpad.yml when create to show something to the user

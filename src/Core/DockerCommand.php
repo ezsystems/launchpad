@@ -46,7 +46,7 @@ abstract class DockerCommand extends Command
         $fs                      = new Filesystem();
         $currentPwd              = $this->projectPath;
         $provisioningFolder      = $this->projectConfiguration->get('provisioning.folder_name');
-        $dockerComposeFileName   = $this->projectConfiguration->get('docker.composer_filename');
+        $dockerComposeFileName   = $this->projectConfiguration->get('docker.compose_filename');
         $dockerComposeFileFolder = NovaCollection([$currentPwd, $provisioningFolder, $this->environment])->implode(
             '/'
         );
