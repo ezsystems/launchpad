@@ -167,6 +167,8 @@ class Docker
                 'PROJECTCOMPOSEPATH'      => $projectComposePath,
                 'PROVISIONINGFOLDERNAME'  => $this->getProvisioningFolderName(),
                 'HOST_COMPOSER_CACHE_DIR' => $composerCacheDir,
+                'DEV_UID'                 => getmyuid(),
+                'DEV_GID'                 => getmygid(),
             ];
     }
 

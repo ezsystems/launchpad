@@ -33,6 +33,8 @@ services:
             - "CUSTOM_CACHE_POOL=singlememcached"
             - "CACHE_HOST=memcache"
             - "CACHE_MEMCACHED_PORT=11211"
+            - "DEV_UID"
+            - "DEV_GID"
 
     db:
         image: mariadb:10.1
