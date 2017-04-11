@@ -36,5 +36,30 @@ class Status extends DockerCommand
         $this->io->section("\nDocker Compose command");
         $this->io->writeln($composeCommand);
         $this->io->section("\nService Access");
+
+        foreach ($this->projectConfiguration->getServices() as $serviceName => $service) {
+            if (isset($service['ports'])) {
+                foreach ($service['ports'] as $port) {
+                    list($external, $internal) = explode(':', $port);
+                    $external                  = str_replace(
+                        '${PROJECTPORTPREFIX}',
+                        $this->projectConfiguration->get('docker.network_prefix_port'),
+                        $external
+                    );
+
+                    $tabs = 2;
+
+                    if (strlen($serviceName) + 2 > 8) {
+                        $tabs = 1;
+                    }
+
+                    $this->io->writeln(
+                        "<fg=white;options=bold>{$serviceName}: </>".
+                        str_pad('', $tabs, "\t").
+                        "http://localhost:<fg=white;options=bold>{$external}</>"
+                    );
+                }
+            }
+        }
     }
 }

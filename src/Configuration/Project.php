@@ -141,4 +141,18 @@ class Project
         $yaml = Yaml::dump($localConfig);
         $fs->dumpFile($filePath, $yaml);
     }
+
+    /**
+     * @return array
+     */
+    public function getServices()
+    {
+        $projectPath = dirname($this->localFilePath);
+
+        return Yaml::parse(
+            file_get_contents(
+                "{$projectPath}/{$this->get('provisioning.folder_name')}/dev/docker-compose.yml"
+            )
+        )['services'];
+    }
 }
