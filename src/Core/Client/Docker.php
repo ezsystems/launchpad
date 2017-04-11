@@ -41,7 +41,7 @@ class Docker
         $resolver->setAllowedTypes('compose-file', 'string');
         $resolver->setAllowedTypes('project-path', 'string');
         $resolver->setAllowedTypes('network-name', 'string');
-        $resolver->setAllowedTypes('composer-cache-dir', 'string');
+        $resolver->setAllowedTypes('composer-cache-dir', ['null', 'string']);
         $resolver->setAllowedTypes('provisioning-folder-name', 'string');
         $resolver->setAllowedTypes('network-prefix-port', 'int');
         $resolver->setAllowedTypes('host-machine-mapping', ['null', 'string']);

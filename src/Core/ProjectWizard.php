@@ -76,7 +76,7 @@ class ProjectWizard
      */
     public function getComposeFileName()
     {
-        $pattern = '^[a-zA-Z0-9]*\.yml$';
+        $pattern = '^[a-zA-Z0-9\-]*\.yml$';
 
         $validator = function ($value) use ($pattern) {
             return preg_match("/{$pattern}/", $value);
