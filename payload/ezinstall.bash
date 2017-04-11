@@ -18,6 +18,15 @@ echo "Installation eZ Platform in the container"
 php -d memory_limit=-1 composer.phar create-project --no-dev --no-interaction ezsystems/ezplatform
 cp composer.phar ezplatform
 cd ezplatform
+
+
+# Wait for the DB
+while ! mysqladmin ping -h"$DATABASE_HOST" -u"$DATABASE_USER" -p"$DATABASE_PASSWORD" --silent; do
+    echo "."
+    sleep 1
+done
+echo ""
+
 php app/console doctrine:database:create
 php app/console ezplatform:install clean
 
