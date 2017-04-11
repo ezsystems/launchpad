@@ -103,6 +103,9 @@ class Initialize extends Command
         $dockerClient->build(['--no-cache']);
         $dockerClient->up(['-d']);
 
+        $installRecipe = "/var/www/html/project/ezinstall.bash";
+        $fs->chmod($installRecipe, 0755);
+        
         // eZ Install
         $dockerClient->exec('/var/www/html/project/ezinstall.bash', ['--user', 'www-data'], 'engine');
 
