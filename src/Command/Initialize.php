@@ -10,6 +10,7 @@ use eZ\Launchpad\Console\Application;
 use eZ\Launchpad\Core\Client\Docker;
 use eZ\Launchpad\Core\Command;
 use eZ\Launchpad\Core\ProjectWizard;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -28,6 +29,7 @@ class Initialize extends Command
         parent::configure();
         $this->setName('docker:initialize')->setDescription('Initialize the project and all the services.');
         $this->setAliases(['docker:init', 'initialize', 'init']);
+        $this->addArgument('version', InputArgument::OPTIONAL, 'eZ Platform version', '');
     }
 
     /**
@@ -105,7 +107,11 @@ class Initialize extends Command
         $dockerClient->up(['-d']);
 
         // eZ Install
-        $dockerClient->exec('/var/www/html/project/ezinstall.bash', ['--user', 'www-data'], 'engine');
+        $dockerClient->exec(
+            '/var/www/html/project/ezinstall.bash '.$input->getArgument('version'),
+            ['--user', 'www-data'],
+            'engine'
+        );
 
         // rebuild with mount after eZ install
         $this->dumpCompose($compose, $selectedServices, "{$provisioningFolder}/dev/{$composeFileName}");
