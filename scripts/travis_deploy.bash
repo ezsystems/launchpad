@@ -13,7 +13,7 @@ git config --global user.email "github-ezlaunchpad@ez.no"
 git config --global user.name "eZ Launchpad Github Bot"
 
 # Add SSH-based remote to GitHub repo:
-git remote add deploy git@github.com:ezsystems/ezlaunchpad.git
+git remote add deploy git@github.com:ezsystems/launchpad.git
 git fetch deploy
 git checkout master
 git status

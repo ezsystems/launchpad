@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 EZ_HOME="$HOME/.ezlaunchpad"
-URL="https://ezsystems.github.io/ezlaunchpad/ez.phar"
+URL="https://ezsystems.github.io/launchpad/ez.phar"
 mkdir -p $EZ_HOME
 cd $EZ_HOME
 

@@ -1,8 +1,8 @@
 ---
 # Todo: put eZ Systems here
 parameters:
-    ez_phar: 'https://ezsystems.github.io/ezlaunchpad/ez.phar'
-    ez_phar_version: 'https://ezsystems.github.io/ezlaunchpad/ez.phar.version'
+    ez_phar: 'https://ezsystems.github.io/launchpad/ez.phar'
+    ez_phar_version: 'https://ezsystems.github.io/launchpad/ez.phar.version'
 
 services:
 

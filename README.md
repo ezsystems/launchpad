@@ -24,11 +24,11 @@ For now there are:
 
 ### With 'curl'
 
-`$ curl -LSs https://ezystems.github.io/ezlaunchpad/install_curl.bash | bash`
+`$ curl -LSs https://ezystems.github.io/launchpad/install_curl.bash | bash`
 
 ### With 'wget'
 
-`$ wget -O - "https://ezystems.github.io/ezlaunchpad/install_wget.bash" | bash`
+`$ wget -O - "https://ezystems.github.io/launchpad/install_wget.bash" | bash`
 
 ## Usage
 
@@ -38,7 +38,7 @@ For now there are:
 
 ## Documentation
 
-You can find the full documentation here: https://ezsystems.github.io/ezlaunchpad#doc
+You can find the full documentation here: https://ezsystems.github.io/launchpad
 
 
 ## Contribution
