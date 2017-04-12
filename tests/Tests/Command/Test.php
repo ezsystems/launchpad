@@ -4,16 +4,16 @@
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
 
-namespace eZ\Launchpad\Command;
+namespace eZ\Launchpad\Tests\Command;
 
-use eZ\Launchpad\Core\DockerCommand;
+use eZ\Launchpad\Core\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class Test.
  */
-class Test extends DockerCommand
+class Test extends Command
 {
     /**
      * {@inheritdoc}

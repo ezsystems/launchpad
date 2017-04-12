@@ -6,7 +6,8 @@
 
 namespace eZ\Launchpad\DependencyInjection;
 
-use eZ\Launchpad\Command\Test;
+use eZ\Launchpad\Tests\Command\Test;
+use eZ\Launchpad\Tests\Command\TestDockerClient;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -41,6 +42,9 @@ class CommandPass implements CompilerPassInterface
             $definition = new Definition(Test::class);
             $definition->addTag('ezlaunchpad.command');
             $container->setDefinition('ez.launchpad.test', $definition);
+            $definition = new Definition(TestDockerClient::class);
+            $definition->addTag('ezlaunchpad.command');
+            $container->setDefinition('ez.launchpad.testdockerclient', $definition);
         }
 
         $commands = $container->findTaggedServiceIds('ezlaunchpad.command');
