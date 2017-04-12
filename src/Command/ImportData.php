@@ -11,9 +11,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class DumpData.
+ * Class ImportData.
  */
-class DumpData extends DockerCommand
+class ImportData extends DockerCommand
 {
     /**
      * {@inheritdoc}
@@ -21,8 +21,8 @@ class DumpData extends DockerCommand
     protected function configure()
     {
         parent::configure();
-        $this->setName('docker:dumpdata')->setDescription('Dump Database and Storage.');
-        $this->setAliases(['dumpdata']);
+        $this->setName('docker:importdata')->setDescription('Import Database and Storage.');
+        $this->setAliases(['importdata']);
     }
 
     /**
@@ -31,7 +31,7 @@ class DumpData extends DockerCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->dockerClient->exec(
-            '/var/www/html/project/create_dump.bash',
+            '/var/www/html/project/import_dump.bash',
             [
                 '--user', 'www-data',
             ],

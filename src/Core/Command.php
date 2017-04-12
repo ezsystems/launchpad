@@ -41,7 +41,7 @@ abstract class Command extends BaseCommand
     /**
      * @var Collection
      */
-    protected $requiredRecipes = [];
+    protected $requiredRecipes;
 
     /**
      * {@inheritdoc}
@@ -106,6 +106,10 @@ abstract class Command extends BaseCommand
      */
     public function getRequiredRecipes()
     {
+        if ($this->requiredRecipes === null) {
+            $this->requiredRecipes = NovaCollection([]);
+        }
+
         return $this->requiredRecipes;
     }
 }

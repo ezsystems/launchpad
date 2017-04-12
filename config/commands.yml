@@ -51,6 +51,13 @@ services:
         tags:
             - { name: ezlaunchpad.command }
 
+    ez.launchpad.importdata:
+        class: eZ\Launchpad\Command\ImportData
+        calls:
+            - [setRequiredRecipes, [ 'import_dump' ] ]
+        tags:
+            - { name: ezlaunchpad.command }
+
     ez.launchpad.sfrun:
         class: eZ\Launchpad\Command\SymfonyRun
         tags:

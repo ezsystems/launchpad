@@ -15,7 +15,7 @@ if [ ! -f box.phar ]; then
 fi
 
 $PHP composer.phar install --no-dev > /dev/null 2>&1
-$PHP -d "phar.readonly=false" box.phar build
+$PHP -d "phar.readonly=false" box.phar build -vv
 $PHP composer.phar install > /dev/null 2>&1
 shasum ez.phar > ez.phar.version
 
