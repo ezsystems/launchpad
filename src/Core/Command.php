@@ -7,6 +7,7 @@
 namespace eZ\Launchpad\Core;
 
 use eZ\Launchpad\Configuration\Project as ProjectConfiguration;
+use Novactive\Collection\Collection;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -38,6 +39,11 @@ abstract class Command extends BaseCommand
     protected $projectPath;
 
     /**
+     * @var Collection
+     */
+    protected $requiredRecipes = [];
+
+    /**
      * {@inheritdoc}
      */
     protected function initialize(InputInterface $input, OutputInterface $output)
@@ -64,10 +70,42 @@ abstract class Command extends BaseCommand
     }
 
     /**
+     * @return string
+     */
+    public function getPayloadDir()
+    {
+        return "{$this->appDir}payload";
+    }
+
+    /**
      * @param string $projectPath
      */
     public function setProjectPath($projectPath)
     {
         $this->projectPath = $projectPath;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProjectPath()
+    {
+        return $this->projectPath;
+    }
+
+    /**
+     * @param array $requiredRecipes
+     */
+    public function setRequiredRecipes($requiredRecipes)
+    {
+        $this->requiredRecipes = NovaCollection($requiredRecipes);
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getRequiredRecipes()
+    {
+        return $this->requiredRecipes;
     }
 }

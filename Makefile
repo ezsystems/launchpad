@@ -18,7 +18,7 @@ list:
 	@echo ""
 	@echo "eZ Launchpad available targets:"
 	@echo ""
-	@echo "  $(YELLOW)phar$(RESTORE)         > build the box"
+	@echo "  $(YELLOW)phar$(RESTORE)         > build the box locally (bypass the PROD)"
 	@echo ""
 	@echo "  $(YELLOW)codeclean$(RESTORE)    > run the codechecker"
 	@echo "  $(YELLOW)tests$(RESTORE)        > run the tests"

@@ -9,9 +9,9 @@ namespace eZ\Launchpad\Listener;
 use Symfony\Component\Console\Event\ConsoleErrorEvent;
 
 /**
- * Class Exception.
+ * Class CommandException.
  */
-class Exception
+class CommandException
 {
     /**
      * @param ConsoleErrorEvent $event

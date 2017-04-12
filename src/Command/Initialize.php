@@ -44,9 +44,8 @@ class Initialize extends Command
         /* @var Application $application */
         $output->writeln($application->getLogo());
 
-        $payloadFolder = "{$this->appDir}payload";
         // Get the Payload docker-compose.yml
-        $compose = Yaml::parse(file_get_contents("{$payloadFolder}/dev/docker-compose.yml"));
+        $compose = Yaml::parse(file_get_contents("{$this->getPayloadDir()}/dev/docker-compose.yml"));
         $wizard  = new ProjectWizard($this->io, $this->projectConfiguration);
 
         list(
@@ -79,7 +78,7 @@ class Initialize extends Command
         // start the scafolding of the Payload
         $fs = new Filesystem();
         $fs->mkdir("{$provisioningFolder}/dev");
-        $fs->mirror("{$payloadFolder}/dev", "{$provisioningFolder}/dev");
+        $fs->mirror("{$this->getPayloadDir()}/dev", "{$provisioningFolder}/dev");
         $fs->chmod(
             [
                 "{$provisioningFolder}/dev/nginx/entrypoint.bash",
@@ -87,13 +86,6 @@ class Initialize extends Command
             ],
             0755
         );
-
-        $recipes = ['composer_install.bash', 'ez_install.bash'];
-
-        foreach ($recipes as $recipe) {
-            $fs->copy("{$payloadFolder}/recipes/{$recipe}", "{$this->projectPath}/{$recipe}", true);
-            $fs->chmod("{$this->projectPath}/{$recipe}", 0755);
-        }
 
         // dump the temporary DockerCompose.yml without the mount on eZ Platform in the provisioning folder
         $this->dumpCompose($compose, $selectedServicesFirstRun, "{$provisioningFolder}/dev/{$composeFileName}");
@@ -131,7 +123,7 @@ class Initialize extends Command
 
         // Composer Install
         $dockerClient->exec(
-            "/var/www/html/project/{$recipes[0]}",
+            "/var/www/html/project/{$this->requiredRecipes[0]}.bash",
             ['--user', 'www-data'],
             'engine'
         );
@@ -153,7 +145,7 @@ class Initialize extends Command
         $version    = $input->getArgument('version');
         $repository = $input->getArgument('repository');
         $dockerClient->exec(
-            "/var/www/html/project/{$recipes[1]} {$repository} {$version}",
+            "/var/www/html/project/{$this->requiredRecipes[1]}.bash {$repository} {$version}",
             ['--user', 'www-data'],
             'engine'
         );
@@ -162,10 +154,6 @@ class Initialize extends Command
         $this->dumpCompose($compose, $selectedServices, "{$provisioningFolder}/dev/{$composeFileName}");
         $dockerClient->build(['--no-cache']);
         $dockerClient->up(['-d']);
-
-        foreach ($recipes as $recipe) {
-            $fs->remove("{$this->projectPath}/{$recipe}");
-        }
     }
 
     /**

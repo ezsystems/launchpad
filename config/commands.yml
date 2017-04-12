@@ -4,6 +4,8 @@ services:
     # Docker Actions
     ez.launchpad.initialize:
         class: eZ\Launchpad\Command\Initialize
+        calls:
+            - [setRequiredRecipes, [ 'composer_install', 'ez_install' ] ]
         tags:
             - { name: ezlaunchpad.command }
 
@@ -39,6 +41,13 @@ services:
 
     ez.launchpad.logs:
         class: eZ\Launchpad\Command\Logs
+        tags:
+            - { name: ezlaunchpad.command }
+
+    ez.launchpad.dumpdata:
+        class: eZ\Launchpad\Command\DumpData
+        calls:
+            - [setRequiredRecipes, [ 'create_dump' ] ]
         tags:
             - { name: ezlaunchpad.command }
 

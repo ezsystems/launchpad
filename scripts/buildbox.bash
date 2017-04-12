@@ -19,7 +19,7 @@ $PHP -d "phar.readonly=false" box.phar build
 $PHP composer.phar install > /dev/null 2>&1
 shasum ez.phar > ez.phar.version
 
-mv ez.phar ez.phar.version ez.phar.pubkey docs/
+mv ez.phar ez.phar.version ez.phar.pubkey ~/.ezlaunchpad/
 
 echoSuccess "Done."
 exit 0;

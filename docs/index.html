@@ -121,13 +121,29 @@
                 <p>From here eZ Launchpad will ask you a bunch of question to configure your project.</p>
                 <p>At the end of the procedure those steps will be done for you:</p>
                 <ul>
-                    <li>Configuration you project locally.</li>
+                    <li>Configuration your project locally.</li>
                     <li>Download(pull) the correct image on your Docker Daemon.</li>
                     <li>Set up a eZ compliant <em>docker-compose.yml</em>.</li>
                     <li>Create and start the containers required.(depending of the choices you made)</li>
                     <li>Install Composer in the Engine container.(where PHP is executed in your Stack)</li>
                     <li>Install eZ Platform through Composer inside the stack.</li>
                 </ul>
+
+                <h4>eZ Platform Enterprise</h4>
+                <p>
+                    Whether you want to use an entreprise version or a non-stable, you have the choice! Look at the help
+                    There is an example:
+                </p>
+                <div class="highlight">
+                    <button class="to-clipboard">
+                        <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+                    </button>
+                    <pre>$ <code>~/ez init ezsystems/ezplatform-ee v1.9.0-rc1</code></pre>
+                </div>
+                <p>When eZ Launchpad will ask you about HTTP-BASIC, then you have to provide the
+                    <a href="https://doc.ez.no/display/TECHDOC/Using+Composer" target="_blank">Installation Key and the Token</a>
+                </p>
+
             </div>
             <div role="tabpanel" class="tab-pane" id="createstack">
                 <h3>Create</h3>
@@ -141,7 +157,7 @@
                 </div>
 
                 <p>If you want to know if your project is eZ Launchpad ready, you can just check the existance of
-                    <em>.ezlaunchpad.yml</em> at the root directory of you project.</p>
+                    <em>.ezlaunchpad.yml</em> at the root directory of your project.</p>
 
                 <p>To create the local stack the command is then</p>
                 <div class="highlight">
@@ -217,10 +233,13 @@ Available commands:
     <h2 id="d4m">Mac OS X optimizations with D4M</h2>
     <div>
         <p>
-            When it comes to share folder from the Host(your mac) to containers <em>Docker for Mac</em> is slow. (at least for now).
+            When it comes to share folder from the Host(your mac) to containers
+            <em>Docker for Mac</em> is slow. (at least for now).
             Then to manage this performance issue, <strong>there is a workaround</strong>.
         </p>
-        <p>This workaround is called <a href="https://github.com/IFSight/d4m-nfs">D4M</a>. Without entering into the details, D4M uses the MobbyVM that runs beside Docker for Mac and NFS mounts your mac.</p>
+        <p>This workaround is called
+            <a href="https://github.com/IFSight/d4m-nfs">D4M</a>. Without entering into the details, D4M uses the MobbyVM that runs beside Docker for Mac and NFS mounts your mac.
+        </p>
         <p>Note: It might be odd, but yes NFS is faster than the default mount. But good news, Docker 17.04.x should fix that little issue.</p>
 
         <p>Still when you use D4M, you can set it up:</p>
@@ -239,7 +258,9 @@ Available commands:
 /Users/bob/MyProjects -mapall=bob:staff localhost
             </code></pre>
         </div>
-        <p>And you have mounted this exported folder in <em>/data/MYPROJECTS</em> in the MobyVM (through D4M). Then you need to add this configuration for eZ Launchpad</p>
+        <p>And you have mounted this exported folder in
+            <em>/data/MYPROJECTS</em> in the MobyVM (through D4M). Then you need to add this configuration for eZ Launchpad
+        </p>
         <div class="highlight">
             <button class="to-clipboard">
                 <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
