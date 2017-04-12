@@ -3,6 +3,12 @@
 cd /var/www/html/project
 mkdir -p data
 
+# Wait for the DB
+while ! mysqladmin ping -h"$DATABASE_HOST" -u"$DATABASE_USER" -p"$DATABASE_PASSWORD" --silent; do
+    echo -n "."
+    sleep 1
+done
+echo ""
 
 DUMP_DIR="$(pwd)/data"
 if [ "$1" != "" ] && [ -d "$1" ]; then

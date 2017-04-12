@@ -129,6 +129,27 @@
                     <li>Install eZ Platform through Composer inside the stack.</li>
                 </ul>
 
+                <p>Once the Initialization is finished, the project is up, you can check doing:</p>
+                <div class="highlight">
+                    <button class="to-clipboard">
+                        <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+                    </button>
+                    <pre>$ <code>~/ez ps</code></pre>
+                </div>
+
+                <p>You are now ready dump the database and storage, git commit and push to share the project to your teams.</p>
+                <div class="highlight">
+                    <button class="to-clipboard">
+                        <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+                    </button>
+                    <pre>$ <code>~/ez dumpdata; git init; git add .; git commit -m "First Initial Commit"</code></pre>
+                </div>
+                <div class="highlight">
+                    <button class="to-clipboard">
+                        <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+                    </button>
+                    <pre>$ <code>git remote add origin https://gitorigin.com/xxx/xxxx-xxx.git; git push -u origin master</code></pre>
+                </div>
                 <h4>eZ Platform Enterprise</h4>
                 <p>
                     Whether you want to use an entreprise version or a non-stable, you have the choice! Look at the help
@@ -143,7 +164,6 @@
                 <p>When eZ Launchpad will ask you about HTTP-BASIC, then you have to provide the
                     <a href="https://doc.ez.no/display/TECHDOC/Using+Composer" target="_blank">Installation Key and the Token</a>
                 </p>
-
             </div>
             <div role="tabpanel" class="tab-pane" id="createstack">
                 <h3>Create</h3>

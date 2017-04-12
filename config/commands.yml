@@ -5,12 +5,14 @@ services:
     ez.launchpad.initialize:
         class: eZ\Launchpad\Command\Initialize
         calls:
-            - [setRequiredRecipes, [ 'composer_install', 'ez_install' ] ]
+            - [setRequiredRecipes, [ [ 'composer_install', 'ez_install' ] ] ]
         tags:
             - { name: ezlaunchpad.command }
 
     ez.launchpad.create:
         class: eZ\Launchpad\Command\Create
+        calls:
+            - [setRequiredRecipes, [ [ 'composer_install', 'ez_create', 'import_dump' ] ] ]
         tags:
             - { name: ezlaunchpad.command }
 
@@ -47,14 +49,14 @@ services:
     ez.launchpad.dumpdata:
         class: eZ\Launchpad\Command\DumpData
         calls:
-            - [setRequiredRecipes, [ 'create_dump' ] ]
+            - [setRequiredRecipes, [ [ 'create_dump' ] ] ]
         tags:
             - { name: ezlaunchpad.command }
 
     ez.launchpad.importdata:
         class: eZ\Launchpad\Command\ImportData
         calls:
-            - [setRequiredRecipes, [ 'import_dump' ] ]
+            - [setRequiredRecipes, [ [ 'import_dump' ] ] ]
         tags:
             - { name: ezlaunchpad.command }
 

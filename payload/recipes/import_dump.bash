@@ -2,6 +2,13 @@
 
 cd /var/www/html/project
 
+# Wait for the DB
+while ! mysqladmin ping -h"$DATABASE_HOST" -u"$DATABASE_USER" -p"$DATABASE_PASSWORD" --silent; do
+    echo "."
+    sleep 1
+done
+echo ""
+
 DUMP_DIR="$(pwd)/data"
 if [ "$1" != "" ] && [ -d "$1" ]; then
     if [[ "$1" =~ ^/ ]]; then
