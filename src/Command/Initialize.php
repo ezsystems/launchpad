@@ -49,7 +49,16 @@ class Initialize extends Command
         $compose = Yaml::parse(file_get_contents("{$payloadFolder}/dev/docker-compose.yml"));
         $wizard  = new ProjectWizard($this->io, $this->projectConfiguration);
 
-        list($networkName, $networkPort, $selectedServices, $provisioningName, $composeFileName) = $wizard($compose);
+        list(
+            $networkName,
+            $httpBasics,
+            $networkPort,
+            $selectedServices,
+            $provisioningName,
+            $composeFileName
+            ) = $wizard(
+            $compose
+        );
 
         $provisioningFolder = "{$this->projectPath}/{$provisioningName}";
 
@@ -78,20 +87,36 @@ class Initialize extends Command
             ],
             0755
         );
-        $fs->copy("{$payloadFolder}/ezinstall.bash", "{$this->projectPath}/ezinstall.bash", true);
-        $fs->chmod("{$this->projectPath}/ezinstall.bash", 0755);
+
+        $recipes = [
+            'recipes/composer_install.bash',
+            'recipes/ez_install.bash',
+        ];
+
+        foreach ($recipes as $recipe) {
+            $fs->copy("{$payloadFolder}/{$recipe}", "{$this->projectPath}/{$recipe}", true);
+            $fs->chmod("{$this->projectPath}/{$recipe}", 0755);
+        }
 
         // dump the temporary DockerCompose.yml without the mount on eZ Platform in the provisioning folder
         $this->dumpCompose($compose, $selectedServicesFirstRun, "{$provisioningFolder}/dev/{$composeFileName}");
 
-        $this->projectConfiguration->setMultiLocal(
-            [
-                'provisioning.folder_name'   => $provisioningName,
-                'docker.compose_filename'    => $composeFileName,
-                'docker.network_name'        => $networkName,
-                'docker.network_prefix_port' => $networkPort,
-            ]
-        );
+        // create the local configurations
+        $localConfigurations = [
+            'provisioning.folder_name'   => $provisioningName,
+            'docker.compose_filename'    => $composeFileName,
+            'docker.network_name'        => $networkName,
+            'docker.network_prefix_port' => $networkPort,
+        ];
+
+        foreach ($httpBasics as $name => $httpBasic) {
+            list($host, $user, $pass)                                    = $httpBasic;
+            $localConfigurations["composer.http_basic.{$name}.host"]     = $host;
+            $localConfigurations["composer.http_basic.{$name}.login"]    = $user;
+            $localConfigurations["composer.http_basic.{$name}.password"] = $pass;
+        }
+
+        $this->projectConfiguration->setMultiLocal($localConfigurations);
 
         // Do the real installation
         $options      = [
@@ -107,11 +132,31 @@ class Initialize extends Command
         $dockerClient->build(['--no-cache']);
         $dockerClient->up(['-d']);
 
+        // Composer Install
+        $dockerClient->exec(
+            "/var/www/html/project/{$recipes[0]}",
+            ['--user', 'www-data'],
+            'engine'
+        );
+
+        // Composer Configuration
+        foreach ($this->projectConfiguration->get('composer.http_basic') as $auth) {
+            if (!isset($auth['host']) || !isset($auth['login']) || !isset($auth['password'])) {
+                continue;
+            }
+            $dockerClient->exec(
+                '/var/www/html/project/composer.phar config --global'.
+                " http-basic.{$auth['host']} {$auth['login']} {$auth['password']}",
+                ['--user', 'www-data'],
+                'engine'
+            );
+        }
+
         // eZ Install
         $version    = $input->getArgument('version');
-        $repository = $input->getArgument('version');
+        $repository = $input->getArgument('repository');
         $dockerClient->exec(
-            "/var/www/html/project/ezinstall.bash {$repository} {$version}",
+            "/var/www/html/project/{$recipes[1]} {$repository} {$version}",
             ['--user', 'www-data'],
             'engine'
         );
@@ -121,7 +166,9 @@ class Initialize extends Command
         $dockerClient->build(['--no-cache']);
         $dockerClient->up(['-d']);
 
-        $fs->remove("{$this->projectPath}/ezinstall.bash");
+        foreach ($recipes as $recipe) {
+            $fs->remove("{$this->projectPath}/{$recipe}");
+        }
     }
 
     /**

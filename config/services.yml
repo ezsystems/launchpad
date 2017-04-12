@@ -13,3 +13,8 @@ services:
             - "@project_configuration"
         tags:
             - { name: kernel.event_listener, event: console.command, method: onCommandAction }
+
+    ezlaunchpad_exception.listener:
+        class: eZ\Launchpad\Listener\Exception
+        tags:
+            - { name: kernel.event_listener, event: console.error, method: onExceptionAction }

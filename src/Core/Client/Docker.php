@@ -7,6 +7,7 @@
 namespace eZ\Launchpad\Core\Client;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 /**
@@ -186,7 +187,18 @@ class Docker
             $process->setTty(true);
         }
         $process->setTimeout(2 * 3600);
-        $process->mustRun();
+        try {
+            $process->mustRun();
+        } catch (ProcessFailedException $e) {
+            $authorizedExitCodes = [
+                129, // Hangup
+                130, // Interrupt
+            ];
+
+            if (!in_array($e->getProcess()->getExitCode(), $authorizedExitCodes)) {
+                throw $e;
+            }
+        }
     }
 
     /**

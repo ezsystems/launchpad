@@ -6,20 +6,21 @@
 
 namespace eZ\Launchpad\Command;
 
-use eZ\Launchpad\Core\Command;
+use eZ\Launchpad\Core\DockerCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class Test.
  */
-class Test extends Command
+class Test extends DockerCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
         $this->setName('test')->setDescription('Test');
         $this->setHidden(true);
     }

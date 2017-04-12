@@ -43,11 +43,61 @@ class ProjectWizard
     {
         return [
             $this->getNetworkName(),
+            $this->getComposerHttpBasicCredentials(),
             $this->getNetworkTCPPort(),
             $this->getSelectedServices($compose['services']),
             $this->getProvisioningFolderName(),
             $this->getComposeFileName(),
         ];
+    }
+
+    /**
+     * @return array
+     */
+    protected function getComposerHttpBasicCredentials()
+    {
+        $credentials        = [];
+        $message            = 'Do you want to set <fg=yellow;options=bold>Composer HTTP-BASIC</> for this project?';
+        $default            = 'no';
+        $autocompleteValues = ['no', 'yes'];
+        $errorMessage       = 'You MUST answer '.implode(' or ', $autocompleteValues);
+        $validator          = function ($value) use ($autocompleteValues) {
+            return in_array($value, $autocompleteValues);
+        };
+
+        $question = $this->getQuestion(
+            $message,
+            $default,
+            $validator,
+            $errorMessage
+        )->setAutocompleterValues($autocompleteValues);
+
+        while ($this->io->askQuestion($question) == 'yes') {
+            list($host, $login, $password) = $this->getOneComposerHttpBasic();
+            $credentials[]                 = [$host, $login, $password];
+        }
+
+        return $credentials;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getOneComposerHttpBasic()
+    {
+        $pattern       = '^[a-zA-Z0-9\-\.]*$';
+        $validatorHost = function ($value) use ($pattern) {
+            return preg_match("/{$pattern}/", $value);
+        };
+
+        $message      = 'What is the <fg=yellow;options=bold>host</> on which you want to add credentials?';
+        $errorMessage = "The host MUST respect {$pattern}.";
+        $default      = 'updates.ez.no';
+        $host         = $this->io->askQuestion($this->getQuestion($message, $default, $validatorHost, $errorMessage));
+        $login        = $this->io->askQuestion($this->getQuestion('Login?'));
+        $password     = $this->io->askQuestion($this->getQuestion('Password?'));
+
+        return [$host, $login, $password];
     }
 
     /**
