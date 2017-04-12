@@ -88,14 +88,11 @@ class Initialize extends Command
             0755
         );
 
-        $recipes = [
-            'recipes/composer_install.bash',
-            'recipes/ez_install.bash',
-        ];
+        $recipes = ['composer_install.bash', 'ez_install.bash'];
 
         foreach ($recipes as $recipe) {
-            $fs->copy("{$payloadFolder}/{$recipe}", "{$this->projectPath}/{$recipe}", true);
-            $fs->chmod("{$this->projectPath}/{$recipe}", 0755);
+            $fs->copy("{$payloadFolder}/recipes/{$recipe}", "{$this->projectPath}/{$recipe}", true);
+            $fs->chmod("{$this->projectPath}/recipes/{$recipe}", 0755);
         }
 
         // dump the temporary DockerCompose.yml without the mount on eZ Platform in the provisioning folder
