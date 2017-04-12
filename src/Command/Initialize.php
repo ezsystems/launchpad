@@ -92,7 +92,7 @@ class Initialize extends Command
 
         foreach ($recipes as $recipe) {
             $fs->copy("{$payloadFolder}/recipes/{$recipe}", "{$this->projectPath}/{$recipe}", true);
-            $fs->chmod("{$this->projectPath}/recipes/{$recipe}", 0755);
+            $fs->chmod("{$this->projectPath}/{$recipe}", 0755);
         }
 
         // dump the temporary DockerCompose.yml without the mount on eZ Platform in the provisioning folder
