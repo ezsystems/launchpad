@@ -22,7 +22,7 @@ services:
             - { name: ezlaunchpad.command }
 
     ez.launchpad.stop:
-        class: eZ\Launchpad\Command\Start
+        class: eZ\Launchpad\Command\Stop
         tags:
             - { name: ezlaunchpad.command }
 
