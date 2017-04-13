@@ -33,42 +33,8 @@ class Create extends DockerCommand
         $this->dockerClient->build(['--no-cache']);
         $this->dockerClient->up(['-d']);
 
-        //@todo refacto that with initialize to reuse
-        $this->dockerClient->exec(
-            '/var/www/html/project/composer_install.bash',
-            [
-                '--user', 'www-data',
-            ],
-            'engine'
-        );
-
-        // Composer Configuration
-        foreach ($this->projectConfiguration->get('composer.http_basic') as $auth) {
-            if (!isset($auth['host']) || !isset($auth['login']) || !isset($auth['password'])) {
-                continue;
-            }
-            $this->dockerClient->exec(
-                '/var/www/html/project/composer.phar config --global'.
-                " http-basic.{$auth['host']} {$auth['login']} {$auth['password']}",
-                ['--user', 'www-data'],
-                'engine'
-            );
-        }
-
-        $this->dockerClient->exec(
-            '/var/www/html/project/ez_create.bash',
-            [
-                '--user', 'www-data',
-            ],
-            'engine'
-        );
-
-        $this->dockerClient->exec(
-            '/var/www/html/project/import_dump.bash',
-            [
-                '--user', 'www-data',
-            ],
-            'engine'
-        );
+        $this->taskExecutor->composerInstall();
+        $this->taskExecutor->eZCreate();
+        $this->taskExecutor->importData();
     }
 }

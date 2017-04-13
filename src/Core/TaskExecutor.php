@@ -100,6 +100,13 @@ class TaskExecutor
         $this->execute("{$recipe}.bash {$repository} {$version}");
     }
 
+    public function eZCreate()
+    {
+        $recipe = 'ez_create';
+        $this->checkRecipeAvailability($recipe);
+        $this->execute("{$recipe}.bash");
+    }
+
     /**
      * Dump Data.
      */
