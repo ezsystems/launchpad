@@ -114,13 +114,13 @@ class Project
     {
         $filePath = $where == 'global' ? $this->globalFilePath : $this->localFilePath;
 
-        $fs          = new Filesystem();
-        $localConfig = $fs->exists($filePath) ? Yaml::parse(file_get_contents($filePath)) : [];
+        $fs     = new Filesystem();
+        $config = $fs->exists($filePath) ? Yaml::parse(file_get_contents($filePath)) : [];
 
         foreach ($keyValues as $name => $value) {
             if (strpos($name, '.')) {
                 $parts  = explode('.', $name);
-                $onFile = &$localConfig;
+                $onFile = &$config;
                 foreach ($parts as $part) {
                     $onFile =&$onFile[$part];
                 }
@@ -134,11 +134,11 @@ class Project
                 $inMemory = $value;
             } else {
                 $this->configurations[$name] = $value;
-                $localConfig[$name]          = $value;
+                $config[$name]               = $value;
             }
         }
 
-        $yaml = Yaml::dump($localConfig);
+        $yaml = Yaml::dump($config);
         $fs->dumpFile($filePath, $yaml);
     }
 

@@ -24,6 +24,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('docker')
+                    ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('compose_filename')->defaultValue('docker-compose.yml')->end()
                         ->scalarNode('network_name')->defaultValue('default-ezlaunchpad')->end()
@@ -33,6 +34,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
                 ->arrayNode('provisioning')
+                    ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('folder_name')->defaultValue('provisioning')->end()
                     ->end()

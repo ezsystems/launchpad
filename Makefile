@@ -22,6 +22,8 @@ list:
 	@echo ""
 	@echo "  $(YELLOW)codeclean$(RESTORE)    > run the codechecker"
 	@echo "  $(YELLOW)tests$(RESTORE)        > run the tests"
+	@echo "  $(YELLOW)behat(RESTORE)         > run the Behat tests only"
+	@echo "  $(YELLOW)unit(RESTORE)          > run the Unit tests only"
 	@echo "  $(YELLOW)coverage$(RESTORE)     > generate the code coverage"
 	@echo ""
 	@echo "  $(YELLOW)docs(RESTORE)          > generate stuff for the documenation"
@@ -38,6 +40,14 @@ codeclean:
 tests:
 	bash $(SCRIPS_DIR)/runtests.bash
 
+.PHONY: behat
+behat:
+	bash $(SCRIPS_DIR)/runtests.bash behat
+
+.PHONY: unit
+unit:
+	bash $(SCRIPS_DIR)/runtests.bash unit
+
 .PHONY: docs
 docs:
 	bash $(SCRIPS_DIR)/pumltoimages.bash
@@ -53,7 +63,8 @@ phar:
 
 .PHONY: coverage
 coverage:
-	$(DOCKER_BIN) run -t --rm -w /app -v $(CURRENT_DIR):/app phpunit/phpunit:6.0.6 -c tests/ --coverage-html /app/tests/coverage
+	rm -rf tests/coverage
+	$(DOCKER_BIN) run -t --rm -w /app -v $(CURRENT_DIR):/app phpunit/phpunit:5.7.12 -c tests/ --coverage-html /app/tests/coverage
 
 .PHONY: clean
 clean:

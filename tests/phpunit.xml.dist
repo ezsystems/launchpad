@@ -18,7 +18,7 @@
     bootstrap="bootstrap.php">
     <testsuites>
         <testsuite name="eZ Launchpad Test Suite">
-            <directory suffix="Test.php">./Tests</directory>
+            <directory suffix="Test.php">./Tests/Unit</directory>
         </testsuite>
     </testsuites>
     <filter>

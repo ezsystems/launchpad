@@ -21,7 +21,8 @@
         "symfony/options-resolver": "3.3.x-dev",
         "padraic/phar-updater": "dev-use-curl",
         "symfony/event-dispatcher": "3.3.x-dev",
-        "nesbot/carbon": "^1.22"
+        "nesbot/carbon": "^1.22",
+        "mikey179/vfsStream": "^1.6"
     },
     "require-dev": {
         "symfony/var-dumper": "3.3.x-dev",

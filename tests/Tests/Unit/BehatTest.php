@@ -5,7 +5,7 @@
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
 
-namespace eZ\Launchpad\Tests;
+namespace eZ\Launchpad\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -28,7 +28,7 @@ class BehatTest extends TestCase
         try {
             $factory      = new \Behat\Behat\ApplicationFactory();
             $bApplication = $factory->createApplication();
-            $input        = new ArrayInput(['--format' => ['progress'], '--config' => __DIR__.'/../behat.yml']);
+            $input        = new ArrayInput(['--format' => ['progress'], '--config' => __DIR__.'/../../behat.yml']);
             $output       = new ConsoleOutput();
             $bApplication->setAutoExit(false);
             $result = $bApplication->run($input, $output);
