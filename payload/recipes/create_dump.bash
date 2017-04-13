@@ -31,7 +31,9 @@ $MYSQLDUMP $DATABASE_NAME > $DUMP_DIR/$DB_FILE_NAME.sql
 gzip -f $DUMP_DIR/$DB_FILE_NAME.sql
 echo "Database dumped."
 
-cd /var/www/html/project/ezplatform/web
-tar czvf $DUMP_DIR/$STORAGE_FILE_NAME.tar.gz var/
-cd -
-echo "Storage dumped."
+if [ -d /var/www/html/project/ezplatform/web/var ]; then
+    cd /var/www/html/project/ezplatform/web
+    tar czvf $DUMP_DIR/$STORAGE_FILE_NAME.tar.gz var/
+    cd -
+    echo "Storage dumped."
+fi

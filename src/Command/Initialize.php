@@ -10,6 +10,7 @@ use eZ\Launchpad\Console\Application;
 use eZ\Launchpad\Core\Client\Docker;
 use eZ\Launchpad\Core\Command;
 use eZ\Launchpad\Core\ProjectWizard;
+use eZ\Launchpad\Core\TaskExecutor;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -121,33 +122,12 @@ class Initialize extends Command
         $dockerClient->build(['--no-cache']);
         $dockerClient->up(['-d']);
 
-        // Composer Install
-        $dockerClient->exec(
-            "/var/www/html/project/{$this->requiredRecipes[0]}.bash",
-            ['--user', 'www-data'],
-            'engine'
-        );
+        $executor = new TaskExecutor($dockerClient, $this->projectConfiguration, $this->requiredRecipes);
+        $executor->composerInstall();
 
-        // Composer Configuration
-        foreach ($this->projectConfiguration->get('composer.http_basic') as $auth) {
-            if (!isset($auth['host']) || !isset($auth['login']) || !isset($auth['password'])) {
-                continue;
-            }
-            $dockerClient->exec(
-                '/var/www/html/project/composer.phar config --global'.
-                " http-basic.{$auth['host']} {$auth['login']} {$auth['password']}",
-                ['--user', 'www-data'],
-                'engine'
-            );
-        }
-
-        // eZ Install
-        $version    = $input->getArgument('version');
-        $repository = $input->getArgument('repository');
-        $dockerClient->exec(
-            "/var/www/html/project/{$this->requiredRecipes[1]}.bash {$repository} {$version}",
-            ['--user', 'www-data'],
-            'engine'
+        $executor->eZInstall(
+            $input->getArgument('version'),
+            $input->getArgument('repository')
         );
 
         // rebuild with mount after eZ install

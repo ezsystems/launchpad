@@ -30,12 +30,6 @@ class ImportData extends DockerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->dockerClient->exec(
-            '/var/www/html/project/import_dump.bash',
-            [
-                '--user', 'www-data',
-            ],
-            'engine'
-        );
+        $this->taskExecutor->importData();
     }
 }

@@ -27,7 +27,7 @@ class Enter extends DockerCommand
         $this->addArgument('service', InputArgument::OPTIONAL, 'Service to enter in', 'engine');
         $this->addOption('user', 'u', InputOption::VALUE_REQUIRED, 'User with who to enter in', 'www-data');
         $this->addArgument('shell', InputArgument::OPTIONAL, 'Command to enter in', '/bin/bash');
-        $this->setAliases(['enter']);
+        $this->setAliases(['enter', 'docker:exec', 'exec']);
     }
 
     /**

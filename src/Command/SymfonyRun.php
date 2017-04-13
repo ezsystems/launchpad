@@ -32,15 +32,9 @@ class SymfonyRun extends DockerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $allArugments = $input->getArgument('sfcommand');
-
+        $allArguments = $input->getArgument('sfcommand');
         // @todo: find a way to pass the options
         $options = '';
-
-        $this->dockerClient->exec(
-            '/var/www/html/project/ezplatform/app/console '.implode(' ', $allArugments)." {$options}",
-            [],
-            'engine'
-        );
+        $this->taskExecutor->runSymfomyCommand(implode(' ', $allArguments)." {$options}");
     }
 }

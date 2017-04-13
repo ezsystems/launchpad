@@ -28,6 +28,11 @@ abstract class DockerCommand extends Command
     protected $dockerClient;
 
     /**
+     * @var TaskExecutor
+     */
+    protected $taskExecutor;
+
+    /**
      * {@inheritdoc}
      */
     protected function configure()
@@ -65,5 +70,10 @@ abstract class DockerCommand extends Command
         ];
 
         $this->dockerClient = new Docker($options);
+        $this->taskExecutor = new TaskExecutor(
+            $this->dockerClient,
+            $this->projectConfiguration,
+            $this->requiredRecipes
+        );
     }
 }
