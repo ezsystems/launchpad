@@ -56,23 +56,11 @@ class ProjectWizard
      */
     protected function getComposerHttpBasicCredentials()
     {
-        $credentials        = [];
-        $message            = 'Do you want to set <fg=yellow;options=bold>Composer HTTP-BASIC</> for this project?';
-        $default            = 'no';
-        $autocompleteValues = ['no', 'yes'];
-        $errorMessage       = 'You MUST answer '.implode(' or ', $autocompleteValues);
-        $validator          = function ($value) use ($autocompleteValues) {
-            return in_array($value, $autocompleteValues);
-        };
-
-        $question = $this->getQuestion(
-            $message,
-            $default,
-            $validator,
-            $errorMessage
-        )->setAutocompleterValues($autocompleteValues);
-
-        while ($this->io->askQuestion($question) == 'yes') {
+        $credentials = [];
+        while ($this->io->confirm(
+            'Do you want to set <fg=yellow;options=bold>Composer HTTP-BASIC</> for this project?',
+            false
+        )) {
             list($host, $login, $password) = $this->getOneComposerHttpBasic();
             $credentials[]                 = [$host, $login, $password];
         }
@@ -151,21 +139,7 @@ class ProjectWizard
     {
         $selectedServices = [];
         foreach ($services as $name => $service) {
-            $message            = "Do you want the service <fg=yellow;options=bold>{$name}</>";
-            $default            = 'yes';
-            $autocompleteValues = ['yes', 'no'];
-            $errorMessage       = 'You MUST answer '.implode(' or ', $autocompleteValues);
-            $validator          = function ($value) use ($autocompleteValues) {
-                return in_array($value, $autocompleteValues);
-            };
-
-            $question = $this->getQuestion(
-                $message,
-                $default,
-                $validator,
-                $errorMessage
-            )->setAutocompleterValues($autocompleteValues);
-            if ($this->io->askQuestion($question) == 'yes') {
+            if ($this->io->confirm("Do you want the service <fg=yellow;options=bold>{$name}</>")) {
                 $selectedServices[$name] = $service;
             }
         }
@@ -184,7 +158,7 @@ class ProjectWizard
             return preg_match("/{$pattern}/", $value);
         };
 
-        $message      = 'What is the name of the <fg=yellow;options=bold>network</>?';
+        $message      = 'Please select a name for the containers <fg=yellow;options=bold>Docker Network</>';
         $errorMessage = "The name of the network MUST respect {$pattern}.";
         $default      = null;
 
