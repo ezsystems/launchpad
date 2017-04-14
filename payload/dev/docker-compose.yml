@@ -43,6 +43,19 @@ services:
         ports:
             - "${PROJECTPORTPREFIX}306:3306"
 
+    varnish:
+        image: million12/varnish
+        volumes:
+            - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/varnish/varnish.vcl:/etc/varnish/default.vcl:ro"
+        environment:
+            - "VCL_CONFIG=/etc/varnish/default.vcl"
+            - "VARNISHD_PARAMS=-p default_ttl=3600"
+            - "CACHE_SIZE=256M"
+        ports:
+            - "${PROJECTPORTPREFIX}082:80"
+        depends_on:
+            - nginx
+
     # Mailcatcher
     mailcatcher:
         image: schickling/mailcatcher
@@ -53,7 +66,7 @@ services:
     adminer:
         image: adminer:latest
         ports:
-            - "${PROJECTPORTPREFIX}086:8080"
+            - "${PROJECTPORTPREFIX}084:8080"
 
     # MEMCACHE
     memcache:
@@ -65,3 +78,5 @@ services:
         image: plopix/docker-memcacheadmin
         environment:
             - "MEMCACHE_HOST=memcache"
+        ports:
+            - "${PROJECTPORTPREFIX}083:8080"
