@@ -77,6 +77,8 @@ class Application extends BaseApplication
     /**
      * Get the Container.
      *
+     * @todo: should be possible to remove
+     *      used in Self update only
      * @return ContainerBuilder
      */
     public function getContainer()
