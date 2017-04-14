@@ -7,7 +7,7 @@ vcl 4.0;
 // Replace the host to fit your setup
 backend ezplatform {
     .host = "nginx";
-    .port = "81";
+    .port = "82";
 }
 
 // ACL for invalidators IP
