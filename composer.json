@@ -2,12 +2,6 @@
     "name": "ezsystems/launchpad",
     "description": "eZ Launchpad - Ultimate eZ Platform CLI Helper.",
     "homepage": "https://github.com/ezsystems/launchpad",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/console-helpers/phar-updater"
-        }
-    ],
     "require": {
         "php": "^5.6 || ^7.0",
         "symfony/console": "3.3.x-dev",

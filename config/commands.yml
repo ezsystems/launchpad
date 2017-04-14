@@ -1,6 +1,19 @@
 ---
 services:
 
+    # Self
+    ez.launchpad.self_update:
+        class: eZ\Launchpad\Command\SelfUpdate
+        calls:
+            - [setParameters, [ {env: "%app_env%", url: "%ez_phar%", version: "%ez_phar_version%"}] ]
+        tags:
+            - { name: ezlaunchpad.command }
+
+    ez.launchpad.self_rollback:
+        class: eZ\Launchpad\Command\Rollback
+        tags:
+            - { name: ezlaunchpad.command }
+
     # Docker Actions
     ez.launchpad.initialize:
         class: eZ\Launchpad\Command\Initialize

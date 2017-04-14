@@ -19,11 +19,24 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SelfUpdate extends Command
 {
     /**
+     * @var array
+     */
+    protected $parameters;
+
+    /**
      * {@inheritdoc}
      */
     protected function configure()
     {
         $this->setName('self-update')->setDescription('Self Update');
+    }
+
+    /**
+     * @param array $parameters
+     */
+    public function setParameters($parameters = [])
+    {
+        $this->parameters = $parameters;
     }
 
     /**
@@ -35,20 +48,17 @@ class SelfUpdate extends Command
         /* @var Application $application */
         $output->writeln($application->getLogo());
 
-        $app_env = $application->getContainer()->getParameter('app_env');
-        $app_dir = $application->getContainer()->getParameter('app_dir');
+        $app_env = $this->parameters['env'];
+        $app_dir = $this->appDir;
 
         $localPharFile = $app_env == 'prod' ? null : $app_dir.'/docs/ez.phar';
         $updater       = new Updater($localPharFile);
         $strategy      = $updater->getStrategy();
         if ($strategy instanceof ShaStrategy) {
             if ($app_env == 'prod') {
-                $ez_phar         = $application->getContainer()->getParameter('ez_phar');
-                $ez_phar_version = $application->getContainer()->getParameter('ez_phar_version');
-                $strategy->setPharUrl($ez_phar);
-                $strategy->setVersionUrl($ez_phar_version);
+                $strategy->setPharUrl($this->parameters['url']);
+                $strategy->setVersionUrl($this->parameters['version']);
             }
-
             $result = $updater->update();
             $this->io->section('eZ Launchpad Auto Update');
             if (!$result) {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3139c1c55c6d51a6b97786bd337f70b7",
+    "content-hash": "c6a68ca1523653e58548a733fbd4498b",
     "packages": [
         {
             "name": "mikey179/vfsStream",
@@ -436,12 +436,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "77a5b2dba81ad2f49ba6d6817c878c24ef73e71f"
+                "reference": "386c1d9d245e21e9df5b0ead3e46a877e44fe247"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/77a5b2dba81ad2f49ba6d6817c878c24ef73e71f",
-                "reference": "77a5b2dba81ad2f49ba6d6817c878c24ef73e71f",
+                "url": "https://api.github.com/repos/symfony/console/zipball/386c1d9d245e21e9df5b0ead3e46a877e44fe247",
+                "reference": "386c1d9d245e21e9df5b0ead3e46a877e44fe247",
                 "shasum": ""
             },
             "require": {
@@ -496,7 +496,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-04-12 14:14:56"
+            "time": "2017-04-13 16:59:03"
         },
         {
             "name": "symfony/debug",
@@ -561,12 +561,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "e17fbfd6373caf7a79c926d3d71e45b02f54f318"
+                "reference": "df7d2b719c272e40aecbc045237c5a0b5c3d52f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/e17fbfd6373caf7a79c926d3d71e45b02f54f318",
-                "reference": "e17fbfd6373caf7a79c926d3d71e45b02f54f318",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/df7d2b719c272e40aecbc045237c5a0b5c3d52f4",
+                "reference": "df7d2b719c272e40aecbc045237c5a0b5c3d52f4",
                 "shasum": ""
             },
             "require": {
@@ -623,7 +623,7 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2017-04-12 18:55:56"
+            "time": "2017-04-13 15:28:14"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -631,12 +631,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "5417d8812f3fe13de219e67ba2bce2a2b580d540"
+                "reference": "73ccae57d5a439a9debf34e3f9bec78b56241949"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/5417d8812f3fe13de219e67ba2bce2a2b580d540",
-                "reference": "5417d8812f3fe13de219e67ba2bce2a2b580d540",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/73ccae57d5a439a9debf34e3f9bec78b56241949",
+                "reference": "73ccae57d5a439a9debf34e3f9bec78b56241949",
                 "shasum": ""
             },
             "require": {
@@ -686,7 +686,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2017-04-12 14:14:56"
+            "time": "2017-04-13 13:45:25"
         },
         {
             "name": "symfony/filesystem",
@@ -3366,7 +3366,7 @@
                 "debug",
                 "dump"
             ],
-            "time": "2017-04-12T14:14:56+00:00"
+            "time": "2017-04-12 14:14:56"
         },
         {
             "name": "webmozart/assert",

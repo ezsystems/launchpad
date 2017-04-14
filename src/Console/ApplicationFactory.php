@@ -36,8 +36,8 @@ class ApplicationFactory
         $loader->load(__DIR__.'/../../config/services.yml');
         $loader->load(__DIR__.'/../../config/commands.yml');
         $application = new Console\Application();
-        $application->setEnv($env);
         $application->setContainer($container);
+        $application->setEnv($env);
         $application->setName('eZ Launchpad');
         $application->setVersion('@package_version@'.(($env != 'prod') ? '-dev' : ''));
         $application->setAutoExit($autoExit);

@@ -3,12 +3,6 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
-if (php_uname('s') == 'Darwin') {
-    // fix a TLS issue with php on Mac
-    copy(__DIR__.'/../cacert.pem', sys_get_temp_dir().'/cacert.pem');
-    putenv('SSL_CERT_FILE='.sys_get_temp_dir().'/cacert.pem');
-}
-
 $file = __DIR__.'/../vendor/autoload.php';
 if (!file_exists($file)) {
     $file = __DIR__.'/../../../autoload.php';

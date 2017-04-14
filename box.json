@@ -14,8 +14,7 @@
         "payload"
     ],
     "files": [
-        "LICENSE",
-        "cacert.pem"
+        "LICENSE"
     ],
     "finder": [
         {

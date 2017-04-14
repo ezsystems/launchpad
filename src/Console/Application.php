@@ -75,18 +75,6 @@ class Application extends BaseApplication
     }
 
     /**
-     * Get the Container.
-     *
-     * @todo: should be possible to remove
-     *      used in Self update only
-     * @return ContainerBuilder
-     */
-    public function getContainer()
-    {
-        return $this->container;
-    }
-
-    /**
      * Set the Env.
      *
      * @param $env
@@ -210,19 +198,6 @@ class Application extends BaseApplication
         $eventDispatcher = $this->container->get('event_dispatcher');
         /* @var EventDispatcher $eventDispatcher */
         $this->setDispatcher($eventDispatcher);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDefaultCommands()
-    {
-        $defaultCommands   = parent::getDefaultCommands();
-        $defaultCommands[] = new Command\SelfUpdate();
-        $defaultCommands[] = new Command\Rollback();
-
-        /* @var \Symfony\Component\Console\Command\Command[] $defaultCommands */
-        return $defaultCommands;
     }
 
     /**
