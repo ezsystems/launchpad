@@ -54,15 +54,15 @@ class ApplicationUpdate
 
         if (!in_array(
             $command->getName(),
-            ['list', 'help', 'test', 'docker:init', 'docker:create', 'self-update', 'rollback']
+            ['list', 'help', 'test', 'docker:initialize', 'docker:create', 'self-update', 'rollback']
         )
         ) {
             $fs                      = new Filesystem();
             $currentPwd              = getcwd();
             $provisioningFolder      = $this->projectConfiguration->get('provisioning.folder_name');
             $dockerComposeFileName   = $this->projectConfiguration->get('docker.compose_filename');
-            $dockerComposeFileFolder = NovaCollection(
-                [$currentPwd, $provisioningFolder, $event->getInput()->getOption('env')]
+            $dockerEnv = $event->getInput()->hasOption('env')?$event->getInput()->getOption('env'):'dev';
+            $dockerComposeFileFolder = NovaCollection([$currentPwd, $provisioningFolder, $dockerEnv]
             )->implode(
                 '/'
             );
