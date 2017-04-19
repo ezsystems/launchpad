@@ -12,6 +12,7 @@ use Humbug\SelfUpdate\Strategy\ShaStrategy;
 use Humbug\SelfUpdate\Updater;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Filesystem\Filesystem;
 
 class ApplicationUpdate
 {
@@ -41,9 +42,38 @@ class ApplicationUpdate
      */
     public function onCommandAction(ConsoleCommandEvent $event)
     {
+        $env     = $this->parameters['env'];
+        $dir     = $this->parameters['dir'];
+        $url     = $this->parameters['url'];
+        $version = $this->parameters['version'];
+
         $command = $event->getCommand();
-        if ($command->getName() == 'self-update' || $command->getName() == 'rollback') {
+        if (in_array($command->getName(), ['self-update', 'rollback'])) {
             return;
+        }
+
+        if (!in_array(
+            $command->getName(),
+            ['list', 'help', 'test', 'docker:init', 'docker:create', 'self-update', 'rollback']
+        )
+        ) {
+            $fs                      = new Filesystem();
+            $currentPwd              = getcwd();
+            $provisioningFolder      = $this->projectConfiguration->get('provisioning.folder_name');
+            $dockerComposeFileName   = $this->projectConfiguration->get('docker.compose_filename');
+            $dockerComposeFileFolder = NovaCollection(
+                [$currentPwd, $provisioningFolder, $event->getInput()->getOption('env')]
+            )->implode(
+                '/'
+            );
+
+            if (!$fs->exists($dockerComposeFileFolder."/{$dockerComposeFileName}")) {
+                $io = new SymfonyStyle($event->getInput(), $event->getOutput());
+                $io->error('Your are not in a folder managed by eZ Launchpad.');
+                $event->disableCommand();
+
+                return;
+            }
         }
 
         // check last time check
@@ -54,11 +84,6 @@ class ApplicationUpdate
                 return;
             }
         }
-
-        $env     = $this->parameters['env'];
-        $dir     = $this->parameters['dir'];
-        $url     = $this->parameters['url'];
-        $version = $this->parameters['version'];
 
         $localPharFile = $env == 'prod' ? null : $dir.'/docs/ez.phar';
         $updater       = new Updater($localPharFile);
@@ -73,6 +98,8 @@ class ApplicationUpdate
             }
         }
 
-        $this->projectConfiguration->setLocal('last_update_check', time());
+        if (!in_array($command->getName(), ['list', 'help'])) {
+            $this->projectConfiguration->setLocal('last_update_check', time());
+        }
     }
 }
