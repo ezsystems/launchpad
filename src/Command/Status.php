@@ -37,7 +37,7 @@ class Status extends DockerCommand
         $this->io->writeln($composeCommand);
         $this->io->section("\nService Access");
 
-        foreach ($this->projectConfiguration->getServices() as $serviceName => $service) {
+        foreach ($this->projectConfiguration->getDockerCompose()->getServices() as $serviceName => $service) {
             if (isset($service['ports'])) {
                 foreach ($service['ports'] as $port) {
                     list($external, $internal) = explode(':', $port);

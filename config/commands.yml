@@ -18,14 +18,14 @@ services:
     ez.launchpad.initialize:
         class: eZ\Launchpad\Command\Initialize
         calls:
-            - [setRequiredRecipes, [ [ 'composer_install', 'ez_install' ] ] ]
+            - [setRequiredRecipes, [ [ 'composer_install', 'ez_install', 'ez_install_solr' ] ] ]
         tags:
             - { name: ezlaunchpad.command }
 
     ez.launchpad.create:
         class: eZ\Launchpad\Command\Create
         calls:
-            - [setRequiredRecipes, [ [ 'composer_install', 'ez_create', 'import_dump' ] ] ]
+            - [setRequiredRecipes, [ [ 'composer_install', 'ez_create', 'import_dump', 'ez_install_solr' ] ] ]
         tags:
             - { name: ezlaunchpad.command }
 

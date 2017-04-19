@@ -130,6 +130,11 @@ class Docker
         $this->perform('rm', $service, $args);
     }
 
+    public function down($args = [], $service = '')
+    {
+        $this->perform('down', $service, $args);
+    }
+
     public function ps($args = [], $service = '')
     {
         $this->perform('ps', $service, $args);

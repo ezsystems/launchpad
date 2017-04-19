@@ -100,6 +100,35 @@ class TaskExecutor
         $this->execute("{$recipe}.bash {$repository} {$version}");
     }
 
+    public function eZInstallSolr()
+    {
+        $recipe = 'ez_install_solr';
+        $this->checkRecipeAvailability($recipe);
+        $this->execute(
+            "{$recipe}.bash {$this->projectConfiguration->get('provisioning.folder_name')} COMPOSER_INSTALL"
+        );
+    }
+
+    public function indexSolr()
+    {
+        $recipe = 'ez_install_solr';
+        $this->checkRecipeAvailability($recipe);
+        $this->execute(
+            "{$recipe}.bash {$this->projectConfiguration->get('provisioning.folder_name')} INDEX"
+        );
+    }
+
+    public function createCore()
+    {
+        $recipe = 'ez_install_solr';
+        $this->checkRecipeAvailability($recipe);
+        $this->execute(
+            "{$recipe}.bash {$this->projectConfiguration->get('provisioning.folder_name')} CREATE_CORE",
+            'solr',
+            'solr'
+        );
+    }
+
     public function eZCreate()
     {
         $recipe = 'ez_create';
@@ -138,11 +167,19 @@ class TaskExecutor
     }
 
     /**
-     * @param $command
+     * @param      $command
+     * @param null $user
+     * @param null $service
      */
-    protected function execute($command)
+    protected function execute($command, $user = null, $service = null)
     {
+        if ($user === null) {
+            $user = $this->user;
+        }
+        if ($service === null) {
+            $service = $this->service;
+        }
         $command = '/var/www/html/project/'.$command;
-        $this->dockerClient->exec($command, ['--user', $this->user], $this->service);
+        $this->dockerClient->exec($command, ['--user', $user], $service);
     }
 }

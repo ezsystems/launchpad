@@ -8,6 +8,7 @@ cloud "Exposed Ports" {
     () XX082 as SymfonyProdModeVarnishPort
 
     () XX083 as MemcacheAdminPort
+    () XX983 as SorlPort
     () XX084 as DatabaseAdminPort
     () XX306 as DatabaseEnginePort
     () XX180 as MailcatcherPort
@@ -39,11 +40,16 @@ node "Mailcatcher" as mailcatcher {
 node "Adminer" as dbadmin {
 }
 
+node "Solr" as solr {
+}
+
+
 
 MemcacheAdminPort -> memcacheadmin: Web Interface
 DatabaseEnginePort ---> db: TCP forward
 MailcatcherPort -> mailcatcher: Web Interface
 DatabaseAdminPort -> dbadmin: Web Interface
+SorlPort -> solr
 
 SymfonyDevModePort --> DEV: Web
 SymfonyProdModePort --> PROD: Web
@@ -53,6 +59,7 @@ varnish --> PROD
 engine --> db
 engine --> appcache
 engine --> mailcatcher
+engine ---> solr
 
 memcacheadmin --> appcache
 

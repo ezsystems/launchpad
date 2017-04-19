@@ -22,6 +22,7 @@ services:
             - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/engine/php.ini:/usr/local/etc/php/php.ini:ro"
             - "${PROJECTCOMPOSEPATH}:/var/www/html/project:rw"
             - "${HOST_COMPOSER_CACHE_DIR}:/var/www/composer_cache:rw"
+            - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/solr:/ezsolr:rw"
         shm_size: 754M
         environment:
             - "COMPOSER_CACHE_DIR=/var/www/composer_cache"
@@ -33,6 +34,8 @@ services:
             - "CUSTOM_CACHE_POOL=singlememcached"
             - "CACHE_HOST=memcache"
             - "CACHE_MEMCACHED_PORT=11211"
+            - "SEARCH_ENGINE=solr"
+            - "SOLR_DSN=http://solr:8983/solr"
             - "DEV_UID"
             - "DEV_GID"
 
@@ -55,6 +58,18 @@ services:
             - "${PROJECTPORTPREFIX}082:80"
         depends_on:
             - nginx
+
+    solr:
+        image: solr:6.4.2
+        volumes:
+            - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/solr:/ezsolr:rw"
+            - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/solr/entrypoint.bash:/entrypoint.bash:ro"
+            - "${PROJECTCOMPOSEPATH}:/var/www/html/project:rw"
+        ports:
+            - "${PROJECTPORTPREFIX}983:8983"
+        entrypoint: /entrypoint.bash
+        depends_on:
+            - engine
 
     # Mailcatcher
     mailcatcher:

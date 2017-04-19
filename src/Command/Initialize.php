@@ -9,13 +9,13 @@ namespace eZ\Launchpad\Command;
 use eZ\Launchpad\Console\Application;
 use eZ\Launchpad\Core\Client\Docker;
 use eZ\Launchpad\Core\Command;
+use eZ\Launchpad\Core\DockerCompose;
 use eZ\Launchpad\Core\ProjectWizard;
 use eZ\Launchpad\Core\TaskExecutor;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class Initialize.
@@ -46,9 +46,11 @@ class Initialize extends Command
         $output->writeln($application->getLogo());
 
         // Get the Payload docker-compose.yml
-        $compose = Yaml::parse(file_get_contents("{$this->getPayloadDir()}/dev/docker-compose.yml"));
-        $wizard  = new ProjectWizard($this->io, $this->projectConfiguration);
+        $compose = new DockerCompose("{$this->getPayloadDir()}/dev/docker-compose.yml");
 
+        $wizard = new ProjectWizard($this->io, $this->projectConfiguration);
+
+        // Ask the questions
         list(
             $networkName,
             $httpBasics,
@@ -60,24 +62,12 @@ class Initialize extends Command
             $compose
         );
 
-        $provisioningFolder = "{$this->projectPath}/{$provisioningName}";
-
-        // remove the mount on eZ Plaftorm as it is not installed yet.
-        $selectedServicesFirstRun = $selectedServices;
-        foreach ($selectedServicesFirstRun as $name => $service) {
-            if (isset($service['volumes'])) {
-                $volumes            = NovaCollection($service['volumes']);
-                $service['volumes'] = $volumes->prune(
-                    function ($value) {
-                        return !preg_match('/ezplatform/', $value);
-                    }
-                )->toArray();
-            }
-            $selectedServicesFirstRun[$name] = $service;
-        }
+        $compose->filterServices($selectedServices);
+        unset($selectedServices);
 
         // start the scafolding of the Payload
-        $fs = new Filesystem();
+        $provisioningFolder = "{$this->projectPath}/{$provisioningName}";
+        $fs                 = new Filesystem();
         $fs->mkdir("{$provisioningFolder}/dev");
         $fs->mirror("{$this->getPayloadDir()}/dev", "{$provisioningFolder}/dev");
         $fs->chmod(
@@ -88,8 +78,10 @@ class Initialize extends Command
             0755
         );
 
-        // dump the temporary DockerCompose.yml without the mount on eZ Platform in the provisioning folder
-        $this->dumpCompose($compose, $selectedServicesFirstRun, "{$provisioningFolder}/dev/{$composeFileName}");
+        $finalCompose = clone $compose;
+        $compose->cleanForInitialize();
+        // dump the temporary DockerCompose.yml without the mount and env vars in the provisioning folder
+        $compose->dump("{$provisioningFolder}/dev/{$composeFileName}");
 
         // create the local configurations
         $localConfigurations = [
@@ -129,23 +121,17 @@ class Initialize extends Command
             $input->getArgument('version'),
             $input->getArgument('repository')
         );
+        if ($finalCompose->hasService('solr')) {
+            $executor->eZInstallSolr();
+        }
+        $finalCompose->removeUselessEnvironmentsVariables();
 
-        // rebuild with mount after eZ install
-        $this->dumpCompose($compose, $selectedServices, "{$provisioningFolder}/dev/{$composeFileName}");
-        $dockerClient->build(['--no-cache']);
+        $finalCompose->dump("{$provisioningFolder}/dev/{$composeFileName}");
         $dockerClient->up(['-d']);
-    }
 
-    /**
-     * @param array  $compose
-     * @param array  $services
-     * @param string $destination
-     */
-    protected function dumpCompose($compose, $services, $destination)
-    {
-        $compose['services'] = $services;
-        $yaml                = Yaml::dump($compose);
-        $fs                  = new Filesystem();
-        $fs->dumpFile($destination, $yaml);
+        if ($finalCompose->hasService('solr')) {
+            $executor->createCore();
+            $executor->indexSolr();
+        }
     }
 }

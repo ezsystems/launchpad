@@ -22,7 +22,7 @@ class Clean extends DockerCommand
     {
         parent::configure();
         $this->setName('docker:clean')->setDescription('Clean all the services.');
-        $this->setAliases(['clean']);
+        $this->setAliases(['docker:down', 'clean', 'down']);
     }
 
     /**
@@ -30,7 +30,6 @@ class Clean extends DockerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->dockerClient->stop();
-        $this->dockerClient->remove(['-v']);
+        $this->dockerClient->down(['-v', '--remove-orphans']);
     }
 }

@@ -35,17 +35,20 @@ class ProjectWizard
     }
 
     /**
-     * @param array $compose
+     * @param DockerCompose $compose
      *
      * @return array
      */
-    public function __invoke($compose)
+    public function __invoke(DockerCompose $compose)
     {
         return [
             $this->getNetworkName(),
             $this->getComposerHttpBasicCredentials(),
             $this->getNetworkTCPPort(),
-            $this->getSelectedServices($compose['services']),
+            $this->getSelectedServices(
+                $compose->getServices(),
+                ['varnish', 'solr', 'mailcatcher', 'adminer', 'memcache', 'memcachedadmin']
+            ),
             $this->getProvisioningFolderName(),
             $this->getComposeFileName(),
         ];
@@ -132,15 +135,20 @@ class ProjectWizard
 
     /**
      * @param array $services
+     * @param array $questionnable
      *
      * @return array
      */
-    protected function getSelectedServices($services)
+    protected function getSelectedServices($services, $questionnable)
     {
         $selectedServices = [];
         foreach ($services as $name => $service) {
-            if ($this->io->confirm("Do you want the service <fg=yellow;options=bold>{$name}</>")) {
-                $selectedServices[$name] = $service;
+            if (in_array($name, $questionnable)) {
+                if ($this->io->confirm("Do you want the service <fg=yellow;options=bold>{$name}</>")) {
+                    $selectedServices[] = $name;
+                }
+            } else {
+                $selectedServices[] = $name;
             }
         }
 

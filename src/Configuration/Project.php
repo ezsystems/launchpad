@@ -6,6 +6,7 @@
 
 namespace eZ\Launchpad\Configuration;
 
+use eZ\Launchpad\Core\DockerCompose;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
 
@@ -143,16 +144,12 @@ class Project
     }
 
     /**
-     * @return array
+     * @return DockerCompose
      */
-    public function getServices()
+    public function getDockerCompose()
     {
         $projectPath = dirname($this->localFilePath);
 
-        return Yaml::parse(
-            file_get_contents(
-                "{$projectPath}/{$this->get('provisioning.folder_name')}/dev/docker-compose.yml"
-            )
-        )['services'];
+        return new DockerCompose("{$projectPath}/{$this->get('provisioning.folder_name')}/dev/docker-compose.yml");
     }
 }

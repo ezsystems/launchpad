@@ -36,5 +36,12 @@ class Create extends DockerCommand
         $this->taskExecutor->composerInstall();
         $this->taskExecutor->eZCreate();
         $this->taskExecutor->importData();
+
+        // if solr run the index
+        $compose = $this->projectConfiguration->getDockerCompose();
+        if ($compose->hasService('solr')) {
+            $this->taskExecutor->createCore();
+            $this->taskExecutor->indexSolr();
+        }
     }
 }
