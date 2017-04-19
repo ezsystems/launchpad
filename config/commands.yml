@@ -77,3 +77,8 @@ services:
         class: eZ\Launchpad\Command\SymfonyRun
         tags:
             - { name: ezlaunchpad.command }
+
+    ez.launchpad.comprun:
+        class: eZ\Launchpad\Command\ComposerRun
+        tags:
+            - { name: ezlaunchpad.command }

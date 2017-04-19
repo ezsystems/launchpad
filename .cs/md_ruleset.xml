@@ -54,6 +54,12 @@
             <property name="maximum" value="75"/>
         </properties>
     </rule>
+    <rule ref="rulesets/codesize.xml/TooManyPublicMethods">
+        <priority>1</priority>
+        <properties>
+            <property name="maxmethods" value="25"/>
+        </properties>
+    </rule>
     <rule ref="rulesets/codesize.xml/ExcessiveMethodLength">
         <priority>1</priority>
         <properties>
@@ -100,6 +106,7 @@
         <exclude name="TooManyFields"/>
         <exclude name="ExcessiveClassComplexity"/>
         <exclude name="ExcessivePublicCount"/>
+        <exclude name="TooManyPublicMethods"/>
         <exclude name="ExcessiveClassLength"/>
         <exclude name="ExcessiveMethodLength"/>
         <exclude name="ExcessiveParameterList"/>

@@ -12,9 +12,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class SymfonyRun.
+ * Class ComposerRun.
  */
-class SymfonyRun extends DockerCommand
+class ComposerRun extends DockerCommand
 {
     /**
      * {@inheritdoc}
@@ -22,9 +22,13 @@ class SymfonyRun extends DockerCommand
     protected function configure()
     {
         parent::configure();
-        $this->setName('docker:sfrun')->setDescription('Run a Symfony command in the engine.');
-        $this->setAliases(['sfrun']);
-        $this->addArgument('sfcommand', InputArgument::IS_ARRAY, 'Symfony Command to run in. Use "" to pass options.');
+        $this->setName('docker:comprun')->setDescription('Run Composer command in the engine.');
+        $this->setAliases(['comprun']);
+        $this->addArgument(
+            'compcommand',
+            InputArgument::IS_ARRAY,
+            'Composer Command to run in. Use "" to pass options.'
+        );
     }
 
     /**
@@ -32,8 +36,8 @@ class SymfonyRun extends DockerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $allArguments = $input->getArgument('sfcommand');
+        $allArguments = $input->getArgument('compcommand');
         $options      = '';
-        $this->taskExecutor->runSymfomyCommand(implode(' ', $allArguments)." {$options}");
+        $this->taskExecutor->runComposerCommand(implode(' ', $allArguments)." {$options}");
     }
 }

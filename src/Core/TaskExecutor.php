@@ -31,16 +31,6 @@ class TaskExecutor
     protected $recipes;
 
     /**
-     * @var string
-     */
-    protected $service;
-
-    /**
-     * @var string
-     */
-    protected $user;
-
-    /**
      * Executor constructor.
      *
      * @param DockerClient         $dockerClient
@@ -51,8 +41,6 @@ class TaskExecutor
         $this->dockerClient         = $dockerClient;
         $this->projectConfiguration = $configuration;
         $this->recipes              = $recipes;
-        $this->service              = 'engine';
-        $this->user                 = 'www-data';
     }
 
     /**
@@ -158,8 +146,6 @@ class TaskExecutor
     }
 
     /**
-     * @todo: improve here and make the options working
-     *
      * @param $arguments
      */
     public function runSymfomyCommand($arguments)
@@ -168,18 +154,20 @@ class TaskExecutor
     }
 
     /**
+     * @param $arguments
+     */
+    public function runComposerCommand($arguments)
+    {
+        $this->execute('ezplatform/composer.phar --working-dir=/var/www/html/project/ezplatform '.$arguments);
+    }
+
+    /**
      * @param      $command
      * @param null $user
      * @param null $service
      */
-    protected function execute($command, $user = null, $service = null)
+    protected function execute($command, $user = 'www-data', $service = 'engine')
     {
-        if ($user === null) {
-            $user = $this->user;
-        }
-        if ($service === null) {
-            $service = $this->service;
-        }
         $command = '/var/www/html/project/'.$command;
         $this->dockerClient->exec($command, ['--user', $user], $service);
     }
