@@ -92,12 +92,13 @@ class TaskExecutor
     /**
      * @param $version
      * @param $repository
+     * @param $initialData
      */
-    public function eZInstall($version, $repository)
+    public function eZInstall($version, $repository, $initialData)
     {
         $recipe = 'ez_install';
         $this->checkRecipeAvailability($recipe);
-        $this->execute("{$recipe}.bash {$repository} {$version}");
+        $this->execute("{$recipe}.bash {$repository} {$version} {$initialData}");
     }
 
     public function eZInstallSolr()

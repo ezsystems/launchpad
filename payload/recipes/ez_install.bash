@@ -6,8 +6,10 @@ PHP="php"
 COMPOSER="$PHP -d memory_limit=-1 composer.phar"
 REPO=$1
 VERSION=$2
+INIT_DATA=$3
 
-echo "Installation eZ Platform ($REPO:$VERSION) in the container"
+
+echo "Installation eZ Platform ($REPO:$VERSION:$INIT_DATA) in the container"
 # Install
 $COMPOSER create-project --no-dev --no-interaction $REPO ezplatform $VERSION
 cp composer.phar ezplatform
@@ -22,7 +24,7 @@ done
 echo ""
 
 $PHP app/console doctrine:database:create
-$PHP app/console ezplatform:install clean
+$PHP app/console ezplatform:install $INIT_DATA
 
 echo "Installation OK"
 

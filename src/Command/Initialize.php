@@ -32,6 +32,7 @@ class Initialize extends Command
         $this->setAliases(['docker:init', 'initialize', 'init']);
         $this->addArgument('repository', InputArgument::OPTIONAL, 'eZ Platform Repository', 'ezsystems/ezplatform');
         $this->addArgument('version', InputArgument::OPTIONAL, 'eZ Platform Version', '');
+        $this->addArgument('initialdata', InputArgument::OPTIONAL, 'eZ Platform Initial', 'clean');
     }
 
     /**
@@ -119,7 +120,8 @@ class Initialize extends Command
 
         $executor->eZInstall(
             $input->getArgument('version'),
-            $input->getArgument('repository')
+            $input->getArgument('repository'),
+            $input->getArgument('initialdata')
         );
         if ($finalCompose->hasService('solr')) {
             $executor->eZInstallSolr();
