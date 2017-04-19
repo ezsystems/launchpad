@@ -75,6 +75,7 @@ class Initialize extends Command
             [
                 "{$provisioningFolder}/dev/nginx/entrypoint.bash",
                 "{$provisioningFolder}/dev/engine/entrypoint.bash",
+                "{$provisioningFolder}/dev/solr/entrypoint.bash",
             ],
             0755
         );
