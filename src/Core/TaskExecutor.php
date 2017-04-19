@@ -74,7 +74,14 @@ class TaskExecutor
             );
         }
 
-        //@todo install the token too
+        foreach ($this->projectConfiguration->get('composer.token') as $auth) {
+            if (!isset($auth['host']) || !isset($auth['value'])) {
+                continue;
+            }
+            $this->execute(
+                'composer.phar config --global'." github-oauth.{$auth['host']} {$auth['value']}"
+            );
+        }
     }
 
     /**
