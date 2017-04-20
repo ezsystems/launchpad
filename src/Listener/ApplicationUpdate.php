@@ -61,8 +61,11 @@ class ApplicationUpdate
             $currentPwd              = getcwd();
             $provisioningFolder      = $this->projectConfiguration->get('provisioning.folder_name');
             $dockerComposeFileName   = $this->projectConfiguration->get('docker.compose_filename');
-            $dockerEnv = $event->getInput()->hasOption('env')?$event->getInput()->getOption('env'):'dev';
-            $dockerComposeFileFolder = NovaCollection([$currentPwd, $provisioningFolder, $dockerEnv]
+            $dockerEnv               = $event->getInput()->hasOption('env') ? $event->getInput()->getOption(
+                'env'
+            ) : 'dev';
+            $dockerComposeFileFolder = NovaCollection(
+                [$currentPwd, $provisioningFolder, $dockerEnv]
             )->implode(
                 '/'
             );
