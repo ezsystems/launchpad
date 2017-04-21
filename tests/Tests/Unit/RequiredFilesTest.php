@@ -7,8 +7,6 @@
 
 namespace eZ\Launchpad\Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
-
 /**
  * Class RequiredFileTest
  */

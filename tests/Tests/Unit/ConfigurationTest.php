@@ -9,8 +9,6 @@ namespace eZ\Launchpad\Tests\Unit;
 use eZ\Launchpad\Configuration\Configuration;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
 
 /**

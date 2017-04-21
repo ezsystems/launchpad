@@ -6,7 +6,6 @@
 
 namespace eZ\Launchpad\Console;
 
-use eZ\Launchpad\Command;
 use eZ\Launchpad\Configuration\Configuration;
 use eZ\Launchpad\Configuration\Project as ProjectConfiguration;
 use eZ\Launchpad\Core;

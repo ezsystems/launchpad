@@ -73,6 +73,7 @@ clean:
 	rm -f .ezlaunchpad.yml
 	rm -rf vendor
 	rm -rf ezplatform
+	rm -rf provisioning
 	rm -rf provisioning2ouf
 	rm -f ezinstall.bash
 

@@ -10,6 +10,7 @@ use eZ\Launchpad\Console\Application;
 use eZ\Launchpad\Core\Client\Docker;
 use eZ\Launchpad\Core\Command;
 use eZ\Launchpad\Core\DockerCompose;
+use eZ\Launchpad\Core\ProcessRunner;
 use eZ\Launchpad\Core\ProjectWizard;
 use eZ\Launchpad\Core\TaskExecutor;
 use Symfony\Component\Console\Input\InputArgument;
@@ -112,7 +113,7 @@ class Initialize extends Command
             'host-machine-mapping'     => $this->projectConfiguration->get('docker.host_machine_mapping'),
             'composer-cache-dir'       => $this->projectConfiguration->get('docker.host_composer_cache_dir'),
         ];
-        $dockerClient = new Docker($options);
+        $dockerClient = new Docker($options, new ProcessRunner());
         $dockerClient->build(['--no-cache']);
         $dockerClient->up(['-d']);
 

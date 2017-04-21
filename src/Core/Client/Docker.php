@@ -6,8 +6,8 @@
 
 namespace eZ\Launchpad\Core\Client;
 
+use eZ\Launchpad\Core\ProcessRunner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 /**
@@ -21,11 +21,17 @@ class Docker
     protected $options;
 
     /**
+     * @var ProcessRunner
+     */
+    protected $runner;
+
+    /**
      * Docker constructor.
      *
-     * @param array $options
+     * @param array         $options
+     * @param ProcessRunner $runner
      */
-    public function __construct($options = [])
+    public function __construct($options, ProcessRunner $runner)
     {
         $resolver = new OptionsResolver();
         $defaults = [
@@ -47,6 +53,8 @@ class Docker
         $resolver->setAllowedTypes('network-prefix-port', 'int');
         $resolver->setAllowedTypes('host-machine-mapping', ['null', 'string']);
         $this->options = $resolver->resolve($options);
+
+        $this->runner = $runner;
     }
 
     /**
@@ -105,55 +113,107 @@ class Docker
         return explode(':', $this->options['host-machine-mapping'])[1];
     }
 
+    /**
+     * @param string $service
+     *
+     * @return Process
+     */
     public function start($service = '')
     {
-        $this->perform('start', $service);
+        return $this->perform('start', $service);
     }
 
+    /**
+     * @param string $service
+     *
+     * @return Process
+     */
     public function stop($service = '')
     {
-        $this->perform('stop', $service);
+        return $this->perform('stop', $service);
     }
 
+    /**
+     * @param array  $args
+     * @param string $service
+     *
+     * @return Process
+     */
     public function build($args = [], $service = '')
     {
-        $this->perform('build', $service, $args);
+        return $this->perform('build', $service, $args);
     }
 
+    /**
+     * @param array  $args
+     * @param string $service
+     *
+     * @return Process
+     */
     public function up($args = [], $service = '')
     {
-        $this->perform('up', $service, $args);
+        return $this->perform('up', $service, $args);
     }
 
+    /**
+     * @param array  $args
+     * @param string $service
+     *
+     * @return Process
+     */
     public function remove($args = [], $service = '')
     {
-        $this->perform('rm', $service, $args);
+        return $this->perform('rm', $service, $args);
     }
 
-    public function down($args = [], $service = '')
+    /**
+     * @param array $args
+     *
+     * @return Process
+     */
+    public function down($args = [])
     {
-        $this->perform('down', $service, $args);
+        return $this->perform('down', '', $args);
     }
 
-    public function ps($args = [], $service = '')
+    /**
+     * @param array $args
+     *
+     * @return Process
+     */
+    public function ps($args = [])
     {
-        $this->perform('ps', $service, $args);
+        return $this->perform('ps', '', $args);
     }
 
+    /**
+     * @param array  $args
+     * @param string $service
+     *
+     * @return Process
+     */
     public function logs($args = [], $service = '')
     {
-        $this->perform('logs', $service, $args);
+        return $this->perform('logs', $service, $args);
     }
 
+    /**
+     * @param $command
+     * @param $args
+     * @param $service
+     *
+     * @return Process
+     */
     public function exec($command, $args, $service)
     {
         array_push($args, $service);
         array_push($args, $command);
-        $this->perform('exec', '', $args);
+
+        return $this->perform('exec', '', $args);
     }
 
     /**
-     * @return string
+     * @return array
      */
     public function getComposeEnvVariables()
     {
@@ -180,30 +240,17 @@ class Docker
 
     /**
      * @param string $action
+     * @param string $service
+     * @param array  $args
+     *
+     * @return Process
      */
     protected function perform($action, $service = '', $args = [])
     {
         $args    = implode(' ', $args);
         $command = "docker-compose -p {$this->getNetworkName()} -f {$this->getComposeFileName()}";
 
-        $command = "{$command} {$action} {$args} {$service} ";
-        $process = new Process(escapeshellcmd($command), null, $this->getComposeEnvVariables());
-        if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
-            $process->setTty(true);
-        }
-        $process->setTimeout(2 * 3600);
-        try {
-            $process->mustRun();
-        } catch (ProcessFailedException $e) {
-            $authorizedExitCodes = [
-                129, // Hangup
-                130, // Interrupt
-            ];
-
-            if (!in_array($e->getProcess()->getExitCode(), $authorizedExitCodes)) {
-                throw $e;
-            }
-        }
+        return $this->runner->run("{$command} {$action} {$args} {$service} ", $this->getComposeEnvVariables());
     }
 
     /**

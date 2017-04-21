@@ -9,6 +9,7 @@ namespace eZ\Launchpad\Core;
 use eZ\Launchpad\Configuration\Project as ProjectConfiguration;
 use eZ\Launchpad\Core\Client\Docker as DockerClient;
 use Novactive\Collection\Collection;
+use Symfony\Component\Process\Process;
 
 /**
  * Class TaskExecutor.
@@ -54,22 +55,23 @@ class TaskExecutor
     }
 
     /**
-     * Composer Install and Configurations (auth and token).
+     * @return Process[]
      */
     public function composerInstall()
     {
         $recipe = 'composer_install';
         $this->checkRecipeAvailability($recipe);
 
+        $processes = [];
         // composer install
-        $this->execute("{$recipe}.bash");
+        $processes[] = $this->execute("{$recipe}.bash");
 
         // Composer Configuration
         foreach ($this->projectConfiguration->get('composer.http_basic') as $auth) {
             if (!isset($auth['host']) || !isset($auth['login']) || !isset($auth['password'])) {
                 continue;
             }
-            $this->execute(
+            $processes[] = $this->execute(
                 'composer.phar config --global'." http-basic.{$auth['host']} {$auth['login']} {$auth['password']}"
             );
         }
@@ -78,104 +80,134 @@ class TaskExecutor
             if (!isset($auth['host']) || !isset($auth['value'])) {
                 continue;
             }
-            $this->execute(
+            $processes[] = $this->execute(
                 'composer.phar config --global'." github-oauth.{$auth['host']} {$auth['value']}"
             );
         }
+
+        return $processes;
     }
 
     /**
      * @param $version
      * @param $repository
      * @param $initialData
+     *
+     * @return Process
      */
     public function eZInstall($version, $repository, $initialData)
     {
         $recipe = 'ez_install';
         $this->checkRecipeAvailability($recipe);
-        $this->execute("{$recipe}.bash {$repository} {$version} {$initialData}");
+
+        return $this->execute("{$recipe}.bash {$repository} {$version} {$initialData}");
     }
 
+    /**
+     * @return Process
+     */
     public function eZInstallSolr()
     {
         $recipe = 'ez_install_solr';
         $this->checkRecipeAvailability($recipe);
-        $this->execute(
+
+        return $this->execute(
             "{$recipe}.bash {$this->projectConfiguration->get('provisioning.folder_name')} COMPOSER_INSTALL"
         );
     }
 
+    /**
+     * @return Process
+     */
     public function indexSolr()
     {
         $recipe = 'ez_install_solr';
         $this->checkRecipeAvailability($recipe);
-        $this->execute(
+
+        return $this->execute(
             "{$recipe}.bash {$this->projectConfiguration->get('provisioning.folder_name')} INDEX"
         );
     }
 
+    /**
+     * @return Process
+     */
     public function createCore()
     {
         $recipe = 'ez_install_solr';
         $this->checkRecipeAvailability($recipe);
-        $this->execute(
+
+        return $this->execute(
             "{$recipe}.bash {$this->projectConfiguration->get('provisioning.folder_name')} CREATE_CORE",
             'solr',
             'solr'
         );
     }
 
+    /**
+     * @return Process
+     */
     public function eZCreate()
     {
         $recipe = 'ez_create';
         $this->checkRecipeAvailability($recipe);
-        $this->execute("{$recipe}.bash");
+
+        return $this->execute("{$recipe}.bash");
     }
 
     /**
-     * Dump Data.
+     * @return Process
      */
     public function dumpData()
     {
         $recipe = 'create_dump';
         $this->checkRecipeAvailability($recipe);
-        $this->execute("{$recipe}.bash");
+
+        return $this->execute("{$recipe}.bash");
     }
 
     /**
-     * Import Dump.
+     * @return Process
      */
     public function importData()
     {
         $recipe = 'import_dump';
         $this->checkRecipeAvailability($recipe);
-        $this->execute("{$recipe}.bash");
+
+        return $this->execute("{$recipe}.bash");
     }
 
     /**
      * @param $arguments
+     *
+     * @return Process
      */
     public function runSymfomyCommand($arguments)
     {
-        $this->execute('ezplatform/app/console '.$arguments);
+        return $this->execute('ezplatform/app/console '.$arguments);
     }
 
     /**
      * @param $arguments
+     *
+     * @return Process
      */
     public function runComposerCommand($arguments)
     {
-        $this->execute('ezplatform/composer.phar --working-dir=/var/www/html/project/ezplatform '.$arguments);
+        return $this->execute('ezplatform/composer.phar --working-dir=/var/www/html/project/ezplatform '.$arguments);
     }
 
     /**
-     * @param      $command
-     * @param null $user
-     * @param null $service
+     * @param string $command
+     * @param string $user
+     * @param string $service
+     *
+     * @return \Symfony\Component\Process\Process
      */
     protected function execute($command, $user = 'www-data', $service = 'engine')
     {
         $command = '/var/www/html/project/'.$command;
-        $this->dockerClient->exec($command, ['--user', $user], $service);
+
+        return $this->dockerClient->exec($command, ['--user', $user], $service);
     }
 }

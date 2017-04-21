@@ -7,7 +7,6 @@
 namespace eZ\Launchpad\Tests\Unit;
 
 use eZ\Launchpad\Core\DockerCompose;
-use PHPUnit\Framework\TestCase;
 
 class DockerComposeTest extends TestCase
 {
@@ -22,6 +21,7 @@ class DockerComposeTest extends TestCase
      */
     public function setUp()
     {
+        parent::setUp();
         $this->compose = new DockerCompose(__DIR__."/../../../payload/dev/docker-compose.yml");
     }
 

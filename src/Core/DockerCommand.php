@@ -47,7 +47,7 @@ abstract class DockerCommand extends Command
     {
         parent::initialize($input, $output);
         $this->environment = $input->getOption('env');
-
+        $this->projectConfiguration->setEnvironment($this->environment);
         $fs                      = new Filesystem();
         $currentPwd              = $this->projectPath;
         $provisioningFolder      = $this->projectConfiguration->get('provisioning.folder_name');
@@ -69,7 +69,7 @@ abstract class DockerCommand extends Command
             'composer-cache-dir'       => $this->projectConfiguration->get('docker.host_composer_cache_dir'),
         ];
 
-        $this->dockerClient = new Docker($options);
+        $this->dockerClient = new Docker($options, new ProcessRunner());
         $this->taskExecutor = new TaskExecutor(
             $this->dockerClient,
             $this->projectConfiguration,

@@ -31,6 +31,11 @@ class Project
     protected $configurations;
 
     /**
+     * @var string The Current Docker Environment
+     */
+    protected $environment;
+
+    /**
      * Project constructor.
      *
      * @param string $globalFilePath
@@ -106,6 +111,14 @@ class Project
     }
 
     /**
+     * @param string $environment
+     */
+    public function setEnvironment($environment)
+    {
+        $this->environment = $environment;
+    }
+
+    /**
      * Store inMemory and in the good file.
      *
      * @param array  $keyValues
@@ -150,6 +163,9 @@ class Project
     {
         $projectPath = dirname($this->localFilePath);
 
-        return new DockerCompose("{$projectPath}/{$this->get('provisioning.folder_name')}/dev/docker-compose.yml");
+        return new DockerCompose(
+            "{$projectPath}/"."{$this->get('provisioning.folder_name')}/".
+            "{$this->environment}/{$this->get('docker.compose_filename')}"
+        );
     }
 }
