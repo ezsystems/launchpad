@@ -14,6 +14,9 @@ if [ $ACTION == "COMPOSER_INSTALL" ]; then
     $COMPOSER require --update-with-dependencies ezsystems/ezplatform-solr-search-engine:~1.3@alpha
     mkdir -p $DESTINATION_TEMPLATE
     cp -R vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/* $DESTINATION_TEMPLATE
+    # simplest way to allow solr to add the conf here... from its own container
+    # We could do better by extending the Dockerfile and build.. but it is also less "generic"
+    chmod -R 777 $DESTINATION_EZ
 fi
 
 if [ $ACTION == "INDEX" ]; then
