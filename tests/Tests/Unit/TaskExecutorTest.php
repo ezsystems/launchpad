@@ -49,7 +49,7 @@ class TaskExecutorTest extends TestCase
         }
 
         $startWith = "exec --user www-data engine";
-        $path      = "/var/www/html/project";
+        $path      = $this->getDockerClient()->getProjectPathContainer();
 
         $this->assertEquals("{$startWith} {$path}/composer_install.bash", $suffixes[0]);
         $this->assertEquals(

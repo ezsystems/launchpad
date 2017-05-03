@@ -8,9 +8,14 @@ cd ${PROJECTDIR}
 
 echoTitle "******** Build it! ********"
 
+if [ ! -f composer.phar ]; then
+    echoInfo "Install composer.phar before..."
+    curl -s http://getcomposer.org/installer | $PHP
+    echoAction "Building now..."
+fi
 if [ ! -f box.phar ]; then
     echoInfo "Install box.phar before..."
-    curl -LSs https://box-project.github.io/box2/installer.php | php
+    curl -LSs https://box-project.github.io/box2/installer.php | $PHP
     echoAction "Building now..."
 fi
 

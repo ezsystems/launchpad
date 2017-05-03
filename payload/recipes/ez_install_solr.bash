@@ -9,7 +9,7 @@ PHP="php"
 
 if [ $ACTION == "COMPOSER_INSTALL" ]; then
     # it is run on the engine
-    cd /var/www/html/project/ezplatform
+    cd $PROJECTMAPPINGFOLDER/ezplatform
     COMPOSER="$PHP -d memory_limit=-1 composer.phar"
     $COMPOSER require --update-with-dependencies ezsystems/ezplatform-solr-search-engine:~1.3@alpha
     mkdir -p $DESTINATION_TEMPLATE
@@ -28,7 +28,7 @@ if [ $ACTION == "INDEX" ]; then
     # wait cores
     sleep 5
     echo "Solr is running"
-    cd /var/www/html/project/ezplatform
+    cd $PROJECTMAPPINGFOLDER/ezplatform
     $PHP app/console --env=prod ezplatform:reindex
 fi
 
@@ -39,7 +39,7 @@ if [ $ACTION == "CREATE_CORE" ]; then
         sleep 2
     done
     echo "Solr is running"
-    /opt/solr/bin/solr create_core -c collection1 -d /ezsolr/server/ez/template
+    /opt/solr/bin/solr create_core -c collection1 -d $DESTINATION_TEMPLATE
     echo "Core created."
 fi
 

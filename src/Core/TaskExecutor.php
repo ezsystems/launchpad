@@ -194,7 +194,10 @@ class TaskExecutor
      */
     public function runComposerCommand($arguments)
     {
-        return $this->execute('ezplatform/composer.phar --working-dir=/var/www/html/project/ezplatform '.$arguments);
+        return $this->execute(
+            'ezplatform/composer.phar --working-dir='.$this->dockerClient->getProjectPathContainer().'/ezplatform '.
+            $arguments
+        );
     }
 
     /**
@@ -206,7 +209,7 @@ class TaskExecutor
      */
     protected function execute($command, $user = 'www-data', $service = 'engine')
     {
-        $command = '/var/www/html/project/'.$command;
+        $command = $this->dockerClient->getProjectPathContainer().'/'.$command;
 
         return $this->dockerClient->exec($command, ['--user', $user], $service);
     }

@@ -159,6 +159,8 @@ docker:
             "HOST_COMPOSER_CACHE_DIR" => getenv('HOME')."/.composer/cache",
             "DEV_UID"                 => getmyuid(),
             "DEV_GID"                 => getmygid(),
+            'COMPOSER_CACHE_DIR'      => "/var/www/composer_cache",
+            'PROJECTMAPPINGFOLDER'    => "/var/www/html/project",
         ];
     }
 }
