@@ -14,13 +14,13 @@ fi
 
 # Create .composer in advance and set the permissions
 mkdir -p /var/www/.composer && chown www-data:www-data /var/www/.composer
-chown www-data:www-data /var/www/html/project
+chown www-data:www-data $PROJECTMAPPINGFOLDER
 
 # give the good permissions to www-data in the container
-if [ -d /var/www/html/project/ezplatform/app/cache ]; then
-    chown -R www-data:www-data /var/www/html/project/ezplatform/app/cache
-    chown -R www-data:www-data /var/www/html/project/ezplatform/app/logs
-    chown -R www-data:www-data /var/www/html/project/ezplatform/web
+if [ -d $PROJECTMAPPINGFOLDER/ezplatform/app/cache ]; then
+    chown -R www-data:www-data $PROJECTMAPPINGFOLDER/ezplatform/app/cache
+    chown -R www-data:www-data $PROJECTMAPPINGFOLDER/ezplatform/app/logs
+    chown -R www-data:www-data $PROJECTMAPPINGFOLDER/ezplatform/web
 fi
 
 exec "$@"

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd /var/www/html/project
+cd $PROJECTMAPPINGFOLDER
 
 # Wait for the DB
 while ! mysqladmin ping -h"$DATABASE_HOST" -u"$DATABASE_USER" -p"$DATABASE_PASSWORD" --silent; do

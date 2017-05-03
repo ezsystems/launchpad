@@ -39,6 +39,7 @@ class Docker
             'network-name'             => null,
             'network-prefix-port'      => null,
             'project-path'             => null,
+            'project-path-container'   => '/var/www/html/project',
             'host-machine-mapping'     => null,
             'provisioning-folder-name' => null,
             'composer-cache-dir'       => null,
@@ -47,6 +48,7 @@ class Docker
         $resolver->setRequired(array_keys($defaults));
         $resolver->setAllowedTypes('compose-file', 'string');
         $resolver->setAllowedTypes('project-path', 'string');
+        $resolver->setAllowedTypes('project-path-container', 'string');
         $resolver->setAllowedTypes('network-name', 'string');
         $resolver->setAllowedTypes('composer-cache-dir', ['null', 'string']);
         $resolver->setAllowedTypes('provisioning-folder-name', 'string');
@@ -87,6 +89,14 @@ class Docker
     protected function getProjectPath()
     {
         return $this->options['project-path'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getProjectPathContainer()
+    {
+        return $this->options['project-path-container'];
     }
 
     /**
@@ -235,6 +245,10 @@ class Docker
                 'HOST_COMPOSER_CACHE_DIR' => $composerCacheDir,
                 'DEV_UID'                 => getmyuid(),
                 'DEV_GID'                 => getmygid(),
+                // In container composer cache directory - (will be mapped to host:composer-cache-dir)
+                'COMPOSER_CACHE_DIR'      => '/var/www/composer_cache',
+                // where to mount the project root directory in the container - (will be mapped to host:project-path)
+                'PROJECTMAPPINGFOLDER'    => $this->getProjectPathContainer(),
             ];
     }
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd /var/www/html/project
+cd $PROJECTMAPPINGFOLDER
 
 PHP="php"
 COMPOSER="$PHP -d memory_limit=-1 composer.phar"

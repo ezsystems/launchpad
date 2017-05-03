@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd /var/www/html/project
+cd $PROJECTMAPPINGFOLDER
 
 # As we are doing build and up we might run here before the end of the entrypoint
 while true ; do

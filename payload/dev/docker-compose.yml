@@ -1,5 +1,4 @@
 version: '2'
-
 services:
     nginx:
         image: nginx:stable-alpine
@@ -15,29 +14,32 @@ services:
         ports:
             - "${PROJECTPORTPREFIX}080:80"
             - "${PROJECTPORTPREFIX}081:81"
+        environment:
+            - PROJECTMAPPINGFOLDER
 
     engine:
         build: ./engine/
         volumes:
             - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/engine/php.ini:/usr/local/etc/php/php.ini:ro"
-            - "${PROJECTCOMPOSEPATH}:/var/www/html/project:rw"
-            - "${HOST_COMPOSER_CACHE_DIR}:/var/www/composer_cache:rw"
+            - "${PROJECTCOMPOSEPATH}:${PROJECTMAPPINGFOLDER}:rw"
+            - "${HOST_COMPOSER_CACHE_DIR}:${COMPOSER_CACHE_DIR}:rw"
             - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/solr:/ezsolr:rw"
         shm_size: 754M
         environment:
-            - "COMPOSER_CACHE_DIR=/var/www/composer_cache"
-            - "DATABASE_HOST=db"
-            - "SYMFONY_SECRET=eZlaunchpad20Secret09Dev83ModeZ"
-            - "DATABASE_NAME=ezplatform"
+            - COMPOSER_CACHE_DIR
+            - PROJECTMAPPINGFOLDER
+            - DEV_UID
+            - DEV_GID
             - "DATABASE_USER=root"
+            - "DATABASE_NAME=ezplatform"
             - "DATABASE_PASSWORD=ezplatform"
+            - "SYMFONY_SECRET=eZlaunchpad20Secret09Dev83ModeZ"
+            - "DATABASE_HOST=db"
             - "CUSTOM_CACHE_POOL=singlememcached"
             - "CACHE_HOST=memcache"
             - "CACHE_MEMCACHED_PORT=11211"
             - "SEARCH_ENGINE=solr"
             - "SOLR_DSN=http://solr:8983/solr"
-            - "DEV_UID"
-            - "DEV_GID"
 
     db:
         image: mariadb:10.1
@@ -64,12 +66,14 @@ services:
         volumes:
             - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/solr:/ezsolr:rw"
             - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/solr/entrypoint.bash:/entrypoint.bash:ro"
-            - "${PROJECTCOMPOSEPATH}:/var/www/html/project:rw"
+            - "${PROJECTCOMPOSEPATH}:${PROJECTMAPPINGFOLDER}:rw"
         ports:
             - "${PROJECTPORTPREFIX}983:8983"
         entrypoint: /entrypoint.bash
         depends_on:
             - engine
+        environment:
+            - PROJECTMAPPINGFOLDER
 
     # Mailcatcher
     mailcatcher:

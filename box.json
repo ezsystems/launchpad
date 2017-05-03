@@ -14,7 +14,8 @@
         "payload"
     ],
     "files": [
-        "LICENSE"
+        "LICENSE",
+        "payload/dev/solr/.gitignore"
     ],
     "finder": [
         {
