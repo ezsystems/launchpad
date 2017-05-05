@@ -13,6 +13,11 @@ services:
         tags:
             - { name: kernel.event_listener, event: console.command, method: onCommandAction }
 
+    ezlaunchpad_d4m.listener:
+        class: eZ\Launchpad\Listener\D4MListener
+        tags:
+            - { name: kernel.event_listener, event: console.command, method: onCommandAction }
+
     ezlaunchpad_command_exception.listener:
         class: eZ\Launchpad\Listener\CommandException
         tags:
