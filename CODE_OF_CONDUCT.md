@@ -48,4 +48,4 @@ This Code of Conduct is adapted from the Contributor Covenant, version 1.4, avai
 
 ## Contributing
 
-[CONTRIBUTING](CONTRIBUTING)
+[CONTRIBUTING](CONTRIBUTING.md)
