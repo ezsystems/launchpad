@@ -10,7 +10,7 @@ You can find the full documentation here: https://ezsystems.github.io/launchpad
 
 ## Contribution
 
-[CONTRIBUTING](CONTRIBUTING)
+[CONTRIBUTING](CONTRIBUTING.md)
 
 ## License
 
