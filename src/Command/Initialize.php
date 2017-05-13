@@ -41,6 +41,7 @@ class Initialize extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $fs = new Filesystem();
         // get the boiler plate
         // run it with few mount
         $application = $this->getApplication();
@@ -65,11 +66,9 @@ class Initialize extends Command
         );
 
         $compose->filterServices($selectedServices);
-        unset($selectedServices);
 
         // start the scafolding of the Payload
         $provisioningFolder = "{$this->projectPath}/{$provisioningName}";
-        $fs                 = new Filesystem();
         $fs->mkdir("{$provisioningFolder}/dev");
         $fs->mirror("{$this->getPayloadDir()}/dev", "{$provisioningFolder}/dev");
         $fs->chmod(
@@ -80,6 +79,32 @@ class Initialize extends Command
             ],
             0755
         );
+
+        // PHP.ini ADAPTATION
+        $phpINIPath = "{$provisioningFolder}/dev/engine/php.ini";
+        $conf       = <<<END
+; memcache configuration in dev 
+session.save_handler = memcached
+session.save_path = "memcache:11211?persistent=1&weight=1&timeout=1&retry_interval=15"
+END;
+        $iniContent = file_get_contents($phpINIPath);
+        $iniContent = str_replace(
+            '##MEMCACHE_CONFIG##',
+            in_array('memcache', $selectedServices) ? $conf : '',
+            $iniContent
+        );
+
+        $conf       = <<<END
+; mailcatcher configuration in dev 
+sendmail_path = /usr/bin/env catchmail --smtp-ip mailcatcher --smtp-port 1025 -f docker@localhost
+END;
+        $iniContent = str_replace(
+            '##SENDMAIL_CONFIG##',
+            in_array('mailcatcher', $selectedServices) ? $conf : '',
+            $iniContent
+        );
+        $fs->dumpFile($phpINIPath, $iniContent);
+        unset($selectedServices);
 
         $finalCompose = clone $compose;
         $compose->cleanForInitialize();

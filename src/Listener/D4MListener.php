@@ -96,11 +96,11 @@ class D4MListener
             return false;
         }
 
-        $isD4MScreenExist = $this->isD4MScreenExist();
+        $isD4MScreenExist          = $this->isD4MScreenExist();
         list($export, $mountPoint) = $this->getHostMapping();
-        $isResvReady   = $this->isResvReady();
-        $isExportReady = $this->isExportReady($export);
-        $exportLine    = "{$export} -mapall=".getenv('USER').':staff localhost';
+        $isResvReady               = $this->isResvReady();
+        $isExportReady             = $this->isExportReady($export);
+        $exportLine                = "{$export} -mapall=".getenv('USER').':staff localhost';
 
         if (!$isResvReady || !$isExportReady || !$isD4MScreenExist) {
             $io->caution('You are on Mac OS X, for optimal performance we recommend to mount the host through NFS.');
