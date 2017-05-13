@@ -75,6 +75,7 @@ class ApplicationUpdate
                 $io->error('Your are not in a folder managed by eZ Launchpad.');
                 $event->disableCommand();
                 $event->stopPropagation();
+
                 return;
             }
         }

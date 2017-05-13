@@ -15,6 +15,9 @@ services:
 
     ezlaunchpad_d4m.listener:
         class: eZ\Launchpad\Listener\D4MListener
+        arguments:
+            - {env: "%app_env%"}
+            - "@project_configuration"
         tags:
             - { name: kernel.event_listener, event: console.command, method: onCommandAction }
 
