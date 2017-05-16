@@ -67,22 +67,28 @@ class TaskExecutor
         $processes[] = $this->execute("{$recipe}.bash");
 
         // Composer Configuration
-        foreach ($this->projectConfiguration->get('composer.http_basic') as $auth) {
-            if (!isset($auth['host']) || !isset($auth['login']) || !isset($auth['password'])) {
-                continue;
+        $httpBasics = $this->projectConfiguration->get('composer.http_basic');
+        if (is_array($httpBasics)) {
+            foreach ($httpBasics as $auth) {
+                if (!isset($auth['host']) || !isset($auth['login']) || !isset($auth['password'])) {
+                    continue;
+                }
+                $processes[] = $this->execute(
+                    'composer.phar config --global'." http-basic.{$auth['host']} {$auth['login']} {$auth['password']}"
+                );
             }
-            $processes[] = $this->execute(
-                'composer.phar config --global'." http-basic.{$auth['host']} {$auth['login']} {$auth['password']}"
-            );
         }
 
-        foreach ($this->projectConfiguration->get('composer.token') as $auth) {
-            if (!isset($auth['host']) || !isset($auth['value'])) {
-                continue;
+        $tokens = $this->projectConfiguration->get('composer.token');
+        if (is_array($tokens)) {
+            foreach ($tokens as $auth) {
+                if (!isset($auth['host']) || !isset($auth['value'])) {
+                    continue;
+                }
+                $processes[] = $this->execute(
+                    'composer.phar config --global'." github-oauth.{$auth['host']} {$auth['value']}"
+                );
             }
-            $processes[] = $this->execute(
-                'composer.phar config --global'." github-oauth.{$auth['host']} {$auth['value']}"
-            );
         }
 
         return $processes;
