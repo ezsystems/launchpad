@@ -1,256 +1,299 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="no-js">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>eZ Launchpad - eZ Systems</title>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/font-awesome.min.css" rel="stylesheet">
-    <link href="css/ezlaunchpad.css" rel="stylesheet">
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <title>eZ Launchpad - Project Page and Documentation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="https://www.ezplatform.com/favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700|Open+Sans:400,600">
+
+    <link rel="stylesheet" type="text/css" href="https://www.ezplatform.com/css/9c79026.css">
+    <style>
+        .container .text-muted {
+            margin: 20px 0;
+        }
+
+        .highlight {
+            position: relative;
+        }
+
+        .highlight .to-clipboard {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 10;
+            display: block;
+            padding: 5px 8px;
+            font-size: 12px;
+            color: #767676;
+            cursor: pointer;
+            background-color: #fff;
+            border: 1px solid #e1e1e8;
+            border-radius: 0 4px 0 4px;
+        }
+
+    </style>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <!-- Google Analytics -->
+    <script>
+    </script>
+
 </head>
 <body>
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/"><i class="fa fa-rocket" aria-hidden="true"></i> eZ Launchpad</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="/">Home</a></li>
-                <li><a href="#installation">Installation</a></li>
-                <li><a href="#usage">Usage</a></li>
-                <li><a href="#stack">Stack</a></li>
-                <li><a href="#commands">Commands</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">More
-                        <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#d4m">Mac OS X optimizations with D4M</a></li>
-                        <li><a href="#home">Global configurations</a></li>
+<main class="white-background">
+
+    <header>
+        <nav class="navbar navbar-default navbar-static-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                    <a class="navbar-brand" href="https://ezsystems.github.io/launchpad">
+                        <img src="https://www.ezplatform.com/assets/images/ez-logo.svg">
+                    </a>
+                </div>
+
+                <div class="collapse navbar-collapse " id="navbar">
+                    <ul class="nav navbar-nav">
+                        <li><a href="#installation">Installation</a></li>
+                        <li><a href="#usage">Usage</a></li>
+                        <li><a href="#stack">Stack</a></li>
+                        <li><a href="#commands">Commands</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">More
+                                <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#d4m">Mac OS X optimizations with D4M</a></li>
+                                <li><a href="#home">Global configurations</a></li>
+                            </ul>
+                        </li>
                     </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="https://www.ezplatform.com" target="_blank">eZ Platform</a></li>
+                        <li><a href="https://www.ezplatform.com/Blog">eZ Blog</a></li>
+                        <li><a href="//ez-community-on-slack.herokuapp.com" target="_blank"> Slack
+                            <i class="fa fa-slack" aria-hidden="true"></i></a></li>
+                        <li><a href="//github.com/ezsystems/launchpad" target="_blank">Github
+                            <i class="fa fa-github" aria-hidden="true"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1><i class="fa fa-rocket fa-2x" aria-hidden="true"></i>eZ Launchpad</h1>
+        <p>An tool that will help you build an
+            <a href="http://ezplatform.com" target="_blank">eZ Platform</a> project on top of
+            <a href="https://www.docker.com/" target="_blank">Docker</a> in less than 5 minutes.</p>
+
+        <div class="alert alert-success" role="alert">
+            <p>
+                <i class="fa fa-code" aria-hidden="true"></i> You will end up with a full <strong>Docker stack</strong>
+                                                              where the source-code
+                                                              is on your host for you <strong>to start coding</strong>
+                                                              right away!
+            </p>
+        </div>
+
+        <h2 id="screencast"><i class="fa fa-play" aria-hidden="true"></i> Demo</h2>
+        <div>
+            <p>This is a demo of an <a href="#initstack">initialization</a>, starting from scratch,
+               you will get everything ready to code, commit and push!</p>
+
+            <center>
+                <iframe width="800" height="450" src="https://www.youtube.com/embed/N_wd-yAlKmA" frameborder="0" allowfullscreen></iframe>
+            </center>
+        </div>
+
+
+        <h2 id="installation"><i class="fa fa-magic" aria-hidden="true"></i> Installation</h2>
+        <div>
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#installioncurl" aria-controls="home" role="tab" data-toggle="tab">curl</a></li>
+                <li role="presentation">
+                    <a href="#installionwget" aria-controls="profile" role="tab" data-toggle="tab">wget</a></li>
+            </ul>
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="installioncurl">
+                    <br/>
+                    <p>If you have <strong>curl</strong> installed:</p>
+                    <div class="highlight">
+                        <button class="to-clipboard">
+                            <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+                        </button>
+                        <pre>$ <code>curl -LSs https://ezsystems.github.io/launchpad/install_curl.bash | bash</code></pre>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="installionwget">
+                    <br/>
+                    <p>If you have <strong>wget</strong> installed:</p>
+                    <div class="highlight">
+                        <button class="to-clipboard">
+                            <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+                        </button>
+                        <pre>$ <code>wget -O - "https://ezsystems.github.io/launchpad/install_wget.bash" | bash</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h2 id="usage"><i class="fa fa-keyboard-o" aria-hidden="true"></i> Usage</h2>
+        <div>
+            <p>When you have installed eZ Launchpad (<em>~/ez</em>) you can start enjoying the feature.</p>
+            <p>eZ Launchpad provides 2 mains features:</p>
+            <ul>
+                <li><strong>Initialization</strong> of a brand new eZ Platform Stack (on top of Docker)</li>
+                <li><strong>Create</strong> the Docker Stack related to the current directory.</li>
+            </ul>
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#initstack" aria-controls="home" role="tab" data-toggle="tab">Start from scratch</a></li>
+                <li role="presentation">
+                    <a href="#createstack" aria-controls="profile" role="tab" data-toggle="tab">Boostrap an existing project</a>
                 </li>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="https://github.com/ezsystems/launchpad" target="_blank"><i class="fa fa-github fa-2x" aria-hidden="true"></i></a>
-                </li>
+
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="initstack">
+                    <h3><i class="fa fa-play" aria-hidden="true"></i> Init
+                        <small>ialization</small>
+                    </h3>
+                    <p>That is the from scratch installation. You need to do that when you have nothing and you want to start a new project with eZ Platform.</p>
+                    <div class="highlight">
+                        <button class="to-clipboard">
+                            <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+                        </button>
+                        <pre>$ <code>~/ez init</code></pre>
+                    </div>
+
+                    <p>From here eZ Launchpad will ask you a bunch of question to configure your project.</p>
+                    <div class="alert alert-info" role="alert">
+                        <p><i class="fa fa-apple" aria-hidden="true"></i> Mac OS X users will have a wizard to set up
+                            <a href="#d4m" class="alert-link">D4M</a>.</p>
+                    </div>
+                    <p>At the end of the procedure those steps will be done for you:</p>
+                    <ul>
+                        <li>Configuration your project locally.</li>
+                        <li>Download(pull) the correct image on your Docker Daemon.</li>
+                        <li>Set up a eZ compliant <em>docker-compose.yml</em>.</li>
+                        <li>Create and start the containers required.(depending of the choices you made)</li>
+                        <li>Install Composer in the Engine container.(where PHP is executed in your Stack)</li>
+                        <li>Install eZ Platform through Composer inside the stack.</li>
+                    </ul>
+
+                    <p>Once the Initialization is finished, the project is up, you can check doing:</p>
+                    <div class="highlight">
+                        <button class="to-clipboard">
+                            <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+                        </button>
+                        <pre>$ <code>~/ez ps</code></pre>
+                    </div>
+
+                    <p>You are now ready dump the database and storage, git commit and push to share the project to your teams.</p>
+                    <div class="highlight">
+                        <button class="to-clipboard">
+                            <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+                        </button>
+                        <pre>$ <code>~/ez dumpdata; git init; git add .; git commit -m "First Initial Commit"</code></pre>
+                    </div>
+                    <div class="highlight">
+                        <button class="to-clipboard">
+                            <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+                        </button>
+                        <pre>$ <code>git remote add origin https://gitorigin.com/xxx/xxxx-xxx.git; git push -u origin master</code></pre>
+                    </div>
+                    <h4><i class="fa fa-building" aria-hidden="true"></i> eZ Platform Enterprise</h4>
+                    <p>
+                        Whether you want to use an entreprise version or a non-stable, you have the choice! Look at the help
+                        There is an example:
+                    </p>
+                    <div class="highlight">
+                        <button class="to-clipboard">
+                            <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+                        </button>
+                        <pre>$ <code>~/ez init ezsystems/ezplatform-ee v1.9.0-rc1</code></pre>
+                    </div>
+                    <p>When eZ Launchpad will ask you about HTTP-BASIC, then you have to provide the
+                        <a href="https://doc.ez.no/display/TECHDOC/Using+Composer" target="_blank">Installation Key and the Token</a>
+                    </p>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="createstack">
+                    <h3><i class="fa fa-fast-forward" aria-hidden="true"></i> Create</h3>
+                    <p>In this context you have already a project somewhere, someone already did a <em>~/ez init</em>
+                    </p>
+                    <p>Then it most likely that you did</p>
+                    <div class="highlight">
+                        <button class="to-clipboard">
+                            <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+                        </button>
+                        <pre>$ <code>git clone https://SOMETHING.git</code></pre>
+                    </div>
+
+                    <p>If you want to know if your project is eZ Launchpad ready, you can just check the existance of
+                        <em>.ezlaunchpad.yml</em> at the root directory of your project.</p>
+
+                    <p>To create the local stack the command is then</p>
+                    <div class="highlight">
+                        <button class="to-clipboard">
+                            <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+                        </button>
+                        <pre>$ <code>~/ez create</code></pre>
+                    </div>
+                    <p>Here eZ Launchpad will pull the images, create the containers of your stack as well a importing the database/storage.</p>
+                </div>
+            </div>
+        </div>
+
+        <h2 id="stack"><i class="fa fa-th-list" aria-hidden="true"></i> Stack</h2>
+        <div>
+            <p>At anytime you can get information on your stack by running</p>
+            <div class="highlight">
+                <button class="to-clipboard">
+                    <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+                </button>
+                <pre>$ <code>~/ez info</code></pre>
+            </div>
+
+            <p>Depending on the initialization, you might have more or less services, but here are the most common stack</p>
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#lempstack" aria-controls="home" role="tab" data-toggle="tab">LEMP</a></li>
+                <li role="presentation">
+                    <a href="#lampstack" aria-controls="profile" role="tab" data-toggle="tab">LAMP</a></li>
             </ul>
-        </div>
-    </div>
-</nav>
-<div class="container">
-    <h1><i class="fa fa-rocket fa-2x" aria-hidden="true"></i>eZ Launchpad</h1>
-    <p>An tool that will help you build an
-        <a href="http://ezplatform.com" target="_blank">eZ Platform</a> project on top of
-        <a href="https://www.docker.com/" target="_blank">Docker</a> in less than 5 minutes.</p>
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="lempstack">
+                    <h3>LEMP: Linux Nginx Mysql/MariaDB PHP-FPM</h3>
+                    <img src="images/puml/LEMP_architecture.png" class="img-responsive"/>
 
-    <div class="alert alert-success" role="alert">
-        <p>
-            <i class="fa fa-code" aria-hidden="true"></i> You will end up with a full <strong>Docker stack</strong>
-                                                          where the source-code
-                                                          is on your host for you <strong>to start coding</strong>
-                                                          right away!
-        </p>
-    </div>
-
-    <h2 id="screencast"><i class="fa fa-play" aria-hidden="true"></i> Demo</h2>
-    <div>
-        <p>This is a demo of an <a href="#initstack">initialization</a>, starting from scratch,
-           you will get everything ready to code, commit and push!</p>
-
-        <center>
-            <iframe width="800" height="450" src="https://www.youtube.com/embed/N_wd-yAlKmA" frameborder="0" allowfullscreen></iframe>
-        </center>
-    </div>
-
-
-    <h2 id="installation"><i class="fa fa-magic" aria-hidden="true"></i> Installation</h2>
-    <div>
-        <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active">
-                <a href="#installioncurl" aria-controls="home" role="tab" data-toggle="tab">curl</a></li>
-            <li role="presentation">
-                <a href="#installionwget" aria-controls="profile" role="tab" data-toggle="tab">wget</a></li>
-        </ul>
-        <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="installioncurl">
-                <br/>
-                <p>If you have <strong>curl</strong> installed:</p>
-                <div class="highlight">
-                    <button class="to-clipboard">
-                        <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
-                    </button>
-                    <pre>$ <code>curl -LSs https://ezsystems.github.io/launchpad/install_curl.bash | bash</code></pre>
                 </div>
-            </div>
-            <div role="tabpanel" class="tab-pane" id="installionwget">
-                <br/>
-                <p>If you have <strong>wget</strong> installed:</p>
-                <div class="highlight">
-                    <button class="to-clipboard">
-                        <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
-                    </button>
-                    <pre>$ <code>wget -O - "https://ezsystems.github.io/launchpad/install_wget.bash" | bash</code></pre>
+                <div role="tabpanel" class="tab-pane" id="lampstack">
+                    <h3>LAMP: Linux Apache Mysql/MariaDB PHP(mod_php)</h3>
+                    <img src="images/puml/LAMP_architecture.png" class="img-responsive"/>
                 </div>
             </div>
         </div>
-    </div>
-    <h2 id="usage"><i class="fa fa-keyboard-o" aria-hidden="true"></i> Usage</h2>
-    <div>
-        <p>When you have installed eZ Launchpad (<em>~/ez</em>) you can start enjoying the feature.</p>
-        <p>eZ Launchpad provides 2 mains features:</p>
-        <ul>
-            <li><strong>Initialization</strong> of a brand new eZ Platform Stack (on top of Docker)</li>
-            <li><strong>Create</strong> the Docker Stack related to the current directory.</li>
-        </ul>
 
-        <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active">
-                <a href="#initstack" aria-controls="home" role="tab" data-toggle="tab">Start from scratch</a></li>
-            <li role="presentation">
-                <a href="#createstack" aria-controls="profile" role="tab" data-toggle="tab">Boostrap an existing project</a>
-            </li>
-        </ul>
-
-        <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="initstack">
-                <h3><i class="fa fa-play" aria-hidden="true"></i> Init
-                    <small>ialization</small>
-                </h3>
-                <p>That is the from scratch installation. You need to do that when you have nothing and you want to start a new project with eZ Platform.</p>
-                <div class="highlight">
-                    <button class="to-clipboard">
-                        <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
-                    </button>
-                    <pre>$ <code>~/ez init</code></pre>
-                </div>
-
-                <p>From here eZ Launchpad will ask you a bunch of question to configure your project.</p>
-                <div class="alert alert-info" role="alert">
-                    <p><i class="fa fa-apple" aria-hidden="true"></i> Mac OS X users will have a wizard to set up
-                        <a href="#d4m" class="alert-link">D4M</a>.</p>
-                </div>
-                <p>At the end of the procedure those steps will be done for you:</p>
-                <ul>
-                    <li>Configuration your project locally.</li>
-                    <li>Download(pull) the correct image on your Docker Daemon.</li>
-                    <li>Set up a eZ compliant <em>docker-compose.yml</em>.</li>
-                    <li>Create and start the containers required.(depending of the choices you made)</li>
-                    <li>Install Composer in the Engine container.(where PHP is executed in your Stack)</li>
-                    <li>Install eZ Platform through Composer inside the stack.</li>
-                </ul>
-
-                <p>Once the Initialization is finished, the project is up, you can check doing:</p>
-                <div class="highlight">
-                    <button class="to-clipboard">
-                        <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
-                    </button>
-                    <pre>$ <code>~/ez ps</code></pre>
-                </div>
-
-                <p>You are now ready dump the database and storage, git commit and push to share the project to your teams.</p>
-                <div class="highlight">
-                    <button class="to-clipboard">
-                        <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
-                    </button>
-                    <pre>$ <code>~/ez dumpdata; git init; git add .; git commit -m "First Initial Commit"</code></pre>
-                </div>
-                <div class="highlight">
-                    <button class="to-clipboard">
-                        <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
-                    </button>
-                    <pre>$ <code>git remote add origin https://gitorigin.com/xxx/xxxx-xxx.git; git push -u origin master</code></pre>
-                </div>
-                <h4><i class="fa fa-building" aria-hidden="true"></i> eZ Platform Enterprise</h4>
-                <p>
-                    Whether you want to use an entreprise version or a non-stable, you have the choice! Look at the help
-                    There is an example:
-                </p>
-                <div class="highlight">
-                    <button class="to-clipboard">
-                        <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
-                    </button>
-                    <pre>$ <code>~/ez init ezsystems/ezplatform-ee v1.9.0-rc1</code></pre>
-                </div>
-                <p>When eZ Launchpad will ask you about HTTP-BASIC, then you have to provide the
-                    <a href="https://doc.ez.no/display/TECHDOC/Using+Composer" target="_blank">Installation Key and the Token</a>
-                </p>
-            </div>
-            <div role="tabpanel" class="tab-pane" id="createstack">
-                <h3><i class="fa fa-fast-forward" aria-hidden="true"></i> Create</h3>
-                <p>In this context you have already a project somewhere, someone already did a <em>~/ez init</em></p>
-                <p>Then it most likely that you did</p>
-                <div class="highlight">
-                    <button class="to-clipboard">
-                        <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
-                    </button>
-                    <pre>$ <code>git clone https://SOMETHING.git</code></pre>
-                </div>
-
-                <p>If you want to know if your project is eZ Launchpad ready, you can just check the existance of
-                    <em>.ezlaunchpad.yml</em> at the root directory of your project.</p>
-
-                <p>To create the local stack the command is then</p>
-                <div class="highlight">
-                    <button class="to-clipboard">
-                        <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
-                    </button>
-                    <pre>$ <code>~/ez create</code></pre>
-                </div>
-                <p>Here eZ Launchpad will pull the images, create the containers of your stack as well a importing the database/storage.</p>
-            </div>
-        </div>
-    </div>
-
-    <h2 id="stack"><i class="fa fa-th-list" aria-hidden="true"></i> Stack</h2>
-    <div>
-        <p>At anytime you can get information on your stack by running</p>
-        <div class="highlight">
-            <button class="to-clipboard">
-                <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
-            </button>
-            <pre>$ <code>~/ez info</code></pre>
-        </div>
-
-        <p>Depending on the initialization, you might have more or less services, but here are the most common stack</p>
-
-        <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active">
-                <a href="#lempstack" aria-controls="home" role="tab" data-toggle="tab">LEMP</a></li>
-            <li role="presentation">
-                <a href="#lampstack" aria-controls="profile" role="tab" data-toggle="tab">LAMP</a></li>
-        </ul>
-        <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="lempstack">
-                <h3>LEMP: Linux Nginx Mysql/MariaDB PHP-FPM</h3>
-                <img src="images/puml/LEMP_architecture.png" class="img-responsive"/>
-
-            </div>
-            <div role="tabpanel" class="tab-pane" id="lampstack">
-                <h3>LAMP: Linux Apache Mysql/MariaDB PHP(mod_php)</h3>
-                <img src="images/puml/LAMP_architecture.png" class="img-responsive"/>
-            </div>
-        </div>
-    </div>
-
-    <h2 id="commands"><i class="fa fa-terminal" aria-hidden="true"></i> Common Commands</h2>
-    <div>
-        <p>eZ Launchpad is done to help you with a local Docker stack.</p>
-        <p>To do so, here is the command available to you:</p>
-        <div class="highlight">
+        <h2 id="commands"><i class="fa fa-terminal" aria-hidden="true"></i> Common Commands</h2>
+        <div>
+            <p>eZ Launchpad is done to help you with a local Docker stack.</p>
+            <p>To do so, here is the command available to you:</p>
+            <div class="highlight">
             <pre>$ ~/ez
                 <code>
 Usage:
@@ -274,19 +317,19 @@ Available commands:
   docker:start       [start] Start all the services (or just one).
   docker:status      [docker:ps|docker:info|ps|info] Obtaining the project information.
   docker:stop        [stop] Stop all the services (or just one).</code></pre>
+            </div>
+
+
         </div>
-
-
-    </div>
-    <h2 id="home"><i class="fa fa-home" aria-hidden="true"></i> Global configuration</h2>
-    <div>
-        <p>Because every project can share stuff and because you might want the same configuration everywhere. eZ Launchpad read a configuration file in your HOME directory.</p>
-        <p>This configuration file is <em>~/ezlaunchpad/ez.yml</em>. Here is a full example:</p>
-        <div class="highlight">
-            <button class="to-clipboard">
-                <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
-            </button>
-            <pre><code>docker:
+        <h2 id="home"><i class="fa fa-home" aria-hidden="true"></i> Global configuration</h2>
+        <div>
+            <p>Because every project can share stuff and because you might want the same configuration everywhere. eZ Launchpad read a configuration file in your HOME directory.</p>
+            <p>This configuration file is <em>~/ezlaunchpad/ez.yml</em>. Here is a full example:</p>
+            <div class="highlight">
+                <button class="to-clipboard">
+                    <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+                </button>
+                <pre><code>docker:
     host_machine_mapping: "/Users/bob/MyProjects:/data/MYPROJECTS"
     host_composer_cache_dir: "/data/MYPROJECTS/.composer_cache"
 
@@ -304,65 +347,128 @@ composer:
             host: github.com
             value: tokenvalue
             </code></pre>
+            </div>
+
+            <p>Note that this configuration is global and won't be including in the project (i.e in the CVS repository). But it will be including in your local stack.</p>
+            <p><em>docker</em> section is described in the next section.</p>
+
         </div>
+        <h2 id="d4m"><i class="fa fa-space-shuttle" aria-hidden="true"></i> Mac OS X optimizations with D4M</h2>
+        <div>
+            <p>
+                When it comes to share folder from the Host(your mac) to containers
+                <em>Docker for Mac</em> is slow. (at least for now).
+                Then to manage this performance issue, <strong>there is a workaround</strong>.
+            </p>
+            <p>This workaround is called
+                <a href="https://github.com/IFSight/d4m-nfs">D4M</a>. Without entering into the details, D4M uses the MobbyVM that runs beside Docker for Mac and NFS mounts your mac.
+            </p>
+            <p>Note: It might be odd, but yes NFS is faster than the default mount.</p>
 
-        <p>Note that this configuration is global and won't be including in the project (i.e in the CVS repository). But it will be including in your local stack.</p>
-        <p><em>docker</em> section is described in the next section.</p>
+            <p>Still when you use D4M, you can set it up:</p>
+            <ul>
+                <li>in a transparent way: Then no configuration is required with eZ Launchpad</li>
+                <li>limitating the folder that you export: In this case, you need to tell it to eZ Launchpad</li>
+            </ul>
 
-    </div>
-    <h2 id="d4m"><i class="fa fa-space-shuttle" aria-hidden="true"></i> Mac OS X optimizations with D4M</h2>
-    <div>
-        <p>
-            When it comes to share folder from the Host(your mac) to containers
-            <em>Docker for Mac</em> is slow. (at least for now).
-            Then to manage this performance issue, <strong>there is a workaround</strong>.
-        </p>
-        <p>This workaround is called
-            <a href="https://github.com/IFSight/d4m-nfs">D4M</a>. Without entering into the details, D4M uses the MobbyVM that runs beside Docker for Mac and NFS mounts your mac.
-        </p>
-        <p>Note: It might be odd, but yes NFS is faster than the default mount.</p>
+            <p>If you have customized the D4M configuration, let's say, that you have exported</p>
 
-        <p>Still when you use D4M, you can set it up:</p>
-        <ul>
-            <li>in a transparent way: Then no configuration is required with eZ Launchpad</li>
-            <li>limitating the folder that you export: In this case, you need to tell it to eZ Launchpad</li>
-        </ul>
-
-        <p>If you have customized the D4M configuration, let's say, that you have exported</p>
-
-        <div class="highlight">
-            <button class="to-clipboard">
-                <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
-            </button>
-            <pre><code># /etc/exports
+            <div class="highlight">
+                <button class="to-clipboard">
+                    <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+                </button>
+                <pre><code># /etc/exports
 /Users/bob/MyProjects -mapall=bob:staff localhost
             </code></pre>
-        </div>
-        <p>And you have mounted this exported folder in
-            <em>/data/MYPROJECTS</em> in the MobyVM (through D4M). Then you need to add this configuration for eZ Launchpad
-        </p>
-        <div class="highlight">
-            <button class="to-clipboard">
-                <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
-            </button>
-            <pre><code># ~/.ezlaunchpad/ez.yml
+            </div>
+            <p>And you have mounted this exported folder in
+                <em>/data/MYPROJECTS</em> in the MobyVM (through D4M). Then you need to add this configuration for eZ Launchpad
+            </p>
+            <div class="highlight">
+                <button class="to-clipboard">
+                    <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+                </button>
+                <pre><code># ~/.ezlaunchpad/ez.yml
 docker:
     host_machine_mapping: "/Users/bob/MyProjects:/data/MYPROJECTS"
     host_composer_cache_dir: "/data/MYPROJECTS/.composer_cache"
             </code></pre>
+            </div>
+            <p><em>host_composer_cache_dir</em> will allow you to share the composer cache for all your projects.</p>
         </div>
-        <p><em>host_composer_cache_dir</em> will allow you to share the composer cache for all your projects.</p>
-
-
     </div>
-</div>
-<footer class="footer">
-    <div class="container">
-        <p class="text-muted">Copyright © 1999-2017 eZ Systems AS. All rights reserved.</p>
-    </div>
-</footer>
-<script src="js/jquery-3.2.0.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
+
+    <footer>
+        <div class="footer-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <img src="https://www.ezplatform.com/assets/images/ez-logo-white.svg" alt="eZ Systems" class="logo">
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="ezrichtext-field">
+                            <ul>
+                                <li><a href="http://ez.no">eZ.no</a></li>
+                                <li>
+                                    <a href="http://ez.no/About-eZ/Company-Overview" target="_blank">Company Overview</a>
+                                </li>
+                                <li><a href="http://ez.no/Products">Products</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="ezrichtext-field">
+                            <ul>
+                                <li><a href="http://doc.ez.no/display/DEVELOPER/Documentation">Documentation</a>
+                                </li>
+                                <li>
+                                    <a href="https://doc.ez.no/display/DEVELOPER/eZ+Platform+Public+PHP+API" target="_blank">API</a>
+                                </li>
+                                <li><a href="http://share.ez.no" target="_blank">eZ Publish</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3 footer-social text-center">
+                        <h4>Follow us on social media</h4>
+
+                        <a href="//www.youtube.com/user/ezpublish/" target="_blank">
+                            <i class="fa fa-youtube fa"></i>
+                        </a>
+                        <a href="//google.com/+ezsystems" target="_blank">
+                            <i class="fa fa-google-plus fa"></i>
+                        </a>
+                        <a href="//www.linkedin.com/company/16738" target="_blank">
+                            <i class="fa fa-linkedin fa"></i>
+                        </a>
+                        <a href="//www.facebook.com/eZPublishEnterprise" target="_blank">
+                            <i class="fa fa-facebook fa"></i>
+                        </a>
+                        <a href="//twitter.com/#!/ezsystems" target="_blank">
+                            <i class="fa fa-twitter fa"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="copyright-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p>Copyright &copy; 1999-2017 eZ Systems AS. All rights reserved.</p>
+                        <p>Powered by <a href="//ezplatform.com" title="eZ Platform">eZ Platform</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</main>
+<script type="text/javascript" src="https://www.ezplatform.com/js/80021c6.js"></script>
 <script src="js/clipboard.min.js"></script>
 <script src="js/ezlaunchpad.js"></script>
 </body>
