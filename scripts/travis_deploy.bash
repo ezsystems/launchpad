@@ -22,6 +22,12 @@ git status
 curl -LSs https://box-project.github.io/box2/installer.php | php
 chmod 755 box.phar
 
+# Generate the DOCs
+php bin/gendocs
+git add docs/index*
+
+composer install --no-dev
+
 # Build the box
 ./box.phar build -vv
 
@@ -29,10 +35,6 @@ chmod 755 box.phar
 sha1sum ez.phar > docs/ez.phar.version
 mv ez.phar docs/ez.phar
 git add docs/ez.phar docs/ez.phar.version
-
-# Generate the DOCs
-php bin/gendocs
-git add docs/index*
 
 # Commit and push:
 DATED_SUFFIX=`date +%Y-%m-%d-%H-%M-%S`

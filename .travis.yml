@@ -32,7 +32,6 @@ script:
 - php vendor/behat/behat/bin/behat -c tests/behat.yml
 
 after_success:
-- if [[ $EXECUTE_DEPLOYMENT == 'true' && $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then composer install --no-dev ; fi
 - if [[ $EXECUTE_DEPLOYMENT == 'true' && $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then ./scripts/travis_deploy.bash ; fi
 
 notifications:
