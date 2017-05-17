@@ -1,0 +1,127 @@
+---
+
+layout:
+    title: "eZ Launchpad - Project Page and Documentation"
+
+header:
+    toggle.navigation: "Basculer la navigation"
+
+    menu:
+        installation: "Installation"
+        usage: "Usage"
+        stack: "Stack"
+        commands: "Commandes"
+        more: "Plus"
+        d4m: "Mac OS X optimisations avec D4M"
+        global.configuration: "Configurations globales"
+
+footer:
+    company.overview: "Présentation de l'entreprise"
+    company.products: "Produits"
+    ez.doc: "Documentation"
+    followus: "Suivez nous sur les réseaux sociaux"
+    copyright: "Copyright © 1999-2017 eZ Systems AS. Tous droits réservés."
+    poweredby: "Propulsé par"
+
+content:
+    intro:
+        blurb: "Un outils qui va vous aider à construire un projet %ez% avec %docker% en moins de 5 minutes."
+        well: >
+            Vous aurez une <strong>stack Docker complète</strong> avec le code source sur l'hôte <strong>prêt
+            à développer</strong> directement !
+
+    demo:
+        title: "Demonstration"
+        blurb: >
+            Voici une démonstration de l'utilisation de l'<a href="#initstack">initialization</a> d'un projet en
+            ne partant de rien. Cela va installer tout la stack pour vous, et vous permettre de code, commit et pusher!
+
+    install:
+        title: "Installation"
+        toolinstalled: "Si vous avez <strong>%tool%</strong> d'installé:"
+
+    usage:
+        title: "Utilisation"
+        blurb: "Quand vous avez installé eZ Launchpad (<em>~/ez</em>), vous pouvez profiter des fonctionnalités."
+        2mainfeatures: "eZ Launchpad fourni 2 fonctionnalités principales:"
+        init: "<strong>Initialisation</strong> d'un tout nouveau projet sur Docker"
+        create: "<strong>Creation</strong> de la stack Docker d'un projet existant."
+        fromscratch: "Démarrer de rien"
+        bootstrap: "Démarrer d'un projet existant"
+        init.title: "Init<small>ialisation</small>"
+        init.blurb: >
+                C'est l'installation en partant de zéro.
+                Vous devez utiliser cela quand vous n'avez pas encore de projet, que vous voulez installer eZ Platform.
+        init.willaskquestion: "eZ Launchpad va vous accompagner dans la création avec quelques questions."
+        init.macosxwarning: "Les utilisateurs de Mac OS X auront des questions spéciales pour installer <a href='#d4m' class='alert-link'>D4M</a>."
+        init.end.steps: "A la fin de la procédure, cette étape auront été fait pour vous:"
+        init.end.steps.1: "Configuration locale du projet."
+        init.end.steps.2: "Téléchargement(pull) des bonnes images Docker sur votre local démon Docker."
+        init.end.steps.3: "Installer un <em>docker-compose.yml</em> adapté pour eZ."
+        init.end.steps.4: "Créer et démarrer les containers requis.(En fonction des choix effectués)"
+        init.end.steps.5: "Installation de Composer dans le container Engine.(la où PHP est éxécuté sur la stack)"
+        init.end.steps.6: "Installation d'eZ Platform avec Composer dans la stack."
+
+        init.end.finished.ps: "Une fois l'initialisation terminée, le projet est prêt, vous pouvez vérifier en faisant:"
+        init.end.finished.dump: "Vous êtes désormais prêt a exporter la base de données et le storage, commiter and publier votre projet vers votre équipe."
+        init.end.finished.entreprise: >
+                Si vous voulez utiliser la version entreprise ou une version non stable vous avez le choix! Regardez l'aide.
+                Voici un exemple:
+        init.end.finished.httpbasics: >
+                Quand eZ Launchpad vous demander les autorisations HTTP-BASIC alors il vous faudra fournir
+                <a href="https://doc.ez.no/display/TECHDOC/Using+Composer" target="_blank">la clef d'installation et le jeton</a>.
+
+        create.title: "Creation"
+        create.blurb: "Dans ce context vous avez déjà un projet quelque part, quelqu'un a déjà fait un <em>~/ez init</em>"
+        create.gitpull: "Donc vous avez probablement déjà fait"
+        create.projectready: >
+                Si vous voulez savoir si votre projet est prêt pour eZ Launchpad vous pouvez vérifier l'existence de
+                <em>.ezlaunchpad.yml</em> à la racine du projet.
+        create.localstack: "Pour créeer la stack locale la commande est alors"
+        create.whathasbeendone: "eZ Launchpad va juste télécharger les images, créer les containers puis importer la base et le storage."
+
+    stack:
+        title: "Stack"
+        blurb: "N'importe quand vous pouvez avoir de l'information sur votre stack"
+        moreorlessservice: "Selon l'initialisation éffectuée vous aurez plus ou moins de service disponible. Voici par défaut."
+
+    commands:
+        title: "Commandes"
+        blurb: "eZ Launchpad est fait pour vous aider avec Docker."
+        list: "Pour le faire, vouci les commandes disponibles:"
+
+    configuration:
+        title: "Configurations globales"
+        blurb: >
+            Parce que vous voulez pouvoir partager certaines configurations entre vos projets.
+            eZ Launchpad lit un fichier de configuration dans votre HOME.
+        fileexample: >
+            Ce fichier de configuration est <em>~/ezlaunchpad/ez.yml</em>. Voici un exemple:
+        fileexample.description: >
+            Notez que la configuarion est globale et ne sera pas incluse dans le projet. (i.e dans le repository de source).
+            Mais elle sera utilisé dans votre stack Docker locale.
+        fileexample.description.dockersectionisnext: "La section <em>docker</em> est décrite dans la prochaine section."
+
+    d4m:
+        title: "Mac OS X optimisations avec D4M"
+        blurb: >
+            Pour partager des répertoires entre l'hôte(votre Mac) vers les containers
+            <em>Docker for Mac</em> est très lent.(au moins pour le moment).
+            Donc pour contourner ce problème de performance, <strong>il y a une technique</strong>.
+        workaround: >
+            Cette technique s'appelle <a href="https://github.com/IFSight/d4m-nfs">D4M</a>.
+            Sans trop rentrer dans les détails, D4M utilise la MobbyVM qui fait touner le démon Docker du Mac et monte
+            les répertoires via NFS.
+        nfsfaster: "Note: C'est étrange en effet, mais oui NFS est bien plus rapide que le montage par défaut!"
+        setup: "Vous avez deux manières de configurer D4M:"
+        setup.1: "de manière transparente: alors il n'y a pas de configuration spéciale pour eZ Launchpad"
+        setup.2: "en limitant le répertoire exporté: Dans ce cas vous devez avertir eZ Launchpad"
+
+        example: "Si vous n'etes pas en mode transparent, disons que vous avez exporté"
+        example.mounted: >
+            Et donc vous avez monté ce répertoire dans <em>/data/MYPROJECTS</em> de la MobyVM (through D4M).
+            Alors vous devez ajouter cette configuration pour eZ Launchpad
+        example.mounted.host_composer_cache_dir: >
+            <em>host_composer_cache_dir</em> permettra lui de partager le cache Composer entre vos projets.
+other:
+    copy: "Copier"

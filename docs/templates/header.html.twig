@@ -1,0 +1,51 @@
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+                <span class="sr-only">{{ "header.toggle.navigation"|trans }}</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://ezsystems.github.io/launchpad">
+                <img src="https://www.ezplatform.com/assets/images/ez-logo.svg">
+            </a>
+        </div>
+
+        <div class="collapse navbar-collapse " id="navbar">
+            <ul class="nav navbar-nav">
+                <li><a href="#installation">{{ "header.menu.installation"|trans }}</a></li>
+                <li><a href="#usage">{{ "header.menu.usage"|trans }}</a></li>
+                <li><a href="#stack">{{ "header.menu.stack"|trans }}</a></li>
+                <li><a href="#commands">{{ "header.menu.commands"|trans }}</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ "header.menu.more"|trans }}
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu ezlp-submenu">
+                        <li><a href="#d4m">{{ "header.menu.d4m"|trans }}</a></li>
+                        <li><a href="#home">{{ "header.menu.global.configuration"|trans }}</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-language" aria-hidden="true"></i>
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu ezlp-submenu">
+                        <li><a href="index.html">en</a></li>
+                        {% for lang in languages %}
+                            <li><a href="index_{{ lang }}.html">{{ lang|split('_').0 }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="https://www.ezplatform.com" target="_blank">eZ Platform</a></li>
+                <li><a href="https://www.ezplatform.com/Blog">eZ Blog</a></li>
+                <li><a href="//ez-community-on-slack.herokuapp.com" target="_blank"> Slack
+                        <i class="fa fa-slack" aria-hidden="true"></i></a></li>
+                <li><a href="//github.com/ezsystems/launchpad" target="_blank">Github
+                        <i class="fa fa-github" aria-hidden="true"></i></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>

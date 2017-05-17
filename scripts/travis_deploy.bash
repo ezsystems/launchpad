@@ -25,10 +25,14 @@ chmod 755 box.phar
 # Build the box
 ./box.phar build -vv
 
-# Generate
+# Generate the PHAR
 sha1sum ez.phar > docs/ez.phar.version
 mv ez.phar docs/ez.phar
 git add docs/ez.phar docs/ez.phar.version
+
+# Generate the DOCs
+php bin/gendocs
+git add docs/index*
 
 # Commit and push:
 DATED_SUFFIX=`date +%Y-%m-%d-%H-%M-%S`

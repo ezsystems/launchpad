@@ -26,7 +26,8 @@ list:
 	@echo "  $(YELLOW)unit$(RESTORE)         > run the Unit tests only"
 	@echo "  $(YELLOW)coverage$(RESTORE)     > generate the code coverage"
 	@echo ""
-	@echo "  $(YELLOW)docs$(RESTORE)         > generate stuff for the documenation"
+	@echo "  $(YELLOW)convertpuml$(RESTORE)  > Convert PUML diagram in images"
+	@echo "  $(YELLOW)docs$(RESTORE)         > Generate the documentation"
 	@echo ""
 	@echo "  $(YELLOW)install$(RESTORE)      > install vendors"
 	@echo "  $(YELLOW)clean$(RESTORE)        > removes the vendors, and caches"
@@ -48,9 +49,13 @@ behat:
 unit:
 	bash $(SCRIPS_DIR)/runtests.bash unit
 
+.PHONY: convertpuml
+convertpuml:
+	bash $(SCRIPS_DIR)/pumltoimages.bash
+
 .PHONY: docs
 docs:
-	bash $(SCRIPS_DIR)/pumltoimages.bash
+	$(PHP_BIN) bin/gendocs
 
 .PHONY: install
 install:

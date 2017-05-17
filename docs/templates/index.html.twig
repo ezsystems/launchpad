@@ -1,0 +1,252 @@
+{% extends "layout.html.twig" %}
+
+{% macro show(code) %}
+    <div class="highlight">
+        <button class="to-clipboard">
+            <i class="fa fa-clipboard" aria-hidden="true"></i> {{ "other.copy"|trans|raw }}
+        </button>
+        <pre>$ <code>{{ code }}</code></pre>
+    </div>
+{% endmacro %}
+
+{% import _self as CodeHelper %}
+
+{% block content %}
+    <h1><i class="fa fa-rocket fa-2x" aria-hidden="true"></i>eZ Launchpad</h1>
+    <p>{{ "content.intro.blurb"|trans({
+            '%ez%':'<a href="http://ezplatform.com" target="_blank">eZ Platform</a>',
+            '%docker%':'<a href="https://www.docker.com/" target="_blank">Docker</a>'
+        })|raw }}</p>
+    <div class="alert alert-success" role="alert">
+        <p><i class="fa fa-code" aria-hidden="true"></i> {{ "content.intro.well"|trans|raw }}</p>
+    </div>
+
+    <h2 id="screencast"><i class="fa fa-play" aria-hidden="true"></i> {{ "content.demo.title"|trans|raw }}</h2>
+    <div>
+        <p>{{ "content.demo.blurb"|trans|raw }}</p>
+        <center>
+            <iframe width="800" height="450" src="https://www.youtube.com/embed/N_wd-yAlKmA" frameborder="0" allowfullscreen></iframe>
+        </center>
+    </div>
+
+
+    <h2 id="installation"><i class="fa fa-magic" aria-hidden="true"></i> {{ "content.install.title"|trans|raw }}</h2>
+    <div>
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#installioncurl" aria-controls="home" role="tab" data-toggle="tab">curl</a>
+            </li>
+            <li role="presentation">
+                <a href="#installionwget" aria-controls="profile" role="tab" data-toggle="tab">wget</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="installioncurl">
+                <br/>
+                <p>{{ "content.install.toolinstalled"|trans({"%tool%":'curl'})|raw }}</p>
+                {{ CodeHelper.show("curl -LSs https://ezsystems.github.io/launchpad/install_curl.bash | bash") }}
+            </div>
+            <div role="tabpanel" class="tab-pane" id="installionwget">
+                <br/>
+                <p>{{ "content.install.toolinstalled"|trans({"%tool%":'wget'})|raw }}</p>
+                {{ CodeHelper.show('wget -O - "https://ezsystems.github.io/launchpad/install_wget.bash" | bash') }}
+            </div>
+        </div>
+    </div>
+    <h2 id="usage"><i class="fa fa-keyboard-o" aria-hidden="true"></i> {{ "content.usage.title"|trans|raw }}</h2>
+    <div>
+        <p>{{ "content.usage.blurb"|trans|raw }}</p>
+        <p>{{ "content.usage.2mainfeatures"|trans|raw }}</p>
+        <ul>
+            <li>{{ "content.usage.init"|trans|raw }}</li>
+            <li>{{ "content.usage.create"|trans|raw }}</li>
+        </ul>
+
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#initstack" aria-controls="home" role="tab" data-toggle="tab">{{ "content.usage.fromscratch"|trans|raw }}</a>
+            </li>
+            <li role="presentation">
+                <a href="#createstack" aria-controls="profile" role="tab" data-toggle="tab">{{ "content.usage.bootstrap"|trans|raw }}</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="initstack">
+                <h3><i class="fa fa-play" aria-hidden="true"></i> {{ "content.usage.init.title"|trans|raw }}</h3>
+                <p>{{ "content.usage.init.blurb"|trans|raw }}</p>
+                {{ CodeHelper.show("~/ez init") }}
+
+                <p>{{ "content.usage.init.willaskquestion"|trans|raw }}</p>
+                <div class="alert alert-info" role="alert">
+                    <p>
+                        <i class="fa fa-apple" aria-hidden="true"></i> {{ "content.usage.init.macosxwarning"|trans|raw }}
+                    </p>
+                </div>
+                <p>{{ "content.usage.init.end.steps"|trans|raw }}</p>
+                <ul>
+                    <li>{{ "content.usage.init.end.steps.1"|trans|raw }}</li>
+                    <li>{{ "content.usage.init.end.steps.2"|trans|raw }}</li>
+                    <li>{{ "content.usage.init.end.steps.3"|trans|raw }}</li>
+                    <li>{{ "content.usage.init.end.steps.4"|trans|raw }}</li>
+                    <li>{{ "content.usage.init.end.steps.5"|trans|raw }}</li>
+                    <li>{{ "content.usage.init.end.steps.6"|trans|raw }}</li>
+                </ul>
+
+                <p>{{ "content.usage.init.end.finished.ps"|trans|raw }}</p>
+                {{ CodeHelper.show("~/ez ps") }}
+
+
+                <p>{{ "content.usage.init.end.finished.dump"|trans|raw }}</p>
+                {{ CodeHelper.show('~/ez dumpdata; git init; git add .; git commit -m "First Initial Commit"') }}
+                {{ CodeHelper.show("git remote add origin https://gitorigin.com/xxx/xxxx-xxx.git; git push -u origin master") }}
+
+                <h4><i class="fa fa-building" aria-hidden="true"></i> eZ Platform Enterprise</h4>
+                <p>{{ "content.usage.init.end.finished.entreprise"|trans|raw }}</p>
+                {{ CodeHelper.show("~/ez init ezsystems/ezplatform-ee v1.9.0-rc1") }}
+                <p>{{ "content.usage.init.end.finished.httpbasics"|trans|raw }}</p>
+
+            </div>
+            <div role="tabpanel" class="tab-pane" id="createstack">
+                <h3>
+                    <i class="fa fa-fast-forward" aria-hidden="true"></i> {{ "content.usage.create.title"|trans|raw }}
+                </h3>
+                <p>{{ "content.usage.create.blurb"|trans|raw }}</p>
+                <p>{{ "content.usage.create.gitpull"|trans|raw }}</p>
+                {{ CodeHelper.show("git clone https://SOMETHING.git") }}
+
+                <p>{{ "content.usage.create.projectready"|trans|raw }}</p>
+                <p>{{ "content.usage.create.localstack"|trans|raw }}</p>
+                {{ CodeHelper.show("~/ez create") }}
+                <p>{{ "content.usage.create.whathasbeendone"|trans|raw }}</p>
+            </div>
+        </div>
+    </div>
+
+    <h2 id="stack"><i class="fa fa-th-list" aria-hidden="true"></i> {{ "content.stack.title"|trans|raw }}</h2>
+    <div>
+        <p>{{ "content.stack.blurb"|trans|raw }}</p>
+        {{ CodeHelper.show("~/ez info") }}
+        <p>{{ "content.stack.moreorlessservice"|trans|raw }}</p>
+
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#lempstack" aria-controls="home" role="tab" data-toggle="tab">LEMP</a></li>
+            <li role="presentation">
+                <a href="#lampstack" aria-controls="profile" role="tab" data-toggle="tab">LAMP</a></li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="lempstack">
+                <h3>LEMP: Linux Nginx Mysql/MariaDB PHP-FPM</h3>
+                <img src="images/puml/LEMP_architecture.png" class="img-responsive"/>
+
+            </div>
+            <div role="tabpanel" class="tab-pane" id="lampstack">
+                <h3>LAMP: Linux Apache Mysql/MariaDB PHP(mod_php)</h3>
+                <img src="images/puml/LAMP_architecture.png" class="img-responsive"/>
+            </div>
+        </div>
+    </div>
+
+    <h2 id="commands"><i class="fa fa-terminal" aria-hidden="true"></i> {{ "content.commands.title"|trans|raw }}</h2>
+    <div>
+        <p>{{ "content.commands.blurb"|trans|raw }}</p>
+        <p>{{ "content.commands.list"|trans|raw }}</p>
+        <div class="highlight">
+            <pre>$ ~/ez
+                <code>
+Usage:
+  command [options] [arguments]
+
+Available commands:
+  help               Displays help for a command
+  list               Lists commands
+  rollback           Rollback an update.
+  self-update        Self Update
+ docker
+  docker:build       [build] Build all the services (or just one).
+  docker:clean       [docker:down|clean|down] Clean all the services.
+  docker:comprun     [comprun] Run Composer command in the engine.
+  docker:create      [create] Create all the services.
+  docker:dumpdata    [dumpdata] Dump Database and Storage.
+  docker:enter       [enter|docker:exec|exec] Enter in a container.
+  docker:importdata  [importdata] Import Database and Storage.
+  docker:initialize  [docker:init|initialize|init] Initialize the project and all the services.
+  docker:logs        [logs|log] Display the logs.
+  docker:sfrun       [sfrun] Run a Symfony command in the engine.
+  docker:start       [start] Start all the services (or just one).
+  docker:status      [docker:ps|docker:info|ps|info] Obtaining the project information.
+  docker:stop        [stop] Stop all the services (or just one).
+  docker:up          [up] Up all the services (or just one).</code></pre>
+        </div>
+
+
+    </div>
+    <h2 id="home"><i class="fa fa-home" aria-hidden="true"></i> {{ "content.configuration.title"|trans|raw }}</h2>
+    <div>
+        <p>{{ "content.configuration.blurb"|trans|raw }}</p>
+        <p>{{ "content.configuration.fileexample"|trans|raw }}</p>
+        <div class="highlight">
+            <button class="to-clipboard">
+                <i class="fa fa-clipboard" aria-hidden="true"></i> {{ "other.copy"|trans|raw }}
+            </button>
+            <pre><code>docker:
+    host_machine_mapping: "/Users/bob/MyProjects:/data/MYPROJECTS"
+    host_composer_cache_dir: "/data/MYPROJECTS/.composer_cache"
+
+provisioning:
+    folder_name: "myprovisioningfoldername"
+
+composer:
+    http_basic:
+        hostname:
+            host: www.hostname.com
+            login: login
+            password: pass
+    token:
+        github:
+            host: github.com
+            value: tokenvalue</code></pre>
+        </div>
+
+        <p>{{ "content.configuration.fileexample.description"|trans|raw }}</p>
+        <p>{{ "content.configuration.fileexample.description.dockersectionisnext"|trans|raw }}</p>
+
+    </div>
+    <h2 id="d4m"><i class="fa fa-space-shuttle" aria-hidden="true"></i> {{ "content.d4m.title"|trans|raw }}</h2>
+    <div>
+        <p>{{ "content.d4m.blurb"|trans|raw }}</p>
+        <p>{{ "content.d4m.workaround"|trans|raw }}</p>
+        <p>{{ "content.d4m.nfsfaster"|trans|raw }}</p>
+        <p>{{ "content.d4m.setup"|trans|raw }}</p>
+        <ul>
+            <li>{{ "content.d4m.setup.1"|trans|raw }}</li>
+            <li>{{ "content.d4m.setup.2"|trans|raw }}</li>
+        </ul>
+
+        <p>{{ "content.d4m.example"|trans|raw }}</p>
+
+        <div class="highlight">
+            <button class="to-clipboard">
+                <i class="fa fa-clipboard" aria-hidden="true"></i> {{ "other.copy"|trans|raw }}
+            </button>
+            <pre><code># /etc/exports
+/Users/bob/MyProjects -mapall=bob:staff localhost
+            </code></pre>
+        </div>
+
+        <p>{{ "content.d4m.example.mounted"|trans|raw }}</p>
+        <div class="highlight">
+            <button class="to-clipboard">
+                <i class="fa fa-clipboard" aria-hidden="true"></i> {{ "other.copy"|trans|raw }}
+            </button>
+            <pre><code># ~/.ezlaunchpad/ez.yml
+docker:
+    host_machine_mapping: "/Users/bob/MyProjects:/data/MYPROJECTS"
+    host_composer_cache_dir: "/data/MYPROJECTS/.composer_cache"
+            </code></pre>
+        </div>
+        <p>{{ "content.d4m.example.mounted.host_composer_cache_dir"|trans|raw }}</p>
+    </div>
+
+{% endblock %}

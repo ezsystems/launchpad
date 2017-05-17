@@ -1,0 +1,26 @@
+.container .text-muted {
+    margin: 20px 0;
+}
+
+.highlight {
+    position: relative;
+}
+
+.highlight .to-clipboard {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    display: block;
+    padding: 5px 8px;
+    font-size: 12px;
+    color: #767676;
+    cursor: pointer;
+    background-color: #fff;
+    border: 1px solid #e1e1e8;
+    border-radius: 0 4px 0 4px;
+}
+
+.ezlp-submenu li, .ezlp-submenu li a {
+    height: auto;
+}
