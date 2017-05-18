@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="no-js" lang="no_NO">
 <head>
-    <title>eZ Launchpad - Norvegian</title>
+    <title>eZ Launchpad - Prosjektside og dokumentasjon</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -46,7 +46,7 @@
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
+                <span class="sr-only">Veksle navigasjon</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -59,16 +59,16 @@
 
         <div class="collapse navbar-collapse " id="navbar">
             <ul class="nav navbar-nav">
-                <li><a href="#installation">Installation</a></li>
-                <li><a href="#usage">Usage</a></li>
+                <li><a href="#installation">Installasjon</a></li>
+                <li><a href="#usage">Bruk</a></li>
                 <li><a href="#stack">Stack</a></li>
-                <li><a href="#commands">Commands</a></li>
+                <li><a href="#commands">Kommandoer</a></li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">More
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mer
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu ezlp-submenu">
-                        <li><a href="#d4m">Mac OS X optimizations with D4M</a></li>
-                        <li><a href="#home">Global configurations</a></li>
+                        <li><a href="#d4m">Mac OS X optimalisering med D4M</a></li>
+                        <li><a href="#home">Global konfigurasjon</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -96,15 +96,15 @@
 
     <div class="container">
             <h1><i class="fa fa-rocket fa-2x" aria-hidden="true"></i>eZ Launchpad</h1>
-    <p>An tool that will help you build an <a href="http://ezplatform.com" target="_blank">eZ Platform</a> project on top of <a href="https://www.docker.com/" target="_blank">Docker</a> in less than 5 minutes.</p>
+    <p>Et verktøy som hjelper deg å bygge et <a href="http://ezplatform.com" target="_blank">eZ Platform</a> prosjekt basert på <a href="https://www.docker.com/" target="_blank">Docker</a> på under 5 minutter.</p>
     <div class="alert alert-success" role="alert">
-        <p><i class="fa fa-code" aria-hidden="true"></i> You will end up with a full <strong>Docker stack</strong>where the source-code is on your host for you <strong>to start coding</strong> right away!
+        <p><i class="fa fa-code" aria-hidden="true"></i> Du får en komplett <strong>Docker stack</strong> hvor kildekoden er på din lokale maskin. Alt klart så du kan <strong>starte å kode</strong> med det samme!
 </p>
     </div>
 
     <h2 id="screencast"><i class="fa fa-play" aria-hidden="true"></i> Demo</h2>
     <div>
-        <p>This is a demo of an <a href="#initstack">initialization</a>, starting from scratch, you will get everything ready to code, commit and push!
+        <p>Dette er en demo av <a href="#initstack">initialisering</a> hvor du får alt du trenger for å kode, committe og pushe!
 </p>
         <center>
             <iframe width="800" height="450" src="https://www.youtube.com/embed/N_wd-yAlKmA" frameborder="0" allowfullscreen></iframe>
@@ -112,7 +112,7 @@
     </div>
 
 
-    <h2 id="installation"><i class="fa fa-magic" aria-hidden="true"></i> Installation</h2>
+    <h2 id="installation"><i class="fa fa-magic" aria-hidden="true"></i> Installasjon</h2>
     <div>
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
@@ -125,10 +125,10 @@
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="installioncurl">
                 <br/>
-                <p>If you have <strong>curl</strong> installed:</p>
+                <p>Dersom du har <strong>curl</strong> installert:</p>
                     <div class="highlight">
         <button class="to-clipboard">
-            <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+            <i class="fa fa-clipboard" aria-hidden="true"></i> Kopier
         </button>
         <pre>$ <code>curl -LSs https://ezsystems.github.io/launchpad/install_curl.bash | bash</code></pre>
     </div>
@@ -136,10 +136,10 @@
             </div>
             <div role="tabpanel" class="tab-pane" id="installionwget">
                 <br/>
-                <p>If you have <strong>wget</strong> installed:</p>
+                <p>Dersom du har <strong>wget</strong> installert:</p>
                     <div class="highlight">
         <button class="to-clipboard">
-            <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+            <i class="fa fa-clipboard" aria-hidden="true"></i> Kopier
         </button>
         <pre>$ <code>wget -O - &quot;https://ezsystems.github.io/launchpad/install_wget.bash&quot; | bash</code></pre>
     </div>
@@ -147,133 +147,133 @@
             </div>
         </div>
     </div>
-    <h2 id="usage"><i class="fa fa-keyboard-o" aria-hidden="true"></i> Usage</h2>
+    <h2 id="usage"><i class="fa fa-keyboard-o" aria-hidden="true"></i> Bruk</h2>
     <div>
-        <p>When you have installed eZ Launchpad (<em>~/ez</em>) you can start enjoying the feature.</p>
-        <p>eZ Launchpad provides 2 mains features:</p>
+        <p>Når du har installert eZ Launchpad (<em>~/ez</em>) kan du begynne å bruke funksjonene.</p>
+        <p>eZ Launchpad leverer 2 hovedfunksjoner:</p>
         <ul>
-            <li><strong>Initialization</strong> of a brand new eZ Platform Stack (on top of Docker)</li>
-            <li><strong>Create</strong> the Docker Stack related to the current directory.</li>
+            <li><strong>Initialisering</strong> av en helt ny eZ Platform stack (på toppen av Docker)</li>
+            <li><strong>Opprette</strong> en Docker Stack relatert til gjelende katalog.</li>
         </ul>
 
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
-                <a href="#initstack" aria-controls="home" role="tab" data-toggle="tab">Start from scratch</a>
+                <a href="#initstack" aria-controls="home" role="tab" data-toggle="tab">Start fra bunn</a>
             </li>
             <li role="presentation">
-                <a href="#createstack" aria-controls="profile" role="tab" data-toggle="tab">Boostrap an existing project</a>
+                <a href="#createstack" aria-controls="profile" role="tab" data-toggle="tab">Boostrap et eksisterende prosjekt</a>
             </li>
         </ul>
 
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="initstack">
-                <h3><i class="fa fa-play" aria-hidden="true"></i> Init<small>ialization</small></h3>
-                <p>That is the from scratch installation. You need to do that when you have nothing and you want to start a new project with eZ Platform.
+                <h3><i class="fa fa-play" aria-hidden="true"></i> Init<small>ialisering</small></h3>
+                <p>Dette er installasjon fra bunn av. Du må kjøre denne når du starter et helt nytt eZ Platform prosjekt.
 </p>
                     <div class="highlight">
         <button class="to-clipboard">
-            <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+            <i class="fa fa-clipboard" aria-hidden="true"></i> Kopier
         </button>
         <pre>$ <code>~/ez init</code></pre>
     </div>
 
 
-                <p>From here eZ Launchpad will ask you a bunch of question to configure your project.</p>
+                <p>Her vil eZ Launchpad spørre deg en del spørsmål.</p>
                 <div class="alert alert-info" role="alert">
                     <p>
-                        <i class="fa fa-apple" aria-hidden="true"></i> Mac OS X users will have a wizard to set up <a href='#d4m' class='alert-link'>D4M</a>.
+                        <i class="fa fa-apple" aria-hidden="true"></i> Mac OS X brukerer har en wizard for å konfigurere <a href='#d4m' class='alert-link'>D4M</a>.
                     </p>
                 </div>
-                <p>At the end of the procedure those steps will be done for you:</p>
+                <p>På Slutten av prosessen vil følgende gjøres for deg:</p>
                 <ul>
-                    <li>Configuration your project locally.</li>
-                    <li>Download(pull) the correct image on your Docker Daemon.</li>
-                    <li>Set up a eZ compliant <em>docker-compose.yml</em>.</li>
-                    <li>Create and start the containers required.(depending of the choices you made)</li>
-                    <li>Install Composer in the Engine container.(where PHP is executed in your Stack)</li>
-                    <li>Install eZ Platform through Composer inside the stack.</li>
+                    <li>Konfigurere prosjektet ditt lokalt.</li>
+                    <li>Laste ned(pull) de korrekte imagene til din Docker Daemon.</li>
+                    <li>Sette opp en eZ kompatibel <em>docker-compose.yml</em>.</li>
+                    <li>Opprette og starte påkrevede containere. (avhengig av valgene du gjorde)</li>
+                    <li>Installere Composer i Engine containerern. (der hvor PHP blir eksekvert for din Stack)</li>
+                    <li>Installere eZ Platform igjennom Composer inne i stacken.</li>
                 </ul>
 
-                <p>Once the Initialization is finished, the project is up, you can check doing:</p>
+                <p>Når installasjonen er fullført, er prosjektet oppe å kjører, og du kan gjøre følgende:</p>
                     <div class="highlight">
         <button class="to-clipboard">
-            <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+            <i class="fa fa-clipboard" aria-hidden="true"></i> Kopier
         </button>
         <pre>$ <code>~/ez ps</code></pre>
     </div>
 
 
 
-                <p>You are now ready dump the database and storage, git commit and push to share the project to your teams.</p>
+                <p>Du er nå klar til å dumpe databasen og filene, git commit og push for å dele prosjektet med ditt team.</p>
                     <div class="highlight">
         <button class="to-clipboard">
-            <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+            <i class="fa fa-clipboard" aria-hidden="true"></i> Kopier
         </button>
         <pre>$ <code>~/ez dumpdata; git init; git add .; git commit -m &quot;First Initial Commit&quot;</code></pre>
     </div>
 
                     <div class="highlight">
         <button class="to-clipboard">
-            <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+            <i class="fa fa-clipboard" aria-hidden="true"></i> Kopier
         </button>
         <pre>$ <code>git remote add origin https://gitorigin.com/xxx/xxxx-xxx.git; git push -u origin master</code></pre>
     </div>
 
 
                 <h4><i class="fa fa-building" aria-hidden="true"></i> eZ Platform Enterprise</h4>
-                <p>Whether you want to use an entreprise version or a non-stable, you have the choice! Look at the help. There is an example:
+                <p>Enten du ønsker å bruke en enterprise versjon eller en ustabil utviklerversjon har du et valg. Sjekk dokumentasjonen. Det er et eksempel der:
 </p>
                     <div class="highlight">
         <button class="to-clipboard">
-            <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+            <i class="fa fa-clipboard" aria-hidden="true"></i> Kopier
         </button>
         <pre>$ <code>~/ez init ezsystems/ezplatform-ee v1.9.0-rc1</code></pre>
     </div>
 
-                <p>When eZ Launchpad will ask you about HTTP-BASIC, then you have to provide the <a href="https://doc.ez.no/display/TECHDOC/Using+Composer" target="_blank">Installation Key and the Token</a>.
+                <p>Når eZ Launchpad spør om HTTP-BASIC må du oppgi <a href="https://doc.ez.no/display/TECHDOC/Using+Composer" target="_blank">Installasjonsnøkkel og token</a>.
 </p>
 
             </div>
             <div role="tabpanel" class="tab-pane" id="createstack">
                 <h3>
-                    <i class="fa fa-fast-forward" aria-hidden="true"></i> Create
+                    <i class="fa fa-fast-forward" aria-hidden="true"></i> Opprett
                 </h3>
-                <p>In this context you have already a project somewhere, someone already did a <em>~/ez init</em></p>
-                <p>Then it most likely that you did</p>
+                <p>Denne kommandoen bruker du når du allere har et eksisterende prosjekt, dvs noen har allerede kjørt <em>~/ez init</em></p>
+                <p>Du har mest sannsynlig gjort</p>
                     <div class="highlight">
         <button class="to-clipboard">
-            <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+            <i class="fa fa-clipboard" aria-hidden="true"></i> Kopier
         </button>
         <pre>$ <code>git clone https://SOMETHING.git</code></pre>
     </div>
 
 
-                <p>If you want to know if your project is eZ Launchpad ready, you can just check the existance of <em>.ezlaunchpad.yml</em> at the root directory of your project.
+                <p>Om du vil vite om prosjektet ditt er klart for eZ Launchpad kan du sjekke om følgende eksisterer <em>.ezlaunchpad.yml</em> i rot-mappen til prosjektet ditt.
 </p>
-                <p>To create the local stack the command is then</p>
+                <p>For å opprette en loak stack er kommandoen</p>
                     <div class="highlight">
         <button class="to-clipboard">
-            <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+            <i class="fa fa-clipboard" aria-hidden="true"></i> Kopier
         </button>
         <pre>$ <code>~/ez create</code></pre>
     </div>
 
-                <p>Here eZ Launchpad will pull the images, create the containers of your stack as well a importing the database/storage.</p>
+                <p>Her vil eZ Launchpad hente images, opprette containere for din stack samt importere database/filer.</p>
             </div>
         </div>
     </div>
 
     <h2 id="stack"><i class="fa fa-th-list" aria-hidden="true"></i> Stack</h2>
     <div>
-        <p>At anytime you can get information on your stack by running</p>
+        <p>Du kan når som helst få informasjon om din stack ved å kjøre</p>
             <div class="highlight">
         <button class="to-clipboard">
-            <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+            <i class="fa fa-clipboard" aria-hidden="true"></i> Kopier
         </button>
         <pre>$ <code>~/ez info</code></pre>
     </div>
 
-        <p>Depending on the initialization, you might have more or less services, but here are the most common stack.</p>
+        <p>Avhengig av initialiseringen kan du ha ulikt antall tjenester, men her er de mest vanlige.</p>
 
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
@@ -294,10 +294,10 @@
         </div>
     </div>
 
-    <h2 id="commands"><i class="fa fa-terminal" aria-hidden="true"></i> Common Commands</h2>
+    <h2 id="commands"><i class="fa fa-terminal" aria-hidden="true"></i> Vanlige kommandoer</h2>
     <div>
-        <p>eZ Launchpad is done to help you with a local Docker stack.</p>
-        <p>To do so, here is the command available to you:</p>
+        <p>eZ Launchpad er laget for å hjelpe deg med din lokale Docker stack.</p>
+        <p>Her er de mest vanlige kommandoene for dette:</p>
         <div class="highlight">
             <pre>$ ~/ez
                 <code>
@@ -328,15 +328,15 @@ Available commands:
 
 
     </div>
-    <h2 id="home"><i class="fa fa-home" aria-hidden="true"></i> Global configuration</h2>
+    <h2 id="home"><i class="fa fa-home" aria-hidden="true"></i> Global konfigurasjon</h2>
     <div>
-        <p>Because every project can share stuff and because you might want the same configuration everywhere. eZ Launchpad read a configuration file in your HOME directory.
+        <p>Siden alle prosjekt kan dele ting og fordi du kan ønske samme konfigurasjon overalt leser eZ Launchpad en konfigurasjonsfil fra din HOME katalog.
 </p>
-        <p>This configuration file is <em>~/ezlaunchpad/ez.yml</em>. Here is a full example:
+        <p>Denne konfigurasjonsfilen er <em>~/ezlaunchpad/ez.yml</em>. Her er et komplett eksempel:
 </p>
         <div class="highlight">
             <button class="to-clipboard">
-                <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+                <i class="fa fa-clipboard" aria-hidden="true"></i> Kopier
             </button>
             <pre><code>docker:
     host_machine_mapping: "/Users/bob/MyProjects:/data/MYPROJECTS"
@@ -357,40 +357,40 @@ composer:
             value: tokenvalue</code></pre>
         </div>
 
-        <p>Note that this configuration is global and won't be including in the project (i.e in the CVS repository). But it will be including in your local stack.
+        <p>Legg merke til at denne konfigurasjonen er global og vil ikke bli inkludert i hvert enkelt prosjekt (dvs i CVS/Git basen). Men det vil bli inkludert i din lokale stack.
 </p>
-        <p><em>docker</em> section is described in the next section.</p>
+        <p><em>docker</em> er beskrevet i neste seksjon.</p>
 
     </div>
-    <h2 id="d4m"><i class="fa fa-space-shuttle" aria-hidden="true"></i> Mac OS X optimizations with D4M</h2>
+    <h2 id="d4m"><i class="fa fa-space-shuttle" aria-hidden="true"></i> Mac OS X optimalisering med D4M</h2>
     <div>
-        <p>When it comes to share folder from the Host(your mac) to containers <em>Docker for Mac</em> is slow. (at least for now). Then to manage this performance issue, <strong>there is a workaround</strong>.
+        <p>Når det gjelder deling av mappe/filer fra din lokale Mac til Docker containere er <em>Docker for Mac</em> tregt. (ihvertfall foreløpig) For å håndtere dette ytelseseproblemet er det en <strong>midlertidig løsning</strong>.
 </p>
-        <p>This workaround is called <a href="https://github.com/IFSight/d4m-nfs">D4M</a>. Without entering into the details, D4M uses the MobbyVM that runs beside Docker for Mac and NFS mounts your mac.
+        <p>Denne midlertidig løsningen heter a href="https://github.com/IFSight/d4m-nfs">D4M</a>. Uten å gå i detaljer bruker D4M MobbyVM som kjører ved siden av Docker for Mac og NFS monterer det på din Mac.
 </p>
-        <p>Note: It might be odd, but yes NFS is faster than the default mount.</p>
-        <p>Still when you use D4M, you can set it up:</p>
+        <p>NB: det kan høres rart ut, men ja, NFS er raskere en standard diskmontering.</p>
+        <p>Når du bruker D4M kan du konfigurere det ved:</p>
         <ul>
-            <li>in a transparent way: Then no configuration is required with eZ Launchpad</li>
-            <li>limitating the folder that you export: In this case, you need to tell it to eZ Launchpad</li>
+            <li>gjennosiktig metode: Ingen konfigurasjon påkrevet med eZ Launchpad</li>
+            <li>begrensning av mappen du eksporterer: Her må du si ifra til eZ Launchpad</li>
         </ul>
 
-        <p>If you have customized the D4M configuration, let's say, that you have exported</p>
+        <p>Dersom du har tilpasset D4M konfigurasjonen, feks dersom du har eksportert</p>
 
         <div class="highlight">
             <button class="to-clipboard">
-                <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+                <i class="fa fa-clipboard" aria-hidden="true"></i> Kopier
             </button>
             <pre><code># /etc/exports
 /Users/bob/MyProjects -mapall=bob:staff localhost
             </code></pre>
         </div>
 
-        <p>And you have mounted this exported folder in <em>/data/MYPROJECTS</em> in the MobyVM (through D4M). Then you need to add this configuration for eZ Launchpad
+        <p>Og dersom du har montert denne eksporten i <em>/data/MYPROJECTS</em> i MobyVM (gjennom D4M). Da må du legge til denne konfigurasjonen i eZ Launchpad
 </p>
         <div class="highlight">
             <button class="to-clipboard">
-                <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+                <i class="fa fa-clipboard" aria-hidden="true"></i> Kopier
             </button>
             <pre><code># ~/.ezlaunchpad/ez.yml
 docker:
@@ -398,7 +398,7 @@ docker:
     host_composer_cache_dir: "/data/MYPROJECTS/.composer_cache"
             </code></pre>
         </div>
-        <p><em>host_composer_cache_dir</em> will allow you to share the composer cache for all your projects.
+        <p><em>host_composer_cache_dir</em> tillater deg å dele composer cache for alle dine prosjekter.
 </p>
     </div>
 
@@ -417,9 +417,9 @@ docker:
                     <ul>
                         <li><a href="http://ez.no">eZ.no</a></li>
                         <li>
-                            <a href="http://ez.no/About-eZ/Company-Overview" target="_blank">Company Overview</a>
+                            <a href="http://ez.no/About-eZ/Company-Overview" target="_blank">Firmaoversikt</a>
                         </li>
-                        <li><a href="http://ez.no/Products">Products</a></li>
+                        <li><a href="http://ez.no/Products">Produkter</a></li>
                     </ul>
                 </div>
 
@@ -429,7 +429,7 @@ docker:
                 <div class="ezrichtext-field">
                     <ul>
                         <li>
-                            <a href="http://doc.ez.no/display/DEVELOPER/Documentation">Documentation</a>
+                            <a href="http://doc.ez.no/display/DEVELOPER/Documentation">Dokumentasjon</a>
                         </li>
                         <li>
                             <a href="https://doc.ez.no/display/DEVELOPER/eZ+Platform+Public+PHP+API" target="_blank">API</a>
@@ -441,7 +441,7 @@ docker:
             </div>
 
             <div class="col-md-3 footer-social text-center">
-                <h4>Follow us on social media</h4>
+                <h4>Følg oss på sosiale medier</h4>
 
                 <a href="//www.youtube.com/user/ezpublish/" target="_blank">
                     <i class="fa fa-youtube fa"></i>
