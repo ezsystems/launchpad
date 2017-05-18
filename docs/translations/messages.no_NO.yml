@@ -1,4 +1,127 @@
 ---
 
 layout:
-    title: "eZ Launchpad - Norvegian"
+    title: "eZ Launchpad - Prosjektside og dokumentasjon"
+
+header:
+    toggle.navigation: "Veksle navigasjon"
+
+    menu:
+        installation: "Installasjon"
+        usage: "Bruk"
+        stack: "Stack"
+        commands: "Kommandoer"
+        more: "Mer"
+        d4m: "Mac OS X optimalisering med D4M"
+        global.configuration: "Global konfigurasjon"
+
+footer:
+    company.overview: "Firmaoversikt"
+    company.products: "Produkter"
+    ez.doc: "Dokumentasjon"
+    followus: "Følg oss på sosiale medier"
+    copyright: "Copyright © 1999-2017 eZ Systems AS. All rights reserved."
+    poweredby: "Powered by"
+
+content:
+    intro:
+        blurb: "Et verktøy som hjelper deg å bygge et %ez% prosjekt basert på %docker% på under 5 minutter."
+        well: >
+            Du får en komplett <strong>Docker stack</strong> hvor kildekoden
+            er på din lokale maskin. Alt klart så du kan <strong>starte å kode</strong> med det samme!
+
+    demo:
+        title: "Demo"
+        blurb: >
+            Dette er en demo av <a href="#initstack">initialisering</a> hvor du får
+            alt du trenger for å kode, committe og pushe!
+
+    install:
+        title: "Installasjon"
+        toolinstalled: "Dersom du har <strong>%tool%</strong> installert:"
+
+    usage:
+        title: "Bruk"
+        blurb: "Når du har installert eZ Launchpad (<em>~/ez</em>) kan du begynne å bruke funksjonene."
+        2mainfeatures: "eZ Launchpad leverer 2 hovedfunksjoner:"
+        init: "<strong>Initialisering</strong> av en helt ny eZ Platform stack (på toppen av Docker)"
+        create: "<strong>Opprette</strong> en Docker Stack relatert til gjelende katalog."
+        fromscratch: "Start fra bunn"
+        bootstrap: "Boostrap et eksisterende prosjekt"
+        init.title: "Init<small>ialisering</small>"
+        init.blurb: >
+                Dette er installasjon fra bunn av.
+                Du må kjøre denne når du starter et helt nytt eZ Platform prosjekt.
+        init.willaskquestion: "Her vil eZ Launchpad spørre deg en del spørsmål."
+        init.macosxwarning: "Mac OS X brukerer har en wizard for å konfigurere <a href='#d4m' class='alert-link'>D4M</a>."
+        init.end.steps: "På Slutten av prosessen vil følgende gjøres for deg:"
+        init.end.steps.1: "Konfigurere prosjektet ditt lokalt."
+        init.end.steps.2: "Laste ned(pull) de korrekte imagene til din Docker Daemon."
+        init.end.steps.3: "Sette opp en eZ kompatibel <em>docker-compose.yml</em>."
+        init.end.steps.4: "Opprette og starte påkrevede containere. (avhengig av valgene du gjorde)"
+        init.end.steps.5: "Installere Composer i Engine containerern. (der hvor PHP blir eksekvert for din Stack)"
+        init.end.steps.6: "Installere eZ Platform igjennom Composer inne i stacken."
+
+        init.end.finished.ps: "Når installasjonen er fullført, er prosjektet oppe å kjører, og du kan gjøre følgende:"
+        init.end.finished.dump: "Du er nå klar til å dumpe databasen og filene, git commit og push for å dele prosjektet med ditt team."
+        init.end.finished.entreprise: >
+                Enten du ønsker å bruke en enterprise versjon eller en ustabil utviklerversjon har du et valg.
+                Sjekk dokumentasjonen. Det er et eksempel der:
+        init.end.finished.httpbasics: >
+                Når eZ Launchpad spør om HTTP-BASIC må du oppgi
+                <a href="https://doc.ez.no/display/TECHDOC/Using+Composer" target="_blank">Installasjonsnøkkel og token</a>.
+
+        create.title: "Opprett"
+        create.blurb: "Denne kommandoen bruker du når du allere har et eksisterende prosjekt, dvs noen har allerede kjørt <em>~/ez init</em>"
+        create.gitpull: "Du har mest sannsynlig gjort"
+        create.projectready: >
+                Om du vil vite om prosjektet ditt er klart for eZ Launchpad kan du sjekke om følgende eksisterer
+                <em>.ezlaunchpad.yml</em> i rot-mappen til prosjektet ditt.
+        create.localstack: "For å opprette en loak stack er kommandoen"
+        create.whathasbeendone: "Her vil eZ Launchpad hente images, opprette containere for din stack samt importere database/filer."
+
+    stack:
+        title: "Stack"
+        blurb: "Du kan når som helst få informasjon om din stack ved å kjøre"
+        moreorlessservice: "Avhengig av initialiseringen kan du ha ulikt antall tjenester, men her er de mest vanlige."
+
+    commands:
+        title: "Vanlige kommandoer"
+        blurb: "eZ Launchpad er laget for å hjelpe deg med din lokale Docker stack."
+        list: "Her er de mest vanlige kommandoene for dette:"
+
+    configuration:
+        title: "Global konfigurasjon"
+        blurb: >
+            Siden alle prosjekt kan dele ting og fordi du kan ønske samme konfigurasjon overalt
+            leser eZ Launchpad en konfigurasjonsfil fra din HOME katalog.
+        fileexample: >
+            Denne konfigurasjonsfilen er <em>~/ezlaunchpad/ez.yml</em>. Her er et komplett eksempel:
+        fileexample.description: >
+            Legg merke til at denne konfigurasjonen er global og vil ikke bli inkludert i hvert enkelt prosjekt (dvs i CVS/Git basen).
+            Men det vil bli inkludert i din lokale stack.
+        fileexample.description.dockersectionisnext: "<em>docker</em> er beskrevet i neste seksjon."
+
+    d4m:
+        title: "Mac OS X optimalisering med D4M"
+        blurb: >
+            Når det gjelder deling av mappe/filer fra din lokale Mac til Docker containere
+            er <em>Docker for Mac</em> tregt. (ihvertfall foreløpig)
+            For å håndtere dette ytelseseproblemet er det en <strong>midlertidig løsning</strong>.
+        workaround: >
+            Denne midlertidig løsningen heter a href="https://github.com/IFSight/d4m-nfs">D4M</a>.
+            Uten å gå i detaljer bruker D4M MobbyVM som kjører ved siden av Docker for Mac og NFS monterer det på din Mac.
+        nfsfaster: "NB: det kan høres rart ut, men ja, NFS er raskere en standard diskmontering."
+        setup: "Når du bruker D4M kan du konfigurere det ved:"
+        setup.1: "gjennosiktig metode: Ingen konfigurasjon påkrevet med eZ Launchpad"
+        setup.2: "begrensning av mappen du eksporterer: Her må du si ifra til eZ Launchpad"
+
+        example: "Dersom du har tilpasset D4M konfigurasjonen, feks dersom du har eksportert"
+        example.mounted: >
+            Og dersom du har montert denne eksporten i <em>/data/MYPROJECTS</em> i MobyVM (gjennom D4M).
+            Da må du legge til denne konfigurasjonen i eZ Launchpad
+        example.mounted.host_composer_cache_dir: >
+            <em>host_composer_cache_dir</em> tillater deg å dele composer cache for alle dine prosjekter.
+
+other:
+    copy: "Kopier"
