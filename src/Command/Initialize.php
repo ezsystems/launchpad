@@ -189,7 +189,7 @@ END;
             $executor->createCore();
             $executor->indexSolr();
         }
-
+        $this->projectConfiguration->setEnvironment('dev');
         $this->projectStatusDumper->dump('ncsi');
     }
 }
