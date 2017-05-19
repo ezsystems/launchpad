@@ -17,6 +17,8 @@ services:
     # Docker Actions
     ez.launchpad.initialize:
         class: eZ\Launchpad\Command\Initialize
+        arguments:
+            - "@ezlaunchpad_project.information.dumper"
         calls:
             - [setRequiredRecipes, [ [ 'composer_install', 'ez_install', 'ez_install_solr' ] ] ]
         tags:
@@ -24,6 +26,8 @@ services:
 
     ez.launchpad.create:
         class: eZ\Launchpad\Command\Create
+        arguments:
+            - "@ezlaunchpad_project.information.dumper"
         calls:
             - [setRequiredRecipes, [ [ 'composer_install', 'ez_create', 'import_dump', 'ez_install_solr' ] ] ]
         tags:
@@ -56,6 +60,8 @@ services:
 
     ez.launchpad.status:
         class: eZ\Launchpad\Command\Status
+        arguments:
+            - "@ezlaunchpad_project.information.dumper"
         tags:
             - { name: ezlaunchpad.command }
 

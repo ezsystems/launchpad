@@ -30,3 +30,8 @@ tests/coverage
 /provisioning2ouf
 /provisioning2
 /data
+
+# we don't want that at the root (usually generated when developing eZ Launchpad)
+/ez_install.bash
+/composer_install.bash
+/ez_install_solr.bash

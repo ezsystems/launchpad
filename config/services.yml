@@ -36,3 +36,8 @@ services:
         class: eZ\Launchpad\Listener\CommandTerminate
         tags:
             - { name: kernel.event_listener, event: console.terminate, method: onTerminateAction }
+
+    ezlaunchpad_project.information.dumper:
+        class: eZ\Launchpad\Core\ProjectStatusDumper
+        arguments:
+            - "@project_configuration"

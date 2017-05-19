@@ -11,6 +11,7 @@ use eZ\Launchpad\Core\Client\Docker;
 use eZ\Launchpad\Core\Command;
 use eZ\Launchpad\Core\DockerCompose;
 use eZ\Launchpad\Core\ProcessRunner;
+use eZ\Launchpad\Core\ProjectStatusDumper;
 use eZ\Launchpad\Core\ProjectWizard;
 use eZ\Launchpad\Core\TaskExecutor;
 use Symfony\Component\Console\Input\InputArgument;
@@ -23,6 +24,31 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class Initialize extends Command
 {
+    /**
+     * @var ProjectStatusDumper
+     */
+    protected $projectStatusDumper;
+
+    /**
+     * Status constructor.
+     *
+     * @param ProjectStatusDumper $projectStatusDumper
+     */
+    public function __construct(ProjectStatusDumper $projectStatusDumper)
+    {
+        parent::__construct();
+        $this->projectStatusDumper = $projectStatusDumper;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
+        parent::initialize($input, $output);
+        $this->projectStatusDumper->setIo($this->io);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -139,6 +165,7 @@ END;
             'composer-cache-dir'       => $this->projectConfiguration->get('docker.host_composer_cache_dir'),
         ];
         $dockerClient = new Docker($options, new ProcessRunner());
+        $this->projectStatusDumper->setDockerClient($dockerClient);
         $dockerClient->build(['--no-cache']);
         $dockerClient->up(['-d']);
 
@@ -162,5 +189,7 @@ END;
             $executor->createCore();
             $executor->indexSolr();
         }
+
+        $this->projectStatusDumper->dump('ncsi');
     }
 }

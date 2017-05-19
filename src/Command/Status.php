@@ -7,6 +7,8 @@
 namespace eZ\Launchpad\Command;
 
 use eZ\Launchpad\Core\DockerCommand;
+use eZ\Launchpad\Core\ProjectStatusDumper;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -16,6 +18,22 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Status extends DockerCommand
 {
     /**
+     * @var ProjectStatusDumper
+     */
+    protected $projectStatusDumper;
+
+    /**
+     * Status constructor.
+     *
+     * @param ProjectStatusDumper $projectStatusDumper
+     */
+    public function __construct(ProjectStatusDumper $projectStatusDumper)
+    {
+        parent::__construct();
+        $this->projectStatusDumper = $projectStatusDumper;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function configure()
@@ -23,6 +41,22 @@ class Status extends DockerCommand
         parent::configure();
         $this->setName('docker:status')->setDescription('Obtaining the project information.');
         $this->setAliases(['docker:ps', 'docker:info', 'ps', 'info']);
+        $this->addArgument(
+            'options',
+            InputArgument::OPTIONAL,
+            'n: Docker Network, c: Docker Compose, s: Service Access',
+            'ncs'
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
+        parent::initialize($input, $output);
+        $this->projectStatusDumper->setDockerClient($this->dockerClient);
+        $this->projectStatusDumper->setIo($this->io);
     }
 
     /**
@@ -30,36 +64,6 @@ class Status extends DockerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $composeCommand = $this->dockerClient->getComposeCommand();
-        $this->io->section('Network');
-        $this->dockerClient->ps();
-        $this->io->section("\nDocker Compose command");
-        $this->io->writeln($composeCommand);
-        $this->io->section("\nService Access");
-
-        foreach ($this->projectConfiguration->getDockerCompose()->getServices() as $serviceName => $service) {
-            if (isset($service['ports'])) {
-                foreach ($service['ports'] as $port) {
-                    list($external, $internal) = explode(':', $port);
-                    $external                  = str_replace(
-                        '${PROJECTPORTPREFIX}',
-                        $this->projectConfiguration->get('docker.network_prefix_port'),
-                        $external
-                    );
-
-                    $tabs = 2;
-
-                    if (strlen($serviceName) + 2 > 8) {
-                        $tabs = 1;
-                    }
-
-                    $this->io->writeln(
-                        "<fg=white;options=bold>{$serviceName}: </>".
-                        str_pad('', $tabs, "\t").
-                        "http://localhost:<fg=white;options=bold>{$external}</>"
-                    );
-                }
-            }
-        }
+        $this->projectStatusDumper->dump($input->getArgument('options'));
     }
 }

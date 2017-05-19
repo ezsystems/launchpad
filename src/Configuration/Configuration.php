@@ -28,7 +28,7 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->scalarNode('compose_filename')->defaultValue('docker-compose.yml')->end()
                         ->scalarNode('network_name')->defaultValue('default-ezlaunchpad')->end()
-                        ->scalarNode('network_prefix_port')->defaultValue('42')->end()
+                        ->scalarNode('network_prefix_port')->defaultValue(42)->end()
                         ->scalarNode('host_machine_mapping')->defaultNull()->end()
                         ->scalarNode('host_composer_cache_dir')->defaultNull()->end()
                     ->end()
