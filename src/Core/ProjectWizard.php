@@ -43,8 +43,8 @@ class ProjectWizard
     {
         return [
             $this->getNetworkName(),
-            $this->getComposerHttpBasicCredentials(),
             $this->getNetworkTCPPort(),
+            $this->getComposerHttpBasicCredentials(),
             $this->getSelectedServices(
                 $compose->getServices(),
                 ['varnish', 'solr', 'mailcatcher', 'adminer', 'memcache', 'memcachedadmin']
@@ -179,11 +179,22 @@ class ProjectWizard
     protected function getNetworkTCPPort()
     {
         $validator = function ($value) {
-            return ($value > 0) && ($value <= 65);
+            if (($value > 0) && ($value <= 65)) {
+                $socket = @fsockopen('127.0.0.1', intval("{$value}080"), $errno, $errstr, 5);
+                if ($socket) {
+                    fclose($socket);
+
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
         };
 
         $message      = 'What is the <fg=yellow;options=bold>TCP Port Prefix</> you want?';
-        $errorMessage = 'The TCP Port Prefix MUST be between 1 and 65.';
+        $errorMessage = 'The TCP Port Prefix is not correct (already used or not between 1 and 65.';
         $default      = 42;
 
         return (int) $this->io->askQuestion($this->getQuestion($message, $default, $validator, $errorMessage));
