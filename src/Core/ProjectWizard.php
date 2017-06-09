@@ -168,7 +168,7 @@ class ProjectWizard
 
         $message      = 'Please select a name for the containers <fg=yellow;options=bold>Docker Network</>';
         $errorMessage = "The name of the network MUST respect {$pattern}.";
-        $default      = null;
+        $default      = strtolower(basename(getcwd()));
 
         return $this->io->askQuestion($this->getQuestion($message, $default, $validator, $errorMessage));
     }
