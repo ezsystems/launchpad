@@ -8,10 +8,14 @@ REPO=$1
 VERSION=$2
 INIT_DATA=$3
 
+CONSOLE="bin/console"
+if [ -f ezplatform/app/console ]; then
+    CONSOLE="app/console"
+fi
 
 echo "Installation eZ Platform ($REPO:$VERSION:$INIT_DATA) in the container"
 # Install
-$COMPOSER create-project --no-dev --no-interaction $REPO ezplatform $VERSION
+$COMPOSER create-project --no-interaction $REPO ezplatform $VERSION
 cp composer.phar ezplatform
 cd ezplatform
 
@@ -23,8 +27,8 @@ while ! mysqladmin ping -h"$DATABASE_HOST" -u"$DATABASE_USER" -p"$DATABASE_PASSW
 done
 echo ""
 
-$PHP app/console doctrine:database:create
-$PHP app/console ezplatform:install $INIT_DATA
+$PHP $CONSOLE doctrine:database:create
+$PHP $CONSOLE ezplatform:install $INIT_DATA
 
 echo "Installation OK"
 
