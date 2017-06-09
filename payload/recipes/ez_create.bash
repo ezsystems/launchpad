@@ -7,6 +7,11 @@ COMPOSER="$PHP -d memory_limit=-1 composer.phar"
 REPO=$1
 VERSION=$2
 
+CONSOLE="bin/console"
+if [ -f ezplatform/app/console ]; then
+    CONSOLE="app/console"
+fi
+
 # Install
 cp composer.phar ezplatform
 cd ezplatform
@@ -19,7 +24,7 @@ while ! mysqladmin ping -h"$DATABASE_HOST" -u"$DATABASE_USER" -p"$DATABASE_PASSW
 done
 echo ""
 
-$PHP app/console doctrine:database:create
+$PHP $CONSOLE doctrine:database:create
 
 echo "Installation OK"
 

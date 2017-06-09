@@ -29,7 +29,11 @@ if [ $ACTION == "INDEX" ]; then
     sleep 5
     echo "Solr is running"
     cd $PROJECTMAPPINGFOLDER/ezplatform
-    $PHP app/console --env=prod ezplatform:reindex
+    CONSOLE="bin/console"
+    if [ -f app/console ]; then
+        CONSOLE="app/console"
+    fi
+    $PHP $CONSOLE --env=prod ezplatform:reindex
 fi
 
 if [ $ACTION == "CREATE_CORE" ]; then
