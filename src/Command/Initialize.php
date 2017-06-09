@@ -105,6 +105,7 @@ class Initialize extends Command
             ],
             0755
         );
+        $fs->chmod("{$provisioningFolder}/dev/solr", 0777);
 
         // PHP.ini ADAPTATION
         $phpINIPath = "{$provisioningFolder}/dev/engine/php.ini";
