@@ -59,13 +59,14 @@ class ProjectWizard
      */
     protected function getComposerHttpBasicCredentials()
     {
-        $credentials = [];
-        while ($this->io->confirm(
-            'Do you want to set <fg=yellow;options=bold>Composer HTTP-BASIC</> for this project?',
-            false
-        )) {
+        $credentials    = [];
+        $endString      = '<fg=yellow;options=bold>Composer HTTP-BASIC</> for this project?';
+        $questionString = 'Do you want to set '.$endString;
+        while ($this->io->confirm($questionString, false)) {
             list($host, $login, $password) = $this->getOneComposerHttpBasic();
-            $credentials[]                 = [$host, $login, $password];
+
+            $credentials[]  = [$host, $login, $password];
+            $questionString = 'Do you want to add another '.$endString;
         }
 
         return $credentials;
