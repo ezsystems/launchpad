@@ -190,6 +190,8 @@ class TaskExecutor
      */
     public function runSymfomyCommand($arguments)
     {
+        //@todo: manage the bin/console
+        // probably by check the current directory on the host
         return $this->execute('ezplatform/app/console '.$arguments);
     }
 

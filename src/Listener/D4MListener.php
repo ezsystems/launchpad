@@ -172,6 +172,13 @@ This wizard is going to:
                 return false;
             }
 
+            //@todo: test the real mount point
+            // screen -r d4m
+            // mount
+            // we should have something like:
+            //192.168.65.1:/Users/plopix on /Users/plopix/ type nfs (rw,relatime,vers=3,rsize=65536,wsize=65536,namlen=255,hard,nolock,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=192.168.65.1,mountvers=3,mountproto=tcp,local_lock=all,addr=192.168.65.1)
+            // and not just /Users/plopix with osfs
+
             $io->success('Moby VM mount succeed.');
         }
 
