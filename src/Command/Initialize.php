@@ -82,8 +82,8 @@ class Initialize extends Command
         // Ask the questions
         list(
             $networkName,
-            $httpBasics,
             $networkPort,
+            $httpBasics,
             $selectedServices,
             $provisioningName,
             $composeFileName
