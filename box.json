@@ -11,11 +11,13 @@
     "directories": [
         "src",
         "config",
-        "payload"
+        "payload",
+        "payload/platformsh/.platform"
     ],
     "files": [
         "LICENSE",
-        "payload/dev/solr/.gitignore"
+        "payload/dev/solr/.gitignore",
+        "payload/platformsh/.platform.app.yml"
     ],
     "finder": [
         {

@@ -9,10 +9,20 @@ VERSION=$2
 INIT_DATA=$3
 
 echo "Installation eZ Platform ($REPO:$VERSION:$INIT_DATA) in the container"
+
 # Install
 $COMPOSER create-project --no-interaction $REPO ezplatform $VERSION
 cp composer.phar ezplatform
 cd ezplatform
+
+# Install Tiny help for Platformsh (will be included soon in ezplatform)
+$COMPOSER require platformsh/config-reader --no-interaction
+
+# Do some cleaning
+## Files
+rm .env .platform.app.yml Dockerfile .travis
+## Folder
+rm -rf .platform bin/.ci bin/.travis
 
 CONSOLE="bin/console"
 if [ -f app/console ]; then
