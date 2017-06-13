@@ -53,6 +53,11 @@ services:
         tags:
             - { name: ezlaunchpad.command }
 
+    ez.launchpad.remove:
+        class: eZ\Launchpad\Command\Remove
+        tags:
+            - { name: ezlaunchpad.command }
+
     ez.launchpad.clean:
         class: eZ\Launchpad\Command\Clean
         tags:
