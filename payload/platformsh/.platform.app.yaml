@@ -59,8 +59,9 @@ hooks:
         set -e
         cd /app
         if [ ! -f ezplatform/web/var/.platform.installed ]; then
-            MYSQL_OPTIONS=`php scripts/getmysqlcredentials.php`
-            zcat data/db.sql.gz | mysql $MYSQL_OPTIONS
+            MYSQL_OPTIONS=`php provisioning/platformsh/getmysqlcredentials.php`
+            zcat data/ezplatform.sql.gz | mysql $MYSQL_OPTIONS
+            tar xvzf data/storage.tar.gz -C ezplatform/web/
             touch ezplatform/web/var/.platform.installed
         fi
         cd /app/ezplatform

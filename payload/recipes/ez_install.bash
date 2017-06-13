@@ -20,7 +20,7 @@ $COMPOSER require platformsh/config-reader --no-interaction
 
 # Do some cleaning
 ## Files
-rm .env .platform.app.yml Dockerfile .travis
+rm .env .platform.app.yaml Dockerfile .travis.yml
 ## Folder
 rm -rf .platform bin/.ci bin/.travis
 
