@@ -15,9 +15,6 @@ $COMPOSER create-project --no-interaction $REPO ezplatform $VERSION
 cp composer.phar ezplatform
 cd ezplatform
 
-# Install Tiny help for Platformsh (will be included soon in ezplatform)
-$COMPOSER require platformsh/config-reader --no-interaction
-
 # Do some cleaning
 ## Files
 rm .env .platform.app.yaml Dockerfile .travis.yml

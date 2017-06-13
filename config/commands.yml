@@ -15,8 +15,8 @@ services:
             - { name: ezlaunchpad.command }
 
     # Docker Actions
-    ez.launchpad.initialize:
-        class: eZ\Launchpad\Command\Initialize
+    ez.launchpad.docker.initialize:
+        class: eZ\Launchpad\Command\Docker\Initialize
         arguments:
             - "@ezlaunchpad_project.information.dumper"
         calls:
@@ -24,8 +24,8 @@ services:
         tags:
             - { name: ezlaunchpad.command }
 
-    ez.launchpad.create:
-        class: eZ\Launchpad\Command\Create
+    ez.launchpad.docker.create:
+        class: eZ\Launchpad\Command\Docker\Create
         arguments:
             - "@ezlaunchpad_project.information.dumper"
         calls:
@@ -33,68 +33,81 @@ services:
         tags:
             - { name: ezlaunchpad.command }
 
-    ez.launchpad.start:
-        class: eZ\Launchpad\Command\Start
+    ez.launchpad.docker.start:
+        class: eZ\Launchpad\Command\Docker\Start
         tags:
             - { name: ezlaunchpad.command }
 
-    ez.launchpad.build:
-        class: eZ\Launchpad\Command\Build
+    ez.launchpad.docker.build:
+        class: eZ\Launchpad\Command\Docker\Build
         tags:
             - { name: ezlaunchpad.command }
 
-    ez.launchpad.up:
-        class: eZ\Launchpad\Command\Up
+    ez.launchpad.docker.up:
+        class: eZ\Launchpad\Command\Docker\Up
         tags:
             - { name: ezlaunchpad.command }
 
     ez.launchpad.stop:
-        class: eZ\Launchpad\Command\Stop
+        class: eZ\Launchpad\Command\Docker\Stop
         tags:
             - { name: ezlaunchpad.command }
 
-    ez.launchpad.clean:
-        class: eZ\Launchpad\Command\Clean
+    ez.launchpad.docker.clean:
+        class: eZ\Launchpad\Command\Docker\Clean
         tags:
             - { name: ezlaunchpad.command }
 
-    ez.launchpad.status:
-        class: eZ\Launchpad\Command\Status
+    ez.launchpad.docker.status:
+        class: eZ\Launchpad\Command\Docker\Status
         arguments:
             - "@ezlaunchpad_project.information.dumper"
         tags:
             - { name: ezlaunchpad.command }
 
-    ez.launchpad.enter:
-        class: eZ\Launchpad\Command\Enter
+    ez.launchpad.docker.enter:
+        class: eZ\Launchpad\Command\Docker\Enter
         tags:
             - { name: ezlaunchpad.command }
 
-    ez.launchpad.logs:
-        class: eZ\Launchpad\Command\Logs
+    ez.launchpad.docker.logs:
+        class: eZ\Launchpad\Command\Docker\Logs
         tags:
             - { name: ezlaunchpad.command }
 
-    ez.launchpad.dumpdata:
-        class: eZ\Launchpad\Command\DumpData
+    ez.launchpad.docker.dumpdata:
+        class: eZ\Launchpad\Command\Docker\DumpData
         calls:
             - [setRequiredRecipes, [ [ 'create_dump' ] ] ]
         tags:
             - { name: ezlaunchpad.command }
 
-    ez.launchpad.importdata:
-        class: eZ\Launchpad\Command\ImportData
+    ez.launchpad.docker.importdata:
+        class: eZ\Launchpad\Command\Docker\ImportData
         calls:
             - [setRequiredRecipes, [ [ 'import_dump' ] ] ]
         tags:
             - { name: ezlaunchpad.command }
 
-    ez.launchpad.sfrun:
-        class: eZ\Launchpad\Command\SymfonyRun
+    ez.launchpad.docker.sfrun:
+        class: eZ\Launchpad\Command\Docker\SymfonyRun
         tags:
             - { name: ezlaunchpad.command }
 
-    ez.launchpad.comprun:
-        class: eZ\Launchpad\Command\ComposerRun
+    ez.launchpad.docker.comprun:
+        class: eZ\Launchpad\Command\Docker\ComposerRun
+        tags:
+            - { name: ezlaunchpad.command }
+
+    # Docker Actions
+    ez.launchpad.platformsh.setup:
+        class: eZ\Launchpad\Command\Platformsh\Setup
+        calls:
+            - [setRequiredRecipes, [ [ 'create_dump' ] ] ]
+        tags:
+            - { name: ezlaunchpad.command }
+
+    ez.launchpad.platformsh.deploy:
+        class: eZ\Launchpad\Command\Platformsh\Deploy
         tags:
             - { name: ezlaunchpad.command }

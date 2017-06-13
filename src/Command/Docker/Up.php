@@ -4,7 +4,7 @@
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
 
-namespace eZ\Launchpad\Command;
+namespace eZ\Launchpad\Command\Docker;
 
 use eZ\Launchpad\Core\DockerCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -12,9 +12,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class Build.
+ * Class Up.
  */
-class Build extends DockerCommand
+class Up extends DockerCommand
 {
     /**
      * {@inheritdoc}
@@ -22,9 +22,9 @@ class Build extends DockerCommand
     protected function configure()
     {
         parent::configure();
-        $this->setName('docker:build')->setDescription('Build all the services (or just one).');
-        $this->addArgument('service', InputArgument::OPTIONAL, 'Service to build', '');
-        $this->setAliases(['build']);
+        $this->setName('docker:up')->setDescription('Up all the services (or just one).');
+        $this->addArgument('service', InputArgument::OPTIONAL, 'Service to up', '');
+        $this->setAliases(['up']);
     }
 
     /**
@@ -32,6 +32,6 @@ class Build extends DockerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->dockerClient->build([], $input->getArgument('service'));
+        $this->dockerClient->up(['-d'], $input->getArgument('service'));
     }
 }

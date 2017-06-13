@@ -1,2 +1,5 @@
-mysqldb: { type: "mysql:10.0", disk: 2048 }
-cache: { type: "memcache:1.4" }
+mysqldb:
+    type: 'mysql:10.0'
+    disk: 2048
+cache:
+    type: 'memcache:1.4'
