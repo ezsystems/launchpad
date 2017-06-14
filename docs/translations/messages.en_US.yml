@@ -34,9 +34,11 @@ content:
     demo:
         title: "Demo"
         blurb: >
-            This is a demo of an <a href="#initstack">initialization</a>, starting from scratch,
+            This is a demo of an <a href="#initstack">initialization</a>. Starting from scratch
             you will get everything ready to code, commit and push!
-
+        create.blurb: >
+            This is a demo of a <a href="#createstack">creation</a>. Starting from a git repository
+            you will get everything ready to code, commit and push!
     install:
         title: "Installation"
         toolinstalled: "If you have <strong>%tool%</strong> installed:"

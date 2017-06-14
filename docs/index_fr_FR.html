@@ -105,14 +105,33 @@
 
     <h2 id="screencast"><i class="fa fa-play" aria-hidden="true"></i> Demonstration</h2>
     <div>
-        <p>Voici une démonstration de l'utilisation de l'<a href="#initstack">initialization</a> d'un projet en ne partant de rien. Cela va installer tout la stack pour vous, et vous permettre de code, commit et pusher!
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#screeninit" aria-controls="screeninit" role="tab" data-toggle="tab">Init<small>ialisation</small></a>
+            </li>
+            <li role="presentation">
+                <a href="#screencreate" aria-controls="screencreate" role="tab" data-toggle="tab">Creation</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="screeninit">
+                <p>Voici une démonstration de l'utilisation de l'<a href="#initstack">initialization</a> d'un projet en ne partant de rien. Cela va installer tout la stack pour vous, et vous permettre de code, commit et pusher!
 </p>
-        <center>
-            <iframe width="800" height="450" src="https://www.youtube.com/embed/N_wd-yAlKmA" frameborder="0" allowfullscreen></iframe>
-        </center>
+                <center>
+                    <iframe width="800" height="450" src="https://www.youtube.com/embed/N_wd-yAlKmA" frameborder="0" allowfullscreen></iframe>
+                </center>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="screencreate">
+                <p>Voici une démonstration de l'utilisation de la<a href="#createstack">creation</a> d'un projet en partant d'un dépot git. Cela va installer tout la stack pour vous, et vous permettre de code, commit et pusher!
+</p>
+                <center>
+                    <iframe width="800" height="450" src="https://www.youtube.com/embed/ap4tdnGApWI" frameborder="0" allowfullscreen></iframe>
+                </center>
+            </div>
+        </div>
+
     </div>
-
-
     <h2 id="installation"><i class="fa fa-magic" aria-hidden="true"></i> Installation</h2>
     <div>
         <ul class="nav nav-tabs" role="tablist">
@@ -273,7 +292,9 @@
                 <a href="#deploy-psh" aria-controls="deploy-psh" role="tab" data-toggle="tab">Platform.sh</a>
             </li>
             <li role="presentation">
-                <a href="#deploy-aws" aria-controls="deploy-aws" role="tab" data-toggle="tab">AWS<small>(@todo)</small></a>
+                <a href="#deploy-aws" aria-controls="deploy-aws" role="tab" data-toggle="tab">AWS
+                    <small>(@todo)</small>
+                </a>
             </li>
         </ul>
         <div class="tab-content">

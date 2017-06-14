@@ -105,14 +105,33 @@
 
     <h2 id="screencast"><i class="fa fa-play" aria-hidden="true"></i> Demo</h2>
     <div>
-        <p>Dette er en demo av <a href="#initstack">initialisering</a> hvor du får alt du trenger for å kode, committe og pushe!
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#screeninit" aria-controls="screeninit" role="tab" data-toggle="tab">Init<small>ialisering</small></a>
+            </li>
+            <li role="presentation">
+                <a href="#screencreate" aria-controls="screencreate" role="tab" data-toggle="tab">Opprett</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="screeninit">
+                <p>Dette er en demo av <a href="#initstack">initialisering</a> hvor du får alt du trenger for å kode, committe og pushe!
 </p>
-        <center>
-            <iframe width="800" height="450" src="https://www.youtube.com/embed/N_wd-yAlKmA" frameborder="0" allowfullscreen></iframe>
-        </center>
+                <center>
+                    <iframe width="800" height="450" src="https://www.youtube.com/embed/N_wd-yAlKmA" frameborder="0" allowfullscreen></iframe>
+                </center>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="screencreate">
+                <p>This is a demo of a <a href="#createstack">creation</a>. Starting from a git repository you will get everything ready to code, commit and push!
+</p>
+                <center>
+                    <iframe width="800" height="450" src="https://www.youtube.com/embed/ap4tdnGApWI" frameborder="0" allowfullscreen></iframe>
+                </center>
+            </div>
+        </div>
+
     </div>
-
-
     <h2 id="installation"><i class="fa fa-magic" aria-hidden="true"></i> Installasjon</h2>
     <div>
         <ul class="nav nav-tabs" role="tablist">
@@ -273,7 +292,9 @@
                 <a href="#deploy-psh" aria-controls="deploy-psh" role="tab" data-toggle="tab">Platform.sh</a>
             </li>
             <li role="presentation">
-                <a href="#deploy-aws" aria-controls="deploy-aws" role="tab" data-toggle="tab">AWS<small>(@todo)</small></a>
+                <a href="#deploy-aws" aria-controls="deploy-aws" role="tab" data-toggle="tab">AWS
+                    <small>(@todo)</small>
+                </a>
             </li>
         </ul>
         <div class="tab-content">

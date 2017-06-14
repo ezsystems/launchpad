@@ -36,7 +36,9 @@ content:
         blurb: >
             Voici une démonstration de l'utilisation de l'<a href="#initstack">initialization</a> d'un projet en
             ne partant de rien. Cela va installer tout la stack pour vous, et vous permettre de code, commit et pusher!
-
+        create.blurb: >
+            Voici une démonstration de l'utilisation de la<a href="#createstack">creation</a> d'un projet en
+            partant d'un dépot git. Cela va installer tout la stack pour vous, et vous permettre de code, commit et pusher!
     install:
         title: "Installation"
         toolinstalled: "Si vous avez <strong>%tool%</strong> d'installé:"
