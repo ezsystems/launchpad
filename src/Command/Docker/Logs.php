@@ -4,16 +4,17 @@
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
 
-namespace eZ\Launchpad\Command;
+namespace eZ\Launchpad\Command\Docker;
 
 use eZ\Launchpad\Core\DockerCommand;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class Clean.
+ * Class Logs.
  */
-class Clean extends DockerCommand
+class Logs extends DockerCommand
 {
     /**
      * {@inheritdoc}
@@ -21,8 +22,9 @@ class Clean extends DockerCommand
     protected function configure()
     {
         parent::configure();
-        $this->setName('docker:clean')->setDescription('Clean all the services.');
-        $this->setAliases(['docker:down', 'clean', 'down']);
+        $this->setName('docker:logs')->setDescription('Display the logs.');
+        $this->addArgument('service', InputArgument::OPTIONAL, 'Service to log.', '');
+        $this->setAliases(['logs', 'log']);
     }
 
     /**
@@ -30,6 +32,6 @@ class Clean extends DockerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->dockerClient->down(['-v', '--remove-orphans']);
+        $this->dockerClient->logs(['-f', '--tail=100'], $input->getArgument('service'));
     }
 }

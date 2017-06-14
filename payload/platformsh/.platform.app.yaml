@@ -1,0 +1,87 @@
+# eZ Launchpad - Platform.sh file boilerplate - 6/10/2017
+
+# This file describes an application. You can have multiple applications
+# in the same project.
+
+# Please see doc/platformsh/README.md and doc/platformsh/INSTALL.md
+# NB: Clustered eZ Platform setups are not tested and are likely to have issues.
+
+# The name of this app. Must be unique within a project.
+name: app
+
+# The type of the application to build.
+type: php:7.1
+build:
+    # "none" means we're running composer manually, see build hook
+    flavor: "none"
+
+# The relationships of the application with services or other applications.
+# The left-hand side is the name of the relationship as it will be exposed
+# to the application in the PLATFORM_RELATIONSHIPS variable. The right-hand
+# side is in the form `<service name>:<endpoint name>`.
+relationships:
+    database: "mysqldb:mysql"
+    cache: "cache:memcache"
+
+# The configuration of app when it is exposed to the web.
+web:
+    locations:
+        "/":
+            # The public directory of the app, relative to its root.
+            root: "ezplatform/web"
+            # The front-controller script to send non-static requests to.
+            passthru: "/app.php"
+            # The number of seconds whitelisted (static) content should be cache
+            expires: 600
+
+# The size of the persistent disk of the application (in MB).
+disk: 2048
+
+# The mounts that will be performed when the package is deployed.
+mounts:
+    "/ezplatform/app/cache": "shared:files/cache"
+    "/ezplatform/app/logs": "shared:files/logs"
+    "/ezplatform/web/var": "shared:files/files"
+
+# The hooks that will be performed when the package is deployed.
+hooks:
+    build: |
+        set -e
+        cd /app/ezplatform
+        CONSOLE="bin/console"
+        if [ -f app/console ]; then
+            CONSOLE="app/console"
+        fi
+        composer install --no-dev --prefer-dist --no-progress --no-interaction --optimize-autoloader
+        rm web/app_dev.php
+        php $CONSOLE --env=prod assetic:dump
+    deploy: |
+        set -e
+        cd /app
+        if [ ! -f ezplatform/web/var/.platform.installed ]; then
+            MYSQL_OPTIONS=`php provisioning/platformsh/getmysqlcredentials.php`
+            zcat data/ezplatform.sql.gz | mysql $MYSQL_OPTIONS
+            tar xvzf data/storage.tar.gz -C ezplatform/web/
+            touch ezplatform/web/var/.platform.installed
+        fi
+        cd /app/ezplatform
+        CONSOLE="bin/console"
+        if [ -f app/console ]; then
+            CONSOLE="app/console"
+        fi
+        php $CONSOLE --env=prod cache:clear
+
+# The configuration of scheduled execution.
+# see http://symfony.com/doc/current/components/console/introduction.html
+#crons:
+#    symfony:
+#        spec: "*/20 * * * *"
+#        cmd: "php cron.php example:test"
+
+runtime:
+    extensions:
+        - xsl
+        - imagick
+        - readline
+        - memcached
+        - msgpack

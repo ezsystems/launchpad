@@ -4,18 +4,17 @@
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
 
-namespace eZ\Launchpad\Command;
+namespace eZ\Launchpad\Command\Docker;
 
 use eZ\Launchpad\Core\DockerCommand;
 use eZ\Launchpad\Core\ProjectStatusDumper;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class Status.
+ * Class Create.
  */
-class Status extends DockerCommand
+class Create extends DockerCommand
 {
     /**
      * @var ProjectStatusDumper
@@ -39,14 +38,8 @@ class Status extends DockerCommand
     protected function configure()
     {
         parent::configure();
-        $this->setName('docker:status')->setDescription('Obtaining the project information.');
-        $this->setAliases(['docker:ps', 'docker:info', 'ps', 'info']);
-        $this->addArgument(
-            'options',
-            InputArgument::OPTIONAL,
-            'n: Docker Network, c: Docker Compose, s: Service Access',
-            'ncs'
-        );
+        $this->setName('docker:create')->setDescription('Create all the services.');
+        $this->setAliases(['create']);
     }
 
     /**
@@ -64,6 +57,20 @@ class Status extends DockerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->projectStatusDumper->dump($input->getArgument('options'));
+        $this->dockerClient->build(['--no-cache']);
+        $this->dockerClient->up(['-d']);
+
+        $this->taskExecutor->composerInstall();
+        $this->taskExecutor->eZCreate();
+        $this->taskExecutor->importData();
+
+        // if solr run the index
+        $compose = $this->projectConfiguration->getDockerCompose();
+        if ($compose->hasService('solr')) {
+            $this->taskExecutor->createCore();
+            $this->taskExecutor->indexSolr();
+        }
+
+        $this->projectStatusDumper->dump('ncsi');
     }
 }

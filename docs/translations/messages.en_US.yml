@@ -9,6 +9,7 @@ header:
     menu:
         installation: "Installation"
         usage: "Usage"
+        deploy: "Deployment"
         stack: "Stack"
         commands: "Commands"
         more: "More"
@@ -33,9 +34,11 @@ content:
     demo:
         title: "Demo"
         blurb: >
-            This is a demo of an <a href="#initstack">initialization</a>, starting from scratch,
+            This is a demo of an <a href="#initstack">initialization</a>. Starting from scratch
             you will get everything ready to code, commit and push!
-
+        create.blurb: >
+            This is a demo of a <a href="#createstack">creation</a>. Starting from a git repository
+            you will get everything ready to code, commit and push!
     install:
         title: "Installation"
         toolinstalled: "If you have <strong>%tool%</strong> installed:"
@@ -79,6 +82,29 @@ content:
                 <em>.ezlaunchpad.yml</em> at the root directory of your project.
         create.localstack: "To create the local stack the command is then"
         create.whathasbeendone: "Here eZ Launchpad will pull the images, create the containers of your stack as well a importing the database/storage."
+
+    deploy:
+        title: "Deployment"
+        blurb: >
+            eZ Launchpad can help you to deploy as well. Even if it is optional and you can deploy the way you want
+            we wanted to provide simplifications.
+        platformsh: "Platform.sh"
+        platformsh.blurb: >
+            <a href="https://platform.sh/product">Platform.sh</a> is a PaaS (<strong>P</strong>latform <strong>a</strong>s <strong>a</strong> <strong>S</strong>ervice)<br />
+            With Platform.sh there is no real deployment process to run manually. Platform.sh will just create and synchronize environments based on your git repository!
+        platformsh.blurb2: >
+            eZ Launchpad provides you a way to set up your eZ Project to be Platform.sh ready.
+        platformsh.setup.subtitle: "Setup"
+        platformsh.setup.blurb: >
+            This command will create and generate files required by Platform.sh. Because eZ Launchpad knows your project and the services you need it will adapt the
+            Plaftorm.sh configuration files to it.
+        platformsh.setup.listfile: "Here is the list of files that are going to be created."
+        platformsh.setup.dump: "Because you will need to initialize the database and the storage on Platform.sh (the first time), eZ Launchpad will also create a dump."
+        platformsh.deploy.subtitle: "Deploy"
+        platformsh.deploy.blurb: >
+            As mentioned there is not real "deployment" process, this command will just display some documentation.
+
+        aws: "AWS"
 
     stack:
         title: "Stack"
@@ -125,3 +151,4 @@ content:
 
 other:
     copy: "Copy"
+    soon: "Coming soon..."

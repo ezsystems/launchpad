@@ -61,12 +61,13 @@
             <ul class="nav navbar-nav">
                 <li><a href="#installation">Installasjon</a></li>
                 <li><a href="#usage">Bruk</a></li>
-                <li><a href="#stack">Stack</a></li>
                 <li><a href="#commands">Kommandoer</a></li>
+                <li><a href="#deploy">Deployment</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mer
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu ezlp-submenu">
+                        <li><a href="#stack">Stack</a></li>
                         <li><a href="#d4m">Mac OS X optimalisering med D4M</a></li>
                         <li><a href="#home">Global konfigurasjon</a></li>
                     </ul>
@@ -104,22 +105,41 @@
 
     <h2 id="screencast"><i class="fa fa-play" aria-hidden="true"></i> Demo</h2>
     <div>
-        <p>Dette er en demo av <a href="#initstack">initialisering</a> hvor du får alt du trenger for å kode, committe og pushe!
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#screeninit" aria-controls="screeninit" role="tab" data-toggle="tab">Init<small>ialisering</small></a>
+            </li>
+            <li role="presentation">
+                <a href="#screencreate" aria-controls="screencreate" role="tab" data-toggle="tab">Opprett</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="screeninit">
+                <p>Dette er en demo av <a href="#initstack">initialisering</a> hvor du får alt du trenger for å kode, committe og pushe!
 </p>
-        <center>
-            <iframe width="800" height="450" src="https://www.youtube.com/embed/N_wd-yAlKmA" frameborder="0" allowfullscreen></iframe>
-        </center>
+                <center>
+                    <iframe width="800" height="450" src="https://www.youtube.com/embed/N_wd-yAlKmA" frameborder="0" allowfullscreen></iframe>
+                </center>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="screencreate">
+                <p>This is a demo of a <a href="#createstack">creation</a>. Starting from a git repository you will get everything ready to code, commit and push!
+</p>
+                <center>
+                    <iframe width="800" height="450" src="https://www.youtube.com/embed/ap4tdnGApWI" frameborder="0" allowfullscreen></iframe>
+                </center>
+            </div>
+        </div>
+
     </div>
-
-
     <h2 id="installation"><i class="fa fa-magic" aria-hidden="true"></i> Installasjon</h2>
     <div>
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
-                <a href="#installioncurl" aria-controls="home" role="tab" data-toggle="tab">curl</a>
+                <a href="#installioncurl" aria-controls="installioncurl" role="tab" data-toggle="tab">curl</a>
             </li>
             <li role="presentation">
-                <a href="#installionwget" aria-controls="profile" role="tab" data-toggle="tab">wget</a>
+                <a href="#installionwget" aria-controls="installionwget" role="tab" data-toggle="tab">wget</a>
             </li>
         </ul>
         <div class="tab-content">
@@ -158,10 +178,10 @@
 
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
-                <a href="#initstack" aria-controls="home" role="tab" data-toggle="tab">Start fra bunn</a>
+                <a href="#initstack" aria-controls="initstack" role="tab" data-toggle="tab">Start fra bunn</a>
             </li>
             <li role="presentation">
-                <a href="#createstack" aria-controls="profile" role="tab" data-toggle="tab">Boostrap et eksisterende prosjekt</a>
+                <a href="#createstack" aria-controls="createstack" role="tab" data-toggle="tab">Boostrap et eksisterende prosjekt</a>
             </li>
         </ul>
 
@@ -263,6 +283,63 @@
         </div>
     </div>
 
+    <h2 id="deploy"><i class="fa fa-th-list" aria-hidden="true"></i> Deployment</h2>
+    <div>
+        <p>eZ Launchpad can help you to deploy as well. Even if it is optional and you can deploy the way you want we wanted to provide simplifications.
+</p>
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#deploy-psh" aria-controls="deploy-psh" role="tab" data-toggle="tab">Platform.sh</a>
+            </li>
+            <li role="presentation">
+                <a href="#deploy-aws" aria-controls="deploy-aws" role="tab" data-toggle="tab">AWS
+                    <small>(@todo)</small>
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="deploy-psh">
+                <h3>Setup</h3>
+                <p><a href="https://platform.sh/product">Platform.sh</a> is a PaaS (<strong>P</strong>latform <strong>a</strong>s <strong>a</strong> <strong>S</strong>ervice)<br /> With Platform.sh there is no real deployment process to run manually. Platform.sh will just create and synchronize environments based on your git repository!
+</p>
+                <p>eZ Launchpad provides you a way to set up your eZ Project to be Platform.sh ready.
+</p>
+
+                    <div class="highlight">
+        <button class="to-clipboard">
+            <i class="fa fa-clipboard" aria-hidden="true"></i> Kopier
+        </button>
+        <pre>$ <code>~/ez platformsh:setup</code></pre>
+    </div>
+
+                <p>This command will create and generate files required by Platform.sh. Because eZ Launchpad knows your project and the services you need it will adapt the Plaftorm.sh configuration files to it.
+</p>
+                <p>Here is the list of files that are going to be created.</p>
+                <div class="highlight">
+                    <pre><code>.platform/services.yaml
+.platform/routes.yaml
+.platform.app.yaml
+ezplatform/app/config/env/platformsh.php</code></pre>
+                </div>
+                <p>Because you will need to initialize the database and the storage on Platform.sh (the first time), eZ Launchpad will also create a dump.</p>
+
+                <h3>Deploy</h3>
+                <p>As mentioned there is not real "deployment" process, this command will just display some documentation.
+</p>
+                    <div class="highlight">
+        <button class="to-clipboard">
+            <i class="fa fa-clipboard" aria-hidden="true"></i> Kopier
+        </button>
+        <pre>$ <code>~/ez platformsh:deploy</code></pre>
+    </div>
+
+            </div>
+            <div role="tabpanel" class="tab-pane" id="deploy-aws">
+                <p>Coming soon...</p>
+            </div>
+        </div>
+    </div>
+
     <h2 id="stack"><i class="fa fa-th-list" aria-hidden="true"></i> Stack</h2>
     <div>
         <p>Du kan når som helst få informasjon om din stack ved å kjøre</p>
@@ -277,9 +354,11 @@
 
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
-                <a href="#lempstack" aria-controls="home" role="tab" data-toggle="tab">LEMP</a></li>
+                <a href="#lempstack" aria-controls="lempstack" role="tab" data-toggle="tab">LEMP</a></li>
             <li role="presentation">
-                <a href="#lampstack" aria-controls="profile" role="tab" data-toggle="tab">LAMP</a></li>
+                <a href="#lampstack" aria-controls="lampstack" role="tab" data-toggle="tab">LAMP
+                    <small>(@todo?)</small>
+                </a></li>
         </ul>
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="lempstack">
@@ -323,7 +402,10 @@ Available commands:
   docker:start       [start] Start all the services (or just one).
   docker:status      [docker:ps|docker:info|ps|info] Obtaining the project information.
   docker:stop        [stop] Stop all the services (or just one).
-  docker:up          [up] Up all the services (or just one).</code></pre>
+  docker:up          [up] Up all the services (or just one).
+ platformsh
+  platformsh:deploy  [psh:deploy] Deploy with Platformsh integration.
+  platformsh:setup   [psh:setup] Set up the Platformsh integration.</code></pre>
         </div>
 
 

@@ -4,7 +4,7 @@
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
 
-namespace eZ\Launchpad\Command;
+namespace eZ\Launchpad\Command\Docker;
 
 use eZ\Launchpad\Core\DockerCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -12,9 +12,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class Stop.
+ * Class ComposerRun.
  */
-class Stop extends DockerCommand
+class ComposerRun extends DockerCommand
 {
     /**
      * {@inheritdoc}
@@ -22,9 +22,13 @@ class Stop extends DockerCommand
     protected function configure()
     {
         parent::configure();
-        $this->setName('docker:stop')->setDescription('Stop all the services (or just one).');
-        $this->addArgument('service', InputArgument::OPTIONAL, 'Service to stop', '');
-        $this->setAliases(['stop']);
+        $this->setName('docker:comprun')->setDescription('Run Composer command in the engine.');
+        $this->setAliases(['comprun']);
+        $this->addArgument(
+            'compcommand',
+            InputArgument::IS_ARRAY,
+            'Composer Command to run in. Use "" to pass options.'
+        );
     }
 
     /**
@@ -32,6 +36,8 @@ class Stop extends DockerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->dockerClient->stop($input->getArgument('service'));
+        $allArguments = $input->getArgument('compcommand');
+        $options      = '';
+        $this->taskExecutor->runComposerCommand(implode(' ', $allArguments)." {$options}");
     }
 }

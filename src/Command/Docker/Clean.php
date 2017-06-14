@@ -4,17 +4,16 @@
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
 
-namespace eZ\Launchpad\Command;
+namespace eZ\Launchpad\Command\Docker;
 
 use eZ\Launchpad\Core\DockerCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class Up.
+ * Class Clean.
  */
-class Up extends DockerCommand
+class Clean extends DockerCommand
 {
     /**
      * {@inheritdoc}
@@ -22,9 +21,8 @@ class Up extends DockerCommand
     protected function configure()
     {
         parent::configure();
-        $this->setName('docker:up')->setDescription('Up all the services (or just one).');
-        $this->addArgument('service', InputArgument::OPTIONAL, 'Service to up', '');
-        $this->setAliases(['up']);
+        $this->setName('docker:clean')->setDescription('Clean all the services.');
+        $this->setAliases(['docker:down', 'clean', 'down']);
     }
 
     /**
@@ -32,6 +30,6 @@ class Up extends DockerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->dockerClient->up(['-d'], $input->getArgument('service'));
+        $this->dockerClient->down(['-v', '--remove-orphans']);
     }
 }
