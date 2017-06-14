@@ -34,10 +34,10 @@
     <div>
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
-                <a href="#installioncurl" aria-controls="home" role="tab" data-toggle="tab">curl</a>
+                <a href="#installioncurl" aria-controls="installioncurl" role="tab" data-toggle="tab">curl</a>
             </li>
             <li role="presentation">
-                <a href="#installionwget" aria-controls="profile" role="tab" data-toggle="tab">wget</a>
+                <a href="#installionwget" aria-controls="installionwget" role="tab" data-toggle="tab">wget</a>
             </li>
         </ul>
         <div class="tab-content">
@@ -64,10 +64,10 @@
 
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
-                <a href="#initstack" aria-controls="home" role="tab" data-toggle="tab">{{ "content.usage.fromscratch"|trans|raw }}</a>
+                <a href="#initstack" aria-controls="initstack" role="tab" data-toggle="tab">{{ "content.usage.fromscratch"|trans|raw }}</a>
             </li>
             <li role="presentation">
-                <a href="#createstack" aria-controls="profile" role="tab" data-toggle="tab">{{ "content.usage.bootstrap"|trans|raw }}</a>
+                <a href="#createstack" aria-controls="createstack" role="tab" data-toggle="tab">{{ "content.usage.bootstrap"|trans|raw }}</a>
             </li>
         </ul>
 
@@ -123,6 +123,44 @@
         </div>
     </div>
 
+    <h2 id="deploy"><i class="fa fa-th-list" aria-hidden="true"></i> {{ "content.deploy.title"|trans|raw }}</h2>
+    <div>
+        <p>{{ "content.deploy.blurb"|trans|raw }}</p>
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#deploy-psh" aria-controls="deploy-psh" role="tab" data-toggle="tab">{{ "content.deploy.platformsh"|trans|raw }}</a>
+            </li>
+            <li role="presentation">
+                <a href="#deploy-aws" aria-controls="deploy-aws" role="tab" data-toggle="tab">{{ "content.deploy.aws"|trans|raw }}<small>(@todo)</small></a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="deploy-psh">
+                <h3>{{ "content.deploy.platformsh.setup.subtitle"|trans|raw }}</h3>
+                <p>{{ "content.deploy.platformsh.blurb"|trans|raw }}</p>
+                <p>{{ "content.deploy.platformsh.blurb2"|trans|raw }}</p>
+
+                {{ CodeHelper.show("~/ez platformsh:setup") }}
+                <p>{{ "content.deploy.platformsh.setup.blurb"|trans|raw }}</p>
+                <p>{{ "content.deploy.platformsh.setup.listfile"|trans|raw }}</p>
+                <div class="highlight">
+                    <pre><code>.platform/services.yaml
+.platform/routes.yaml
+.platform.app.yaml
+ezplatform/app/config/env/platformsh.php</code></pre>
+                </div>
+                <p>{{ "content.deploy.platformsh.setup.dump"|trans|raw }}</p>
+
+                <h3>{{ "content.deploy.platformsh.deploy.subtitle"|trans|raw }}</h3>
+                <p>{{ "content.deploy.platformsh.deploy.blurb"|trans|raw }}</p>
+                {{ CodeHelper.show("~/ez platformsh:deploy") }}
+            </div>
+            <div role="tabpanel" class="tab-pane" id="deploy-aws">
+                <p>{{ "other.soon"|trans|raw }}</p>
+            </div>
+        </div>
+    </div>
+
     <h2 id="stack"><i class="fa fa-th-list" aria-hidden="true"></i> {{ "content.stack.title"|trans|raw }}</h2>
     <div>
         <p>{{ "content.stack.blurb"|trans|raw }}</p>
@@ -131,9 +169,11 @@
 
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
-                <a href="#lempstack" aria-controls="home" role="tab" data-toggle="tab">LEMP</a></li>
+                <a href="#lempstack" aria-controls="lempstack" role="tab" data-toggle="tab">LEMP</a></li>
             <li role="presentation">
-                <a href="#lampstack" aria-controls="profile" role="tab" data-toggle="tab">LAMP</a></li>
+                <a href="#lampstack" aria-controls="lampstack" role="tab" data-toggle="tab">LAMP
+                    <small>(@todo?)</small>
+                </a></li>
         </ul>
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="lempstack">
@@ -177,7 +217,10 @@ Available commands:
   docker:start       [start] Start all the services (or just one).
   docker:status      [docker:ps|docker:info|ps|info] Obtaining the project information.
   docker:stop        [stop] Stop all the services (or just one).
-  docker:up          [up] Up all the services (or just one).</code></pre>
+  docker:up          [up] Up all the services (or just one).
+ platformsh
+  platformsh:deploy  [psh:deploy] Deploy with Platformsh integration.
+  platformsh:setup   [psh:setup] Set up the Platformsh integration.</code></pre>
         </div>
 
 

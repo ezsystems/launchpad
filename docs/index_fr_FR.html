@@ -61,12 +61,13 @@
             <ul class="nav navbar-nav">
                 <li><a href="#installation">Installation</a></li>
                 <li><a href="#usage">Usage</a></li>
-                <li><a href="#stack">Stack</a></li>
                 <li><a href="#commands">Commandes</a></li>
+                <li><a href="#deploy">Déploiement</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Plus
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu ezlp-submenu">
+                        <li><a href="#stack">Stack</a></li>
                         <li><a href="#d4m">Mac OS X optimisations avec D4M</a></li>
                         <li><a href="#home">Configurations globales</a></li>
                     </ul>
@@ -116,10 +117,10 @@
     <div>
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
-                <a href="#installioncurl" aria-controls="home" role="tab" data-toggle="tab">curl</a>
+                <a href="#installioncurl" aria-controls="installioncurl" role="tab" data-toggle="tab">curl</a>
             </li>
             <li role="presentation">
-                <a href="#installionwget" aria-controls="profile" role="tab" data-toggle="tab">wget</a>
+                <a href="#installionwget" aria-controls="installionwget" role="tab" data-toggle="tab">wget</a>
             </li>
         </ul>
         <div class="tab-content">
@@ -158,10 +159,10 @@
 
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
-                <a href="#initstack" aria-controls="home" role="tab" data-toggle="tab">Démarrer de rien</a>
+                <a href="#initstack" aria-controls="initstack" role="tab" data-toggle="tab">Démarrer de rien</a>
             </li>
             <li role="presentation">
-                <a href="#createstack" aria-controls="profile" role="tab" data-toggle="tab">Démarrer d'un projet existant</a>
+                <a href="#createstack" aria-controls="createstack" role="tab" data-toggle="tab">Démarrer d'un projet existant</a>
             </li>
         </ul>
 
@@ -263,6 +264,61 @@
         </div>
     </div>
 
+    <h2 id="deploy"><i class="fa fa-th-list" aria-hidden="true"></i> Déploiement</h2>
+    <div>
+        <p>eZ Launchpad peut également vous aider à deployer. Même si c'est optionnel et que vous pouvez déployer comme bon vous semble, nous voulions vous simplifier la tâche.
+</p>
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#deploy-psh" aria-controls="deploy-psh" role="tab" data-toggle="tab">Platform.sh</a>
+            </li>
+            <li role="presentation">
+                <a href="#deploy-aws" aria-controls="deploy-aws" role="tab" data-toggle="tab">AWS<small>(@todo)</small></a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="deploy-psh">
+                <h3>Configuration</h3>
+                <p><a href="https://platform.sh/product">Platform.sh</a> est une PaaS (<strong>P</strong>latform <strong>a</strong>s <strong>a</strong> <strong>S</strong>ervice)<br /> Avec Platform.sh il n'y a pas vraiment de processus de déploiement manuel. Platform.sh va simplement créer et synchroniser les environments selon le repository git!
+</p>
+                <p>eZ Launchpad va vous permettre de configurer le projet pour fonctionner avec Platform.sh.
+</p>
+
+                    <div class="highlight">
+        <button class="to-clipboard">
+            <i class="fa fa-clipboard" aria-hidden="true"></i> Copier
+        </button>
+        <pre>$ <code>~/ez platformsh:setup</code></pre>
+    </div>
+
+                <p>Cette commande va créer et générer les fichiers requis par Platform.sh. Comme eZ Launchpad connait votre projet et vos services il va adapter les fichiers de configuration Platform.sh
+</p>
+                <p>Voici la liste des fichier qui vont être créés.</p>
+                <div class="highlight">
+                    <pre><code>.platform/services.yaml
+.platform/routes.yaml
+.platform.app.yaml
+ezplatform/app/config/env/platformsh.php</code></pre>
+                </div>
+                <p>Vous aurez besoin d'initialiser la base de données et le storage sur Platform.sh (la première fois), eZ Launchpad va donc aussi créer un dump.</p>
+
+                <h3>Deploiement</h3>
+                <p>Comment déjà mentionné, il n'y a pas vraiment de processus de déploiement, cette command va juste afficher de la documentation.
+</p>
+                    <div class="highlight">
+        <button class="to-clipboard">
+            <i class="fa fa-clipboard" aria-hidden="true"></i> Copier
+        </button>
+        <pre>$ <code>~/ez platformsh:deploy</code></pre>
+    </div>
+
+            </div>
+            <div role="tabpanel" class="tab-pane" id="deploy-aws">
+                <p>Bientôt disponible...</p>
+            </div>
+        </div>
+    </div>
+
     <h2 id="stack"><i class="fa fa-th-list" aria-hidden="true"></i> Stack</h2>
     <div>
         <p>N'importe quand vous pouvez avoir de l'information sur votre stack</p>
@@ -277,9 +333,11 @@
 
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
-                <a href="#lempstack" aria-controls="home" role="tab" data-toggle="tab">LEMP</a></li>
+                <a href="#lempstack" aria-controls="lempstack" role="tab" data-toggle="tab">LEMP</a></li>
             <li role="presentation">
-                <a href="#lampstack" aria-controls="profile" role="tab" data-toggle="tab">LAMP</a></li>
+                <a href="#lampstack" aria-controls="lampstack" role="tab" data-toggle="tab">LAMP
+                    <small>(@todo?)</small>
+                </a></li>
         </ul>
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="lempstack">
@@ -323,7 +381,10 @@ Available commands:
   docker:start       [start] Start all the services (or just one).
   docker:status      [docker:ps|docker:info|ps|info] Obtaining the project information.
   docker:stop        [stop] Stop all the services (or just one).
-  docker:up          [up] Up all the services (or just one).</code></pre>
+  docker:up          [up] Up all the services (or just one).
+ platformsh
+  platformsh:deploy  [psh:deploy] Deploy with Platformsh integration.
+  platformsh:setup   [psh:setup] Set up the Platformsh integration.</code></pre>
         </div>
 
 
