@@ -1,118 +1,55 @@
 ---
 services:
 
+    _defaults:
+        autowire: true
+
+    _instanceof:
+        eZ\Launchpad\Core\Command:
+            tags: [ezlaunchpad.command]
+
+    # Not working in a Phar (method glob() is used but it is not working in a phar)
+    #eZ\Launchpad\Command\:
+    #    resource: ../src/Command/*
+
+    # then we need to list them manually
+    eZ\Launchpad\Command\Rollback: ~
+    eZ\Launchpad\Command\Docker\Start: ~
+    eZ\Launchpad\Command\Docker\Stop: ~
+    eZ\Launchpad\Command\Docker\Build: ~
+    eZ\Launchpad\Command\Docker\Up: ~
+    eZ\Launchpad\Command\Docker\Clean: ~
+    eZ\Launchpad\Command\Docker\Status: ~
+    eZ\Launchpad\Command\Docker\Enter: ~
+    eZ\Launchpad\Command\Docker\Logs: ~
+    eZ\Launchpad\Command\Docker\Update: ~
+    eZ\Launchpad\Command\Docker\SymfonyRun: ~
+    eZ\Launchpad\Command\Docker\ComposerRun: ~
+    eZ\Launchpad\Command\Platformsh\Deploy: ~
+
     # Self
-    ez.launchpad.self_update:
-        class: eZ\Launchpad\Command\SelfUpdate
+    eZ\Launchpad\Command\SelfUpdate:
         calls:
             - [setParameters, [ {env: "%app_env%", url: "%ez_phar%", version: "%ez_phar_version%"}] ]
-        tags:
-            - { name: ezlaunchpad.command }
 
-    ez.launchpad.self_rollback:
-        class: eZ\Launchpad\Command\Rollback
-        tags:
-            - { name: ezlaunchpad.command }
-
-    # Docker Actions
-    ez.launchpad.docker.initialize:
-        class: eZ\Launchpad\Command\Docker\Initialize
-        arguments:
-            - "@ezlaunchpad_project.information.dumper"
+    # Docker
+    eZ\Launchpad\Command\Docker\Initialize:
         calls:
             - [setRequiredRecipes, [ [ 'composer_install', 'ez_install', 'ez_install_solr' ] ] ]
-        tags:
-            - { name: ezlaunchpad.command }
 
-    ez.launchpad.docker.create:
-        class: eZ\Launchpad\Command\Docker\Create
-        arguments:
-            - "@ezlaunchpad_project.information.dumper"
+    eZ\Launchpad\Command\Docker\Create:
         calls:
             - [setRequiredRecipes, [ [ 'composer_install', 'ez_create', 'import_dump', 'ez_install_solr' ] ] ]
-        tags:
-            - { name: ezlaunchpad.command }
 
-    ez.launchpad.docker.start:
-        class: eZ\Launchpad\Command\Docker\Start
-        tags:
-            - { name: ezlaunchpad.command }
-
-    ez.launchpad.docker.build:
-        class: eZ\Launchpad\Command\Docker\Build
-        tags:
-            - { name: ezlaunchpad.command }
-
-    ez.launchpad.docker.up:
-        class: eZ\Launchpad\Command\Docker\Up
-        tags:
-            - { name: ezlaunchpad.command }
-
-    ez.launchpad.stop:
-        class: eZ\Launchpad\Command\Docker\Stop
-        tags:
-            - { name: ezlaunchpad.command }
-
-    ez.launchpad.docker.clean:
-        class: eZ\Launchpad\Command\Docker\Clean
-        tags:
-            - { name: ezlaunchpad.command }
-
-    ez.launchpad.docker.status:
-        class: eZ\Launchpad\Command\Docker\Status
-        arguments:
-            - "@ezlaunchpad_project.information.dumper"
-        tags:
-            - { name: ezlaunchpad.command }
-
-    ez.launchpad.docker.enter:
-        class: eZ\Launchpad\Command\Docker\Enter
-        tags:
-            - { name: ezlaunchpad.command }
-
-    ez.launchpad.docker.logs:
-        class: eZ\Launchpad\Command\Docker\Logs
-        tags:
-            - { name: ezlaunchpad.command }
-
-    ez.launchpad.docker.update:
-        class: eZ\Launchpad\Command\Docker\Update
-        tags:
-            - { name: ezlaunchpad.command }
-
-    ez.launchpad.docker.dumpdata:
-        class: eZ\Launchpad\Command\Docker\DumpData
+    eZ\Launchpad\Command\Docker\DumpData:
         calls:
             - [setRequiredRecipes, [ [ 'create_dump' ] ] ]
-        tags:
-            - { name: ezlaunchpad.command }
 
-    ez.launchpad.docker.importdata:
-        class: eZ\Launchpad\Command\Docker\ImportData
+    eZ\Launchpad\Command\Docker\ImportData:
         calls:
             - [setRequiredRecipes, [ [ 'import_dump' ] ] ]
-        tags:
-            - { name: ezlaunchpad.command }
 
-    ez.launchpad.docker.sfrun:
-        class: eZ\Launchpad\Command\Docker\SymfonyRun
-        tags:
-            - { name: ezlaunchpad.command }
-
-    ez.launchpad.docker.comprun:
-        class: eZ\Launchpad\Command\Docker\ComposerRun
-        tags:
-            - { name: ezlaunchpad.command }
-
-    # Docker Actions
-    ez.launchpad.platformsh.setup:
-        class: eZ\Launchpad\Command\Platformsh\Setup
+    # Platform.sh
+    eZ\Launchpad\Command\Platformsh\Setup:
         calls:
             - [setRequiredRecipes, [ [ 'create_dump' ] ] ]
-        tags:
-            - { name: ezlaunchpad.command }
-
-    ez.launchpad.platformsh.deploy:
-        class: eZ\Launchpad\Command\Platformsh\Deploy
-        tags:
-            - { name: ezlaunchpad.command }
