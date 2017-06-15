@@ -80,6 +80,19 @@
             <li>{{ "content.usage.create"|trans|raw }}</li>
         </ul>
 
+        <div class="alert alert-warning clickable" role="alert" data-toggle="collapse" href="#blackfireexports" aria-expanded="false" aria-controls="blackfireexports">
+            <p>
+                <i class="fa fa-fire" aria-hidden="true"></i> {{ "content.usage.blackfire.note"|trans|raw }}
+            </p>
+        </div>
+        <div id="blackfireexports" class="collapse">
+            {{ CodeHelper.show(
+            "export BLACKFIRE_CLIENT_ID=xxxx-xxxx-xxxx-xxxx-xxxxx
+export BLACKFIRE_CLIENT_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+export BLACKFIRE_SERVER_ID=xxxx-xxxx-xxxx-xxxx-xxxxx
+export BLACKFIRE_SERVER_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx") }}
+        </div>
+
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
                 <a href="#initstack" aria-controls="initstack" role="tab" data-toggle="tab">{{ "content.usage.fromscratch"|trans|raw }}</a>
@@ -238,6 +251,7 @@ Available commands:
   docker:status      [docker:ps|docker:info|ps|info] Obtaining the project information.
   docker:stop        [stop] Stop all the services (or just one).
   docker:up          [up] Up all the services (or just one).
+  docker:update      Update to last images.
  platformsh
   platformsh:deploy  [psh:deploy] Deploy with Platformsh integration.
   platformsh:setup   [psh:setup] Set up the Platformsh integration.</code></pre>

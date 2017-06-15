@@ -176,6 +176,25 @@
             <li><strong>Create</strong> the Docker Stack related to the current directory.</li>
         </ul>
 
+        <div class="alert alert-warning clickable" role="alert" data-toggle="collapse" href="#blackfireexports" aria-expanded="false" aria-controls="blackfireexports">
+            <p>
+                <i class="fa fa-fire" aria-hidden="true"></i> If you are using <a href="https://blackfire.io">Blackfire.io</a>, then don't forget to export your credentials before to run the following commands.
+
+            </p>
+        </div>
+        <div id="blackfireexports" class="collapse">
+                <div class="highlight">
+        <button class="to-clipboard">
+            <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+        </button>
+        <pre>$ <code>export BLACKFIRE_CLIENT_ID=xxxx-xxxx-xxxx-xxxx-xxxxx
+export BLACKFIRE_CLIENT_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+export BLACKFIRE_SERVER_ID=xxxx-xxxx-xxxx-xxxx-xxxxx
+export BLACKFIRE_SERVER_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code></pre>
+    </div>
+
+        </div>
+
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
                 <a href="#initstack" aria-controls="initstack" role="tab" data-toggle="tab">Start from scratch</a>

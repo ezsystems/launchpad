@@ -83,6 +83,10 @@ content:
         create.localstack: "Pour créeer la stack locale la commande est alors"
         create.whathasbeendone: "eZ Launchpad va juste télécharger les images, créer les containers puis importer la base et le storage."
 
+        blackfire.note: >
+                Si vous utilisez <a href="https://blackfire.io">Blackfire.io</a>, alors n'oubliez pas d'exporter vos variables
+                d'authentification avant d'éxécuter les commandes suivantes.
+
     deploy:
         title: "Déploiement"
         blurb: >

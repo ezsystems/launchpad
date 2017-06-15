@@ -24,3 +24,7 @@
 .ezlp-submenu li, .ezlp-submenu li a {
     height: auto;
 }
+
+.clickable {
+    cursor:pointer;
+}

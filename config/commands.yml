@@ -75,6 +75,11 @@ services:
         tags:
             - { name: ezlaunchpad.command }
 
+    ez.launchpad.docker.update:
+        class: eZ\Launchpad\Command\Docker\Update
+        tags:
+            - { name: ezlaunchpad.command }
+
     ez.launchpad.docker.dumpdata:
         class: eZ\Launchpad\Command\Docker\DumpData
         calls:

@@ -208,6 +208,17 @@ class Docker
     }
 
     /**
+     * @param array  $args
+     * @param string $service
+     *
+     * @return Process
+     */
+    public function pull($args = [], $service = '')
+    {
+        return $this->perform('pull', $service, $args);
+    }
+
+    /**
      * @param $command
      * @param $args
      * @param $service
