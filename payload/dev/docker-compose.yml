@@ -40,7 +40,6 @@ services:
             - "CACHE_MEMCACHED_PORT=11211"
             - "SEARCH_ENGINE=solr"
             - "SOLR_DSN=http://solr:8983/solr"
-
     db:
         image: mariadb:10.1
         environment:
@@ -99,3 +98,12 @@ services:
             - "MEMCACHE_HOST=memcache"
         ports:
             - "${PROJECTPORTPREFIX}083:8080"
+
+    # Blackfire
+    blackfire:
+        image: blackfire/blackfire
+        environment:
+            - BLACKFIRE_CLIENT_ID
+            - BLACKFIRE_CLIENT_TOKEN
+            - BLACKFIRE_SERVER_ID
+            - BLACKFIRE_SERVER_TOKEN

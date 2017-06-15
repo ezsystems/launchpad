@@ -161,6 +161,10 @@ docker:
             "DEV_GID"                 => getmygid(),
             'COMPOSER_CACHE_DIR'      => "/var/www/composer_cache",
             'PROJECTMAPPINGFOLDER'    => "/var/www/html/project",
+            'BLACKFIRE_CLIENT_ID'     => getenv('BLACKFIRE_CLIENT_ID'),
+            'BLACKFIRE_CLIENT_TOKEN'  => getenv('BLACKFIRE_CLIENT_TOKEN'),
+            'BLACKFIRE_SERVER_ID'     => getenv('BLACKFIRE_SERVER_ID'),
+            'BLACKFIRE_SERVER_TOKEN'  => getenv('BLACKFIRE_SERVER_TOKEN'),
         ];
     }
 }

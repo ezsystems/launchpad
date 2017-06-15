@@ -249,6 +249,11 @@ class Docker
                 'COMPOSER_CACHE_DIR'      => '/var/www/composer_cache',
                 // where to mount the project root directory in the container - (will be mapped to host:project-path)
                 'PROJECTMAPPINGFOLDER'    => $this->getProjectPathContainer(),
+                // pass the Blackfire env variable here
+                'BLACKFIRE_CLIENT_ID'     => getenv('BLACKFIRE_CLIENT_ID'),
+                'BLACKFIRE_CLIENT_TOKEN'  => getenv('BLACKFIRE_CLIENT_TOKEN'),
+                'BLACKFIRE_SERVER_ID'     => getenv('BLACKFIRE_SERVER_ID'),
+                'BLACKFIRE_SERVER_TOKEN'  => getenv('BLACKFIRE_SERVER_TOKEN'),
             ];
     }
 
