@@ -1,5 +1,5 @@
 <?php
-include(__DIR__."/../ezplatform/vendor/autoload.php");
+include(__DIR__."/../../ezplatform/vendor/autoload.php");
 
 use Platformsh\ConfigReader\Config as PlatformshConfig;
 
