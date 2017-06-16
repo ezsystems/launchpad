@@ -1,4 +1,8 @@
-sudo: false
+sudo: required
+
+services:
+  - docker
+
 language: php
 
 cache:
@@ -24,12 +28,16 @@ before_install:
 install:
 - travis_retry composer install --no-interaction
 - composer info -i
+- docker pull postman/newman_ubuntu1404:latest
 
 script:
 - php vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src/
 - php vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php tests/Tests/
 - php vendor/bin/phpunit -c tests/ --exclude-group behat
 - php vendor/behat/behat/bin/behat -c tests/behat.yml
+- php bin/ez-prod init --no-interaction -vvv
+- php bin/ez-prod ps
+
 
 after_success:
 - if [[ $EXECUTE_DEPLOYMENT == 'true' && $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then ./scripts/travis_deploy.bash ; fi
