@@ -1,4 +1,6 @@
 sudo: required
+dist: precise
+group: legacy
 
 services:
   - docker
