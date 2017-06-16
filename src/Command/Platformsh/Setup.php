@@ -10,7 +10,6 @@ use eZ\Launchpad\Core\DockerCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class Setup.
@@ -80,15 +79,6 @@ class Setup extends DockerCommand
             true
         );
 
-        // manage the memcache service or not
-        $services = Yaml::parse(
-            file_get_contents("{$this->getPayloadDir()}/platformsh/.platform/services.yaml")
-        );
-        if (!$this->projectConfiguration->getDockerCompose()->hasService('memcache')) {
-            unset($services['cache']);
-        }
-        $yaml = Yaml::dump($services);
-        $fs->dumpFile("{$this->projectPath}/.platform/services.yaml", $yaml);
         $this->io->writeln(
             "Your project is now set up with Platform.sh.\n".
             "You can run <comment>git status</comment> to see the changes\n".
