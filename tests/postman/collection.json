@@ -1,0 +1,136 @@
+{
+    "variables": [],
+    "info": {
+        "name": "eZ Launchpad",
+        "_postman_id": "8c9b1b7c-3cab-0d63-5514-e4712892b3de",
+        "description": "A Collection to test that eZ Launchpad initialize correctly",
+        "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Load Home Page",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                            "tests[\"Page loaded\"] = responseBody.has(\"eZ Platform\");",
+                            "tests[\"Status code is 200\"] = responseCode.code === 200;"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "url": "http://localhost:42080/",
+                "method": "GET",
+                "header": [],
+                "body": {},
+                "description": ""
+            },
+            "response": []
+        },
+        {
+            "name": "Load Admin Page",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                            "tests[\"Page loaded\"] = responseBody.has(\"eZ Platform UI\");",
+                            "tests[\"Page loaded 2\"] = responseBody.has(\"Loading the application...\");",
+                            "tests[\"Status code is 200\"] = responseCode.code === 200;"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "url": "http://localhost:42080/ez",
+                "method": "GET",
+                "header": [],
+                "body": {},
+                "description": ""
+            },
+            "response": []
+        },
+        {
+            "name": "Front Login Failure - DB Test",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                            "tests[\"Login Failed\"] = responseBody.has(\"Bad credentials\");",
+                            "tests[\"Status code is 200\"] = responseCode.code === 200;"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "url": "http://localhost:42080/login_check",
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "formdata",
+                    "formdata": [
+                        {
+                            "key": "_username",
+                            "value": "Plopix",
+                            "description": "",
+                            "type": "text"
+                        },
+                        {
+                            "key": "_password",
+                            "value": "Novactive",
+                            "description": "",
+                            "type": "text"
+                        }
+                    ]
+                },
+                "description": ""
+            },
+            "response": []
+        },
+        {
+            "name": "Front Login OK - DB Test",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                            "tests[\"Login success\"] = !responseBody.has(\"Bad credentials\");",
+                            "tests[\"Status code is 200\"] = responseCode.code === 200;"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "url": "http://localhost:42080/login_check",
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "formdata",
+                    "formdata": [
+                        {
+                            "key": "_username",
+                            "value": "admin",
+                            "description": "",
+                            "type": "text"
+                        },
+                        {
+                            "key": "_password",
+                            "value": "publish",
+                            "description": "",
+                            "type": "text"
+                        }
+                    ]
+                },
+                "description": ""
+            },
+            "response": []
+        }
+    ]
+}

@@ -1,5 +1,9 @@
+dist: trusty
 sudo: false
 language: php
+
+services:
+  - docker
 
 cache:
   directories:
@@ -24,12 +28,16 @@ before_install:
 install:
 - travis_retry composer install --no-interaction
 - composer info -i
+- docker pull postman/newman_ubuntu1404:latest
 
 script:
 - php vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src/
 - php vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php tests/Tests/
 - php vendor/bin/phpunit -c tests/ --exclude-group behat
 - php vendor/behat/behat/bin/behat -c tests/behat.yml
+- php bin/ez-prod init --no-interaction -vvv
+- php bin/ez-prod ps
+- travis_retry docker run --net=host -v $(pwd)/tests/postman:/etc/newman -t postman/newman_ubuntu1404 run collection.json
 
 after_success:
 - if [[ $EXECUTE_DEPLOYMENT == 'true' && $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then ./scripts/travis_deploy.bash ; fi
