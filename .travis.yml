@@ -1,11 +1,8 @@
-sudo: required
-dist: precise
-group: legacy
+sudo: false
+language: php
 
 services:
   - docker
-
-language: php
 
 cache:
   directories:
