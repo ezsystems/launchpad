@@ -15,7 +15,7 @@ fi
 # Install
 cp composer.phar ezplatform
 cd ezplatform
-$COMPOSER install --no-dev --no-interaction
+$COMPOSER install --no-interaction
 
 # Wait for the DB
 while ! mysqladmin ping -h"$DATABASE_HOST" -u"$DATABASE_USER" -p"$DATABASE_PASSWORD" --silent; do
