@@ -49,7 +49,7 @@ class DockerCompose
      */
     public function dump($destination)
     {
-        $yaml = Yaml::dump($this->compose);
+        $yaml = Yaml::dump($this->compose, 4);
         $fs   = new Filesystem();
         $fs->dumpFile($destination, $yaml);
     }
