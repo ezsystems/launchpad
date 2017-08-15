@@ -152,7 +152,7 @@ class Project
             }
         }
 
-        $yaml = Yaml::dump($config);
+        $yaml = Yaml::dump($config, 4);
         $fs->dumpFile($filePath, $yaml);
     }
 
