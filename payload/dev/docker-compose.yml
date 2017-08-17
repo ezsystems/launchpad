@@ -18,7 +18,10 @@ services:
             - PROJECTMAPPINGFOLDER
 
     engine:
-        build: ./engine/
+        build:
+            context: ./engine/
+            args:
+                - PROJECTMAPPINGFOLDER
         volumes:
             - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/engine/php.ini:/usr/local/etc/php/php.ini:ro"
             - "${PROJECTCOMPOSEPATH}:${PROJECTMAPPINGFOLDER}:rw"

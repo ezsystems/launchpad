@@ -6,4 +6,6 @@ RUN chmod +x /entrypoint.bash
 ENTRYPOINT ["/entrypoint.bash"]
 CMD ["php-fpm"]
 
-WORKDIR /var/www/html/project/ezplatform/
+ARG PROJECTMAPPINGFOLDER
+RUN mkdir -p ${PROJECTMAPPINGFOLDER}/ezplatform
+WORKDIR ${PROJECTMAPPINGFOLDER}/ezplatform
