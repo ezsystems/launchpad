@@ -39,7 +39,7 @@ class ApplicationFactory
         $application->setContainer($container);
         $application->setEnv($env);
         $application->setName('eZ Launchpad');
-        $application->setVersion('@package_version@'.(($env != 'prod') ? '-dev' : ''));
+        $application->setVersion('@package_version@'.(('prod' != $env) ? '-dev' : ''));
         $application->setAutoExit($autoExit);
 
         return $application;

@@ -239,12 +239,12 @@ class Docker
     public function getComposeEnvVariables()
     {
         $projectComposePath = '../../';
-        if ($this->options['host-machine-mapping'] != null) {
+        if (null != $this->options['host-machine-mapping']) {
             $projectComposePath = $this->getMachineMountPath().
                                   str_replace($this->getHostExportedPath(), '', $this->getProjectPath());
         }
         $composerCacheDir = getenv('HOME').'/.composer/cache';
-        if ($this->options['composer-cache-dir'] != null) {
+        if (null != $this->options['composer-cache-dir']) {
             $composerCacheDir = $this->options['composer-cache-dir'];
         }
 

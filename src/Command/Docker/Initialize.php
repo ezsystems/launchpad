@@ -149,7 +149,7 @@ END;
         ];
 
         foreach ($httpBasics as $name => $httpBasic) {
-            list($host, $user, $pass) = $httpBasic;
+            list($host, $user, $pass)                                    = $httpBasic;
             $localConfigurations["composer.http_basic.{$name}.host"]     = $host;
             $localConfigurations["composer.http_basic.{$name}.login"]    = $user;
             $localConfigurations["composer.http_basic.{$name}.password"] = $pass;
@@ -181,8 +181,8 @@ END;
         $repository  = $input->getArgument('repository');
         $initialdata = $input->getArgument('initialdata');
 
-        if ('clean' === $initialdata && strpos($repository, 'ezplatform-ee') !== false) {
-            $initialdata = "studio-clean";
+        if ('clean' === $initialdata && false !== strpos($repository, 'ezplatform-ee')) {
+            $initialdata = 'studio-clean';
         }
 
         $executor->eZInstall($input->getArgument('version'), $repository, $initialdata);

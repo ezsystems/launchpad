@@ -57,7 +57,7 @@ class D4MListener
     protected function restartNFSD(SymfonyStyle $io)
     {
         exec('sudo nfsd restart', $output, $returnCode);
-        if ($returnCode != 0) {
+        if (0 != $returnCode) {
             $io->error('NFSD restart failed.');
 
             return false;
@@ -121,7 +121,7 @@ This wizard is going to:
 
         if (!$isResvReady) {
             exec('echo "nfs.server.mount.require_resv_port = 0" | sudo tee -a '.static::RESV, $output, $returnCode);
-            if ($returnCode != 0) {
+            if (0 != $returnCode) {
                 $io->error('Writing in '.static::RESV.' failed.');
 
                 return false;
@@ -134,7 +134,7 @@ This wizard is going to:
 
         if (!$isExportReady) {
             exec("echo \"{$exportLine}\" | sudo tee -a ".static::EXPORTS, $output, $returnCode);
-            if ($returnCode != 0) {
+            if (0 != $returnCode) {
                 $io->error('Writing in '.static::EXPORTS.' failed.');
 
                 return false;
@@ -190,7 +190,7 @@ This wizard is going to:
      */
     public function onCommandAction(ConsoleCommandEvent $event)
     {
-        if (php_uname('s') != 'Darwin') {
+        if ('Darwin' != php_uname('s')) {
             return;
         }
         $command = $event->getCommand();
@@ -214,7 +214,7 @@ This wizard is going to:
     {
         exec('screen -list | grep -q "'.static::SCREEN_NAME.'";', $output, $return);
 
-        return $return == 0;
+        return 0 == $return;
     }
 
     /**
@@ -224,7 +224,7 @@ This wizard is going to:
     {
         exec('which -s docker', $output, $return);
 
-        return $return == 0;
+        return 0 == $return;
     }
 
     /**
@@ -242,7 +242,7 @@ This wizard is going to:
                 $export = addcslashes($export, '/.');
                 $line   = trim($line);
 
-                return preg_match("#^{$export}#", $line) == 1;
+                return 1 == preg_match("#^{$export}#", $line);
             }
         );
     }
@@ -262,7 +262,7 @@ This wizard is going to:
                 $line = trim($line);
                 if (preg_match("/^nfs\.server\.mount\.require_resv_port/", $line)) {
                     if (strpos($line, '=')) {
-                        return (string) explode('=', $line)[1] == '0';
+                        return '0' == (string) explode('=', $line)[1];
                     }
                 }
 

@@ -16,6 +16,6 @@ if (!file_exists($file)) {
 
 include $file;
 
-if (@date_default_timezone_get() != '') {
+if ('' != @date_default_timezone_get()) {
     date_default_timezone_set(getDefaultTimeZone());
 }

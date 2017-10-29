@@ -81,7 +81,7 @@ class ApplicationUpdate
         }
 
         // check last time check
-        if ($this->projectConfiguration->get('last_update_check') != null) {
+        if (null != $this->projectConfiguration->get('last_update_check')) {
             $lastUpdate = Carbon::createFromTimestamp($this->projectConfiguration->get('last_update_check'));
             $now        = Carbon::now();
             if ($now > $lastUpdate->subDays(3)) {
@@ -89,7 +89,7 @@ class ApplicationUpdate
             }
         }
 
-        $localPharFile = $env == 'prod' ? null : $dir.'/docs/ez.phar';
+        $localPharFile = 'prod' == $env ? null : $dir.'/docs/ez.phar';
         $updater       = new Updater($localPharFile);
         $strategy      = $updater->getStrategy();
         if ($strategy instanceof ShaStrategy) {

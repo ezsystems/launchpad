@@ -20,7 +20,7 @@ class ProcessRunner
     public function run($command, $envVars)
     {
         $process = new Process(escapeshellcmd($command), null, $envVars);
-        if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
+        if ('WIN' !== strtoupper(substr(PHP_OS, 0, 3))) {
             $process->setTty(true);
         }
         $process->setTimeout(2 * 3600);

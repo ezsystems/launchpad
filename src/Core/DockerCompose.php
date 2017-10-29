@@ -90,8 +90,17 @@ class DockerCompose
                 $environnementVars      = NovaCollection($service['environment']);
                 $service['environment'] = $environnementVars->prune(
                     function ($value) {
+                        $vars = [
+                            'CUSTOM_CACHE_POOL',
+                            'CACHE_HOST',
+                            'CACHE_MEMCACHED_PORT',
+                            'SEARCH_ENGINE',
+                            'SOLR_DSN',
+                            'HTTPCACHE_PURGE_SERVER',
+                        ];
+
                         return !preg_match(
-                            '/(CUSTOM_CACHE_POOL|CACHE_HOST|CACHE_MEMCACHED_PORT|SEARCH_ENGINE|SOLR_DSN|HTTPCACHE_PURGE_SERVER)/',
+                            '/('.implode('|', $vars).')/',
                             $value
                         );
                     }
