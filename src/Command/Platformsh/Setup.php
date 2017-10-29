@@ -74,6 +74,11 @@ class Setup extends DockerCommand
             true
         );
         $fs->copy(
+            "{$this->getPayloadDir()}/platformsh/clearmemcache.php",
+            "{$provisioningFolder}/platformsh/clearmemcache.php",
+            true
+        );
+        $fs->copy(
             "{$this->getPayloadDir()}/platformsh/platformsh.php",
             "{$this->projectPath}/ezplatform/app/config/env/platformsh.php",
             true

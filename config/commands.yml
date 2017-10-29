@@ -16,7 +16,6 @@ services:
     eZ\Launchpad\Command\Rollback: ~
     eZ\Launchpad\Command\Docker\Start: ~
     eZ\Launchpad\Command\Docker\Stop: ~
-    eZ\Launchpad\Command\Docker\Build: ~
     eZ\Launchpad\Command\Docker\Up: ~
     eZ\Launchpad\Command\Docker\Clean: ~
     eZ\Launchpad\Command\Docker\Status: ~
@@ -33,6 +32,10 @@ services:
             - [setParameters, [ {env: "%app_env%", url: "%ez_phar%", version: "%ez_phar_version%"}] ]
 
     # Docker
+    eZ\Launchpad\Command\Docker\Build:
+        calls:
+            - [setRequiredRecipes, [ [ 'composer_install' ] ] ]
+
     eZ\Launchpad\Command\Docker\Initialize:
         calls:
             - [setRequiredRecipes, [ [ 'composer_install', 'ez_install', 'ez_install_solr' ] ] ]

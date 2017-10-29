@@ -193,6 +193,7 @@ END;
 
         $finalCompose->dump("{$provisioningFolder}/dev/{$composeFileName}");
         $dockerClient->up(['-d']);
+        $executor->composerInstall();
 
         if ($finalCompose->hasService('solr')) {
             $executor->createCore();
