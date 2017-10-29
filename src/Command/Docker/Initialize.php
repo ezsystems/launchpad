@@ -58,7 +58,7 @@ class Initialize extends Command
         $this->setName('docker:initialize')->setDescription('Initialize the project and all the services.');
         $this->setAliases(['docker:init', 'initialize', 'init']);
         $this->addArgument('repository', InputArgument::OPTIONAL, 'eZ Platform Repository', 'ezsystems/ezplatform');
-        $this->addArgument('version', InputArgument::OPTIONAL, 'eZ Platform Version', '1.9.*');
+        $this->addArgument('version', InputArgument::OPTIONAL, 'eZ Platform Version', '1.11.*');
         $this->addArgument('initialdata', InputArgument::OPTIONAL, 'eZ Platform Initial', 'clean');
     }
 
