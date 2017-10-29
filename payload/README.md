@@ -20,7 +20,7 @@ $ wget -O - "https://ezsystems.github.io/launchpad/install_wget.bash" | bash
 
 2. Start the docker containers:
 ```sh
-$ ~/ez up
+$ ~/ez start
 ```
 
 3. Load data:
