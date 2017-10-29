@@ -66,7 +66,7 @@ class Setup extends DockerCommand
         // put the files in places
         $fs->mirror("{$this->getPayloadDir()}/platformsh/.platform", "{$this->projectPath}/.platform");
         $fs->copy("{$this->getPayloadDir()}/platformsh/.platform.app.yaml", "{$this->projectPath}/.platform.app.yaml");
-        $provisioningName   = $this->projectConfiguration->get('provisionning.folder_name');
+        $provisioningName   = $this->projectConfiguration->get('provisioning.folder_name');
         $provisioningFolder = "{$this->projectPath}/{$provisioningName}";
         $fs->copy(
             "{$this->getPayloadDir()}/platformsh/getmysqlcredentials.php",
@@ -87,6 +87,7 @@ class Setup extends DockerCommand
             "\t<comment>git commit -m \"Integration Platform.sh\"</comment>\n".
             "\t<comment>git push platform {branchname}</comment>\n"
         );
+
         $this->postAction();
     }
 }
