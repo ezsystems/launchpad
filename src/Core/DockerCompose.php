@@ -91,7 +91,7 @@ class DockerCompose
                 $service['environment'] = $environnementVars->prune(
                     function ($value) {
                         return !preg_match(
-                            '/(CUSTOM_CACHE_POOL|CACHE_HOST|CACHE_MEMCACHED_PORT|SEARCH_ENGINE|SOLR_DSN)/',
+                            '/(CUSTOM_CACHE_POOL|CACHE_HOST|CACHE_MEMCACHED_PORT|SEARCH_ENGINE|SOLR_DSN|HTTPCACHE_PURGE_SERVER)/',
                             $value
                         );
                     }
