@@ -21,7 +21,7 @@ build:
 # side is in the form `<service name>:<endpoint name>`.
 relationships:
     database: "mysqldb:mysql"
-    cache: "cache:memcache"
+    cache: "cache:memcached"
 
 # The configuration of app when it is exposed to the web.
 web:
@@ -47,17 +47,18 @@ mounts:
 hooks:
     build: |
         set -e
-        cd /app/ezplatform
+        cd ezplatform
         CONSOLE="bin/console"
         if [ -f app/console ]; then
             CONSOLE="app/console"
         fi
         composer install --no-dev --prefer-dist --no-progress --no-interaction --optimize-autoloader
         rm web/app_dev.php
-        php $CONSOLE --env=prod assetic:dump
+        php -d memory_limit=-1 -d max_execution_time=3600 $CONSOLE --env=prod assetic:dump
+
     deploy: |
         set -e
-        cd /app
+        php provisioning/platformsh/clearmemcache.php
         if [ ! -f ezplatform/web/var/.platform.installed ]; then
             MYSQL_OPTIONS=`php provisioning/platformsh/getmysqlcredentials.php`
             zcat data/ezplatform.sql.gz | mysql $MYSQL_OPTIONS
