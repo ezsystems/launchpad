@@ -69,6 +69,7 @@
                     <ul class="dropdown-menu ezlp-submenu">
                         <li><a href="#stack">Stack</a></li>
                         <li><a href="#d4m">Mac OS X optimisations avec D4M</a></li>
+                        <li><a href="#mac-tips">Mac OS X - Astuces</a></li>
                         <li><a href="#home">Configurations globales</a></li>
                     </ul>
                 </li>
@@ -83,6 +84,7 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                <li><a href="https://discuss.ezplatform.com" target="_blank">Discuss</a></li>
                 <li><a href="https://www.ezplatform.com" target="_blank">eZ Platform</a></li>
                 <li><a href="https://www.ezplatform.com/Blog">eZ Blog</a></li>
                 <li><a href="//ez-community-on-slack.herokuapp.com" target="_blank"> Slack
@@ -500,7 +502,44 @@ docker:
     host_composer_cache_dir: "/data/MYPROJECTS/.composer_cache"
             </code></pre>
         </div>
-        <p><em>host_composer_cache_dir</em> permettra lui de partager le cache Composer entre vos projets.</p>
+        <p><em>host_composer_cache_dir</em> permettra lui de partager le cache Composer entre vos projets.
+</p>
+    </div>
+    <h2 id="mac-tips"><i class="fa fa-apple" aria-hidden="true"></i> Mac OS X - Astuces</h2>
+    <div>
+        <p>Même avec D4M et le partage NFS les performances peuvent être améliorées. Ce qui suit est clairement une astuce mais une astuce qui fonctionne parfaitement bien!<br /> Voici la technique dans votre kernel:
+</p>
+
+        <div class="highlight">
+            <button class="to-clipboard">
+                <i class="fa fa-clipboard" aria-hidden="true"></i> Copier
+            </button>
+            <pre><code># ezplatform/app/AppKernel.php
+public function getCacheDir()
+    {
+        if ($this->getEnvironment() == "prod" && getenv("RUNNING_ENV") == "DOCKER") {
+            return '/tmp/cache/'.$this->environment;
+        }
+
+        // approach to optimize the cache in DEV
+        $generateCacheFile = $this->rootDir.'/cache/'.$this->environment."/created";
+        if (
+            (getenv("RUNNING_ENV") == "DOCKER") &&
+            ($this->getEnvironment() == "dev") &&
+            (file_exists($generateCacheFile)) &&
+            (filemtime($generateCacheFile) > (time() - 600))
+        ) {
+            return '/tmp/cache/'.$this->environment;
+        } else {
+            if (is_dir($this->rootDir.'/cache/'.$this->environment)) {
+                touch($generateCacheFile);
+            }
+        }
+
+        return $this->rootDir.'/cache/'.$this->environment;
+    }</code></pre>
+        </div>
+        <p>D'abord en mode "prod" on ne store pas le cache sur le host, donc c'est toujours rapide.<br /> Ensuite en mode "dev", on store le cache sur le host qu'une fois toute les 10min (pour avoir l'autocompletion avec votre PHPStorm!).</p>
     </div>
 
     </div>
