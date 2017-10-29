@@ -146,7 +146,7 @@ END;
         ];
 
         foreach ($httpBasics as $name => $httpBasic) {
-            list($host, $user, $pass)                                    = $httpBasic;
+            list($host, $user, $pass) = $httpBasic;
             $localConfigurations["composer.http_basic.{$name}.host"]     = $host;
             $localConfigurations["composer.http_basic.{$name}.login"]    = $user;
             $localConfigurations["composer.http_basic.{$name}.password"] = $pass;
@@ -172,11 +172,17 @@ END;
         $executor = new TaskExecutor($dockerClient, $this->projectConfiguration, $this->requiredRecipes);
         $executor->composerInstall();
 
-        $executor->eZInstall(
-            $input->getArgument('version'),
-            $input->getArgument('repository'),
-            $input->getArgument('initialdata')
-        );
+        // Fix #7
+        // if eZ EE is selected then the DB is not selected by the install process
+        // we have to do it manually here
+        $repository  = $input->getArgument('repository');
+        $initialdata = $input->getArgument('initialdata');
+
+        if ('clean' === $initialdata && strpos($repository, 'ezplatform-ee') !== false) {
+            $initialdata = "studio-clean";
+        }
+
+        $executor->eZInstall($input->getArgument('version'), $repository, $initialdata);
         if ($finalCompose->hasService('solr')) {
             $executor->eZInstallSolr();
         }
