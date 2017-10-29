@@ -126,6 +126,14 @@ class DockerCompose
                                 return false;
                             }
                         }
+                        if (!$this->hasService('varnish')) {
+                            if (preg_match(
+                                '/(HTTPCACHE_PURGE_SERVER)/',
+                                $value
+                            )) {
+                                return false;
+                            }
+                        }
 
                         return true;
                     }
