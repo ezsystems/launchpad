@@ -132,6 +132,9 @@ END;
         $fs->dumpFile($phpINIPath, $iniContent);
         unset($selectedServices);
 
+        // Get the Payload README.md
+        $fs->copy("{$this->getPayloadDir()}/README.md", "{$provisioningFolder}/README.md");
+
         $finalCompose = clone $compose;
         $compose->cleanForInitialize();
         // dump the temporary DockerCompose.yml without the mount and env vars in the provisioning folder
