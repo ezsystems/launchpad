@@ -42,20 +42,16 @@ services:
             - "SOLR_DSN=http://solr:8983/solr"
             - "HTTPCACHE_PURGE_SERVER=http://varnish:80"
     db:
-        image: mariadb:10.1
+        image: mariadb:10.2
         environment:
             - "MYSQL_ROOT_PASSWORD=ezplatform"
         ports:
             - "${PROJECTPORTPREFIX}306:3306"
 
     varnish:
-        image: million12/varnish
+        image: plopix/docker-varnish5
         volumes:
             - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/varnish/varnish.vcl:/etc/varnish/default.vcl:ro"
-        environment:
-            - "VCL_CONFIG=/etc/varnish/default.vcl"
-            - "VARNISHD_PARAMS=-p default_ttl=3600"
-            - "CACHE_SIZE=256M"
         ports:
             - "${PROJECTPORTPREFIX}082:80"
         depends_on:

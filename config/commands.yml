@@ -21,7 +21,6 @@ services:
     eZ\Launchpad\Command\Docker\Status: ~
     eZ\Launchpad\Command\Docker\Enter: ~
     eZ\Launchpad\Command\Docker\Logs: ~
-    eZ\Launchpad\Command\Docker\Update: ~
     eZ\Launchpad\Command\Docker\SymfonyRun: ~
     eZ\Launchpad\Command\Docker\ComposerRun: ~
     eZ\Launchpad\Command\Platformsh\Deploy: ~
@@ -32,6 +31,10 @@ services:
             - [setParameters, [ {env: "%app_env%", url: "%ez_phar%", version: "%ez_phar_version%"}] ]
 
     # Docker
+    eZ\Launchpad\Command\Docker\Update:
+        calls:
+            - [setRequiredRecipes, [ [ 'composer_install' ] ] ]
+
     eZ\Launchpad\Command\Docker\Build:
         calls:
             - [setRequiredRecipes, [ [ 'composer_install' ] ] ]

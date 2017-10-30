@@ -4,7 +4,9 @@
 
 ### 1.1.0 
 
-- New Default README after init
+- ezplatform-http-cache is enabled when not loaded
+- Varnish5 and xkey VCL by default
+- new Default README.md after initialize
 - Simpler Makefile
 - Cache are now purged when using Varnish (new ENV var trigger ezplatform to do it)
 - Platform.sh optimizations
