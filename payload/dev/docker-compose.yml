@@ -42,7 +42,7 @@ services:
             - "SOLR_DSN=http://solr:8983/solr"
             - "HTTPCACHE_PURGE_SERVER=http://varnish:80"
     db:
-        image: mariadb:10.2
+        image: mariadb:10.1
         environment:
             - "MYSQL_ROOT_PASSWORD=ezplatform"
         ports:
