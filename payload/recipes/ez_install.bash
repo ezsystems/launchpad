@@ -17,7 +17,7 @@ cd ezplatform
 $COMPOSER require ezsystems/ezplatform-http-cache
 
 # Add to the kernel if not loaded (anticipation here)
-if grep -Fxq "EzSystemsPlatformHttpCacheBundle" app/AppKernel.php
+if grep -q "EzSystemsPlatformHttpCacheBundle" app/AppKernel.php
 then
     echo "EzSystemsPlatformHttpCacheBundle is already loaded."
 else
