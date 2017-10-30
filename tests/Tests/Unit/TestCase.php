@@ -165,6 +165,9 @@ docker:
             'BLACKFIRE_CLIENT_TOKEN'  => getenv('BLACKFIRE_CLIENT_TOKEN'),
             'BLACKFIRE_SERVER_ID'     => getenv('BLACKFIRE_SERVER_ID'),
             'BLACKFIRE_SERVER_TOKEN'  => getenv('BLACKFIRE_SERVER_TOKEN'),
+            'DOCKER_HOST'             => getenv('DOCKER_HOST'),
+            'DOCKER_CERT_PATH'        => getenv('DOCKER_CERT_PATH'),
+            'DOCKER_TLS_VERIFY'       => getenv('DOCKER_TLS_VERIFY'),
         ];
     }
 }
