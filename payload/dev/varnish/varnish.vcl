@@ -45,15 +45,12 @@ sub vcl_recv {
     set req.http.Surrogate-Capability = "abc=ESI/1.0";
 
     // Varnish, in its default configuration, sends the X-Forwarded-For header but does not filter out Forwarded header
+    // To be removed in Symfony 3.3
     unset req.http.Forwarded;
-    // Add a unique header containing the client address (only for master request)
-    // Please note that /_fragment URI can change in Symfony configuration
-    if (!req.url ~ "^/_fragment") {
-        if (req.http.x-forwarded-for) {
-            set req.http.X-Forwarded-For = req.http.X-Forwarded-For + ", " + client.ip;
-        } else {
-            set req.http.X-Forwarded-For = client.ip;
-        }
+    if (req.http.X-Forwarded-Proto == "https" ) {
+       set req.http.X-Forwarded-Port = "443";
+    } else {
+       set req.http.X-Forwarded-Port = "80";
     }
 
     // Trigger cache purge if needed
@@ -62,17 +59,6 @@ sub vcl_recv {
     // Don't cache requests other than GET and HEAD.
     if (req.method != "GET" && req.method != "HEAD") {
         return (pass);
-    }
-
-    // Normalize the Accept-Encoding headers
-    if (req.http.Accept-Encoding) {
-        if (req.http.Accept-Encoding ~ "gzip") {
-            set req.http.Accept-Encoding = "gzip";
-        } elsif (req.http.Accept-Encoding ~ "deflate") {
-            set req.http.Accept-Encoding = "deflate";
-        } else {
-            unset req.http.Accept-Encoding;
-        }
     }
 
     // Don't cache Authenticate & Authorization
@@ -283,7 +269,10 @@ sub vcl_deliver {
     }
 
     if (client.ip ~ debuggers) {
-        if (obj.hits > 0) {
+        # In Varnish 4 the obj.hits counter behaviour has changed, so we use a
+        # different method: if X-Varnish contains only 1 id, we have a miss, if it
+        # contains more (and therefore a space), we have a hit.
+        if (resp.http.x-varnish ~ " ") {
             set resp.http.X-Cache = "HIT";
             set resp.http.X-Cache-Hits = obj.hits;
             set resp.http.X-Cache-TTL = obj.ttl;
