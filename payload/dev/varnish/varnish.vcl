@@ -47,11 +47,6 @@ sub vcl_recv {
     // Varnish, in its default configuration, sends the X-Forwarded-For header but does not filter out Forwarded header
     // To be removed in Symfony 3.3
     unset req.http.Forwarded;
-    if (req.http.X-Forwarded-Proto == "https" ) {
-       set req.http.X-Forwarded-Port = "443";
-    } else {
-       set req.http.X-Forwarded-Port = "80";
-    }
 
     // Trigger cache purge if needed
     call ez_purge;
