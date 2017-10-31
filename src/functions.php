@@ -17,7 +17,7 @@ function getDefaultTimeZone()
         // Mac OS X (and older Linuxes)
         // /etc/localtime is a symlink to the timezone in /usr/share/zoneinfo.
         $filename = readlink('/etc/localtime');
-        if (strpos($filename, '/usr/share/zoneinfo/') === 0) {
+        if (0 === strpos($filename, '/usr/share/zoneinfo/')) {
             $timezone = substr($filename, 20);
         }
     } elseif (file_exists('/etc/timezone')) {

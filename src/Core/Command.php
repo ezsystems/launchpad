@@ -106,7 +106,7 @@ abstract class Command extends BaseCommand
      */
     public function getRequiredRecipes()
     {
-        if ($this->requiredRecipes === null) {
+        if (null === $this->requiredRecipes) {
             $this->requiredRecipes = NovaCollection([]);
         }
 

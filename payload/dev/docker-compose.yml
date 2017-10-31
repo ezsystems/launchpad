@@ -40,6 +40,7 @@ services:
             - "CACHE_MEMCACHED_PORT=11211"
             - "SEARCH_ENGINE=solr"
             - "SOLR_DSN=http://solr:8983/solr"
+            - "HTTPCACHE_PURGE_SERVER=http://varnish:80"
     db:
         image: mariadb:10.1
         environment:
@@ -48,13 +49,9 @@ services:
             - "${PROJECTPORTPREFIX}306:3306"
 
     varnish:
-        image: million12/varnish
+        image: plopix/docker-varnish5
         volumes:
             - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/varnish/varnish.vcl:/etc/varnish/default.vcl:ro"
-        environment:
-            - "VCL_CONFIG=/etc/varnish/default.vcl"
-            - "VARNISHD_PARAMS=-p default_ttl=3600"
-            - "CACHE_SIZE=256M"
         ports:
             - "${PROJECTPORTPREFIX}082:80"
         depends_on:

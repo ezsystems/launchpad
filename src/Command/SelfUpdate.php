@@ -51,11 +51,11 @@ class SelfUpdate extends Command
         $app_env = $this->parameters['env'];
         $app_dir = $this->appDir;
 
-        $localPharFile = $app_env == 'prod' ? null : $app_dir.'/docs/ez.phar';
+        $localPharFile = 'prod' == $app_env ? null : $app_dir.'/docs/ez.phar';
         $updater       = new Updater($localPharFile);
         $strategy      = $updater->getStrategy();
         if ($strategy instanceof ShaStrategy) {
-            if ($app_env == 'prod') {
+            if ('prod' == $app_env) {
                 $strategy->setPharUrl($this->parameters['url']);
                 $strategy->setVersionUrl($this->parameters['version']);
             }

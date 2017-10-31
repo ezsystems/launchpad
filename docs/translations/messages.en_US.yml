@@ -14,6 +14,7 @@ header:
         commands: "Commands"
         more: "More"
         d4m: "Mac OS X optimizations with D4M"
+        mac-tips: "Mac OS X - Tips"
         global.configuration: "Global configurations"
 
 footer:
@@ -153,6 +154,15 @@ content:
         example.mounted.host_composer_cache_dir: >
             <em>host_composer_cache_dir</em> will allow you to share the composer cache for all your projects.
 
+    mac-tips:
+        title: Mac OS X - Tips
+        blurb: >
+            Even with D4M and the NFS mount, performances can be optimized. The following is clearly a trick. But a
+            trick that works pretty well!<br /> Here is the magic, in your kernel:
+        explanation: >
+            First in "prod" mode we don't store the cache on the host, then it is always fast.<br />
+            Second in "dev" mode, we store the cache on the host, only 1 time every 10min (to get the autocompletion for
+            your PHPStorm!).
 other:
     copy: "Copy"
     soon: "Coming soon..."

@@ -13,66 +13,50 @@ SRCS := src
 CURRENT_DIR := $(shell pwd)
 SCRIPS_DIR := $(CURRENT_DIR)/scripts
 
+.DEFAULT_GOAL := list
+
 .PHONY: list
 list:
-	@echo ""
-	@echo "eZ Launchpad available targets:"
-	@echo ""
-	@echo "  $(YELLOW)phar$(RESTORE)         > build the box locally (bypass the PROD)"
-	@echo ""
-	@echo "  $(YELLOW)codeclean$(RESTORE)    > run the codechecker"
-	@echo "  $(YELLOW)tests$(RESTORE)        > run the tests"
-	@echo "  $(YELLOW)behat$(RESTORE)        > run the Behat tests only"
-	@echo "  $(YELLOW)unit$(RESTORE)         > run the Unit tests only"
-	@echo "  $(YELLOW)coverage$(RESTORE)     > generate the code coverage"
-	@echo ""
-	@echo "  $(YELLOW)convertpuml$(RESTORE)  > Convert PUML diagram in images"
-	@echo "  $(YELLOW)docs$(RESTORE)         > Generate the documentation"
-	@echo ""
-	@echo "  $(YELLOW)install$(RESTORE)      > install vendors"
-	@echo "  $(YELLOW)clean$(RESTORE)        > removes the vendors, and caches"
-
+	@echo "******************************"
+	@echo "${YELLOW}eZ Launchpad available targets${RESTORE}:"
+	@grep -E '^[a-zA-Z-]+:.*?## .*$$' Makefile | sort | awk 'BEGIN {FS = ":.*?## "}; {printf " ${YELLOW}%-15s${RESTORE} > %s\n", $$1, $$2}'
+	@echo "${RED}==============================${RESTORE}"
 
 .PHONY: codeclean
-codeclean:
+codeclean: ## Run the codechecker
 	bash $(SCRIPS_DIR)/codechecker.bash
 
 .PHONY: tests
-tests:
+tests: ## Run the tests
 	bash $(SCRIPS_DIR)/runtests.bash
 
 .PHONY: behat
-behat:
+behat: ## Run the Behat tests only
 	bash $(SCRIPS_DIR)/runtests.bash behat
 
 .PHONY: unit
-unit:
+unit: ## Run the Unit tests only
 	bash $(SCRIPS_DIR)/runtests.bash unit
 
 .PHONY: convertpuml
-convertpuml:
+convertpuml: ## Convert PUML diagram in images
 	bash $(SCRIPS_DIR)/pumltoimages.bash
 
 .PHONY: docs
-docs:
+docs: ## Generate the documentation
 	$(PHP_BIN) bin/gendocs
 
-.PHONY: install
-install:
-	curl -s http://getcomposer.org/installer | $(PHP_BIN)
-	$(PHP_BIN) $(COMPOSER_BIN) install
-
 .PHONY: phar
-phar:
+phar: ## Build the box locally (bypass the PROD)
 	bash $(SCRIPS_DIR)/buildbox.bash
 
 .PHONY: coverage
-coverage:
+coverage: ## Generate the code coverage
 	rm -rf tests/coverage
 	$(DOCKER_BIN) run -t --rm -w /app -v $(CURRENT_DIR):/app phpunit/phpunit:5.7.12 -c tests/ --coverage-html /app/tests/coverage
 
 .PHONY: clean
-clean:
+clean: ## Removes the vendors, and caches
 	rm -rf tests/coverage
 	rm -f .php_cs.cache
 	rm -f .ezlaunchpad.yml

@@ -69,6 +69,7 @@
                     <ul class="dropdown-menu ezlp-submenu">
                         <li><a href="#stack">Stack</a></li>
                         <li><a href="#d4m">Mac OS X optimalisering med D4M</a></li>
+                        <li><a href="#mac-tips">Mac OS X - Tips</a></li>
                         <li><a href="#home">Global konfigurasjon</a></li>
                     </ul>
                 </li>
@@ -83,6 +84,7 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                <li><a href="https://discuss.ezplatform.com" target="_blank">Discuss</a></li>
                 <li><a href="https://www.ezplatform.com" target="_blank">eZ Platform</a></li>
                 <li><a href="https://www.ezplatform.com/Blog">eZ Blog</a></li>
                 <li><a href="//ez-community-on-slack.herokuapp.com" target="_blank"> Slack
@@ -266,7 +268,7 @@ export BLACKFIRE_SERVER_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
         <button class="to-clipboard">
             <i class="fa fa-clipboard" aria-hidden="true"></i> Kopier
         </button>
-        <pre>$ <code>~/ez init ezsystems/ezplatform-ee v1.9.0-rc1</code></pre>
+        <pre>$ <code>~/ez init ezsystems/ezplatform-ee</code></pre>
     </div>
 
                 <p>Når eZ Launchpad spør om HTTP-BASIC må du oppgi <a href="https://doc.ez.no/display/TECHDOC/Using+Composer" target="_blank">Installasjonsnøkkel og token</a>.
@@ -502,6 +504,42 @@ docker:
         </div>
         <p><em>host_composer_cache_dir</em> tillater deg å dele composer cache for alle dine prosjekter.
 </p>
+    </div>
+    <h2 id="mac-tips"><i class="fa fa-apple" aria-hidden="true"></i> Mac OS X - Tips</h2>
+    <div>
+        <p>Even with D4M and the NFS mount, performances can be optimized. The following is clearly a trick. But a trick that works pretty well!<br /> Here is the magic, in your kernel:
+</p>
+
+        <div class="highlight">
+            <button class="to-clipboard">
+                <i class="fa fa-clipboard" aria-hidden="true"></i> Kopier
+            </button>
+            <pre><code># ezplatform/app/AppKernel.php
+public function getCacheDir()
+    {
+        if ($this->getEnvironment() == "prod" && getenv("RUNNING_ENV") == "DOCKER") {
+            return '/tmp/cache/'.$this->environment;
+        }
+
+        // approach to optimize the cache in DEV
+        $generateCacheFile = $this->rootDir.'/cache/'.$this->environment."/created";
+        if (
+            (getenv("RUNNING_ENV") == "DOCKER") &&
+            ($this->getEnvironment() == "dev") &&
+            (file_exists($generateCacheFile)) &&
+            (filemtime($generateCacheFile) > (time() - 600))
+        ) {
+            return '/tmp/cache/'.$this->environment;
+        } else {
+            if (is_dir($this->rootDir.'/cache/'.$this->environment)) {
+                touch($generateCacheFile);
+            }
+        }
+
+        return $this->rootDir.'/cache/'.$this->environment;
+    }</code></pre>
+        </div>
+        <p>First in "prod" mode we don't store the cache on the host, then it is always fast.<br /> Second in "dev" mode, we store the cache on the host, only 1 time every 10min (to get the autocompletion for your PHPStorm!).</p>
     </div>
 
     </div>

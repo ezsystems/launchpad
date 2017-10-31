@@ -49,7 +49,7 @@ class DockerCompose
      */
     public function dump($destination)
     {
-        $yaml = Yaml::dump($this->compose);
+        $yaml = Yaml::dump($this->compose, 4);
         $fs   = new Filesystem();
         $fs->dumpFile($destination, $yaml);
     }
@@ -90,8 +90,17 @@ class DockerCompose
                 $environnementVars      = NovaCollection($service['environment']);
                 $service['environment'] = $environnementVars->prune(
                     function ($value) {
+                        $vars = [
+                            'CUSTOM_CACHE_POOL',
+                            'CACHE_HOST',
+                            'CACHE_MEMCACHED_PORT',
+                            'SEARCH_ENGINE',
+                            'SOLR_DSN',
+                            'HTTPCACHE_PURGE_SERVER',
+                        ];
+
                         return !preg_match(
-                            '/(CUSTOM_CACHE_POOL|CACHE_HOST|CACHE_MEMCACHED_PORT|SEARCH_ENGINE|SOLR_DSN)/',
+                            '/('.implode('|', $vars).')/',
                             $value
                         );
                     }
@@ -121,6 +130,14 @@ class DockerCompose
                         if (!$this->hasService('memcache')) {
                             if (preg_match(
                                 '/(CUSTOM_CACHE_POOL|CACHE_HOST|CACHE_MEMCACHED_PORT)/',
+                                $value
+                            )) {
+                                return false;
+                            }
+                        }
+                        if (!$this->hasService('varnish')) {
+                            if (preg_match(
+                                '/(HTTPCACHE_PURGE_SERVER)/',
                                 $value
                             )) {
                                 return false;

@@ -14,6 +14,16 @@ echo "Installation eZ Platform ($REPO:$VERSION:$INIT_DATA) in the container"
 $COMPOSER create-project --no-interaction $REPO ezplatform $VERSION
 cp composer.phar ezplatform
 cd ezplatform
+$COMPOSER require ezsystems/ezplatform-http-cache
+
+# Add to the kernel if not loaded (anticipation here)
+if grep -q "EzSystemsPlatformHttpCacheBundle" app/AppKernel.php
+then
+    echo "EzSystemsPlatformHttpCacheBundle is already loaded."
+else
+    sed -i '/FOSHttpCacheBundle/a new EzSystems\\PlatformHttpCacheBundle\\EzSystemsPlatformHttpCacheBundle(),' app/AppKernel.php
+    echo "EzSystemsPlatformHttpCacheBundle added to the Kernel."
+fi
 
 # Do some cleaning
 ## Files

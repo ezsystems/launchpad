@@ -2,6 +2,19 @@
 
 ## CHANGELOG
 
+### 1.1.0 
+
+- ezplatform-http-cache is enabled when not loaded
+- Varnish5 and xkey VCL by default
+- new Default README.md after initialize
+- Simpler Makefile
+- Cache are now purged when using Varnish (new ENV var trigger ezplatform to do it)
+- Platform.sh optimizations
+- Docker-Compose file is more readable
+- Fix #7
+- Fix #8
+
+
 ### 1.0.0 
 
 - Initial Stable Version

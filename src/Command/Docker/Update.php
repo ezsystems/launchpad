@@ -34,5 +34,6 @@ class Update extends DockerCommand
         $this->dockerClient->pull(['--ignore-pull-failures'], $input->getArgument('service'));
         $this->dockerClient->build([], $input->getArgument('service'));
         $this->dockerClient->up(['-d'], $input->getArgument('service'));
+        $this->taskExecutor->composerInstall();
     }
 }

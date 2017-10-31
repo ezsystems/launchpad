@@ -126,7 +126,7 @@ class Project
      */
     protected function set($keyValues, $where = 'global')
     {
-        $filePath = $where == 'global' ? $this->globalFilePath : $this->localFilePath;
+        $filePath = 'global' == $where ? $this->globalFilePath : $this->localFilePath;
 
         $fs     = new Filesystem();
         $config = $fs->exists($filePath) ? Yaml::parse(file_get_contents($filePath)) : [];
@@ -152,7 +152,7 @@ class Project
             }
         }
 
-        $yaml = Yaml::dump($config);
+        $yaml = Yaml::dump($config, 4);
         $fs->dumpFile($filePath, $yaml);
     }
 

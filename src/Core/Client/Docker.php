@@ -239,12 +239,12 @@ class Docker
     public function getComposeEnvVariables()
     {
         $projectComposePath = '../../';
-        if ($this->options['host-machine-mapping'] != null) {
+        if (null != $this->options['host-machine-mapping']) {
             $projectComposePath = $this->getMachineMountPath().
                                   str_replace($this->getHostExportedPath(), '', $this->getProjectPath());
         }
         $composerCacheDir = getenv('HOME').'/.composer/cache';
-        if ($this->options['composer-cache-dir'] != null) {
+        if (null != $this->options['composer-cache-dir']) {
             $composerCacheDir = $this->options['composer-cache-dir'];
         }
 
@@ -265,6 +265,10 @@ class Docker
                 'BLACKFIRE_CLIENT_TOKEN'  => getenv('BLACKFIRE_CLIENT_TOKEN'),
                 'BLACKFIRE_SERVER_ID'     => getenv('BLACKFIRE_SERVER_ID'),
                 'BLACKFIRE_SERVER_TOKEN'  => getenv('BLACKFIRE_SERVER_TOKEN'),
+                // pass the DOCKER native vars for compose
+                'DOCKER_HOST'             => getenv('DOCKER_HOST'),
+                'DOCKER_CERT_PATH'        => getenv('DOCKER_CERT_PATH'),
+                'DOCKER_TLS_VERIFY'       => getenv('DOCKER_TLS_VERIFY'),
             ];
     }
 

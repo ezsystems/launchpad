@@ -58,7 +58,7 @@ class Initialize extends Command
         $this->setName('docker:initialize')->setDescription('Initialize the project and all the services.');
         $this->setAliases(['docker:init', 'initialize', 'init']);
         $this->addArgument('repository', InputArgument::OPTIONAL, 'eZ Platform Repository', 'ezsystems/ezplatform');
-        $this->addArgument('version', InputArgument::OPTIONAL, 'eZ Platform Version', '1.9.*');
+        $this->addArgument('version', InputArgument::OPTIONAL, 'eZ Platform Version', '1.11.*');
         $this->addArgument('initialdata', InputArgument::OPTIONAL, 'eZ Platform Initial', 'clean');
     }
 
@@ -132,6 +132,9 @@ END;
         $fs->dumpFile($phpINIPath, $iniContent);
         unset($selectedServices);
 
+        // Get the Payload README.md
+        $fs->copy("{$this->getPayloadDir()}/README.md", "{$provisioningFolder}/README.md");
+
         $finalCompose = clone $compose;
         $compose->cleanForInitialize();
         // dump the temporary DockerCompose.yml without the mount and env vars in the provisioning folder
@@ -172,11 +175,17 @@ END;
         $executor = new TaskExecutor($dockerClient, $this->projectConfiguration, $this->requiredRecipes);
         $executor->composerInstall();
 
-        $executor->eZInstall(
-            $input->getArgument('version'),
-            $input->getArgument('repository'),
-            $input->getArgument('initialdata')
-        );
+        // Fix #7
+        // if eZ EE is selected then the DB is not selected by the install process
+        // we have to do it manually here
+        $repository  = $input->getArgument('repository');
+        $initialdata = $input->getArgument('initialdata');
+
+        if ('clean' === $initialdata && false !== strpos($repository, 'ezplatform-ee')) {
+            $initialdata = 'studio-clean';
+        }
+
+        $executor->eZInstall($input->getArgument('version'), $repository, $initialdata);
         if ($finalCompose->hasService('solr')) {
             $executor->eZInstallSolr();
         }
@@ -184,6 +193,7 @@ END;
 
         $finalCompose->dump("{$provisioningFolder}/dev/{$composeFileName}");
         $dockerClient->up(['-d']);
+        $executor->composerInstall();
 
         if ($finalCompose->hasService('solr')) {
             $executor->createCore();

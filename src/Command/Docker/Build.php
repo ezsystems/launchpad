@@ -33,5 +33,6 @@ class Build extends DockerCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->dockerClient->build([], $input->getArgument('service'));
+        $this->taskExecutor->composerInstall();
     }
 }
