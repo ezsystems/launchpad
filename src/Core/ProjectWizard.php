@@ -7,6 +7,7 @@
 namespace eZ\Launchpad\Core;
 
 use eZ\Launchpad\Configuration\Project as ProjectConfiguration;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -21,6 +22,24 @@ class ProjectWizard
      * @var ProjectConfiguration
      */
     protected $projectConfiguration;
+
+    const INIT_STD              = 'standard';
+    const INIT_STD_COMPOER_AUTH = 'standard-with-composer-auth';
+    const INIT_EXPERT           = 'expert';
+
+    /**
+     * @var array
+     */
+    protected static $modes = [
+        self::INIT_STD,
+        self::INIT_STD_COMPOER_AUTH,
+        self::INIT_EXPERT,
+    ];
+
+    /**
+     * @var string
+     */
+    protected $mode;
 
     /**
      * ProjectWizard constructor.
@@ -41,7 +60,9 @@ class ProjectWizard
      */
     public function __invoke(DockerCompose $compose)
     {
-        return [
+        $this->mode = $this->getInitializationMode();
+
+        $configuration = [
             $this->getNetworkName(),
             $this->getNetworkTCPPort(),
             $this->getComposerHttpBasicCredentials(),
@@ -52,6 +73,28 @@ class ProjectWizard
             $this->getProvisioningFolderName(),
             $this->getComposeFileName(),
         ];
+
+        return $configuration;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInitializationMode()
+    {
+        $standard     = self::INIT_STD;
+        $withComposer = self::INIT_STD_COMPOER_AUTH;
+        $expert       = self::INIT_EXPERT;
+        $question     = <<<END
+eZ Launchpad will install a new architecture for you.
+ Three modes are available:
+  - <fg=cyan>{$standard}</>: All the services, no composer auth
+  - <fg=cyan>{$withComposer}</>: Standard with ability to provide Composer Auth, useful for eZ Platform Enterprise
+  - <fg=cyan>{$expert}</>: All the questions will be asked and you can select the services you want only
+ Please select your <fg=yellow;options=bold>Init</>ialization mode
+END;
+
+        return $this->io->choice($question, self::$modes, self::INIT_STD);
     }
 
     /**
@@ -59,6 +102,9 @@ class ProjectWizard
      */
     protected function getComposerHttpBasicCredentials()
     {
+        if (!$this->requireComposerAuth()) {
+            return [];
+        }
         $credentials    = [];
         $endString      = '<fg=yellow;options=bold>Composer HTTP-BASIC</> for this project?';
         $questionString = 'Do you want to set '.$endString;
@@ -97,6 +143,14 @@ class ProjectWizard
      */
     protected function getProvisioningFolderName()
     {
+        $default = $this->projectConfiguration->get('provisioning.folder_name');
+        if (empty($default)) {
+            $default = 'provisioning';
+        }
+
+        if ($this->isStandardMode()) {
+            return $default;
+        }
         $pattern = '^[a-zA-Z0-9]*$';
 
         $validator = function ($value) use ($pattern) {
@@ -105,10 +159,6 @@ class ProjectWizard
 
         $message      = 'What is your preferred name for the <fg=yellow;options=bold>provisioning folder</>?';
         $errorMessage = "The name of the folder MUST respect {$pattern}.";
-        $default      = $this->projectConfiguration->get('provisioning.folder_name');
-        if (empty($default)) {
-            $default = 'provisioning';
-        }
 
         return $this->io->askQuestion($this->getQuestion($message, $default, $validator, $errorMessage));
     }
@@ -118,6 +168,14 @@ class ProjectWizard
      */
     public function getComposeFileName()
     {
+        $default = $this->projectConfiguration->get('docker.compose_file');
+        if (empty($default)) {
+            $default = 'docker-compose.yml';
+        }
+        if ($this->isStandardMode()) {
+            return $default;
+        }
+
         $pattern = '^[a-zA-Z0-9\-]*\.yml$';
 
         $validator = function ($value) use ($pattern) {
@@ -126,10 +184,6 @@ class ProjectWizard
 
         $message      = 'What is your preferred filename for the <fg=yellow;options=bold>Docker Compose file</>?';
         $errorMessage = "The name of the filename MUST respect {$pattern}.";
-        $default      = $this->projectConfiguration->get('docker.compose_file');
-        if (empty($default)) {
-            $default = 'docker-compose.yml';
-        }
 
         return $this->io->askQuestion($this->getQuestion($message, $default, $validator, $errorMessage));
     }
@@ -145,7 +199,8 @@ class ProjectWizard
         $selectedServices = [];
         foreach ($services as $name => $service) {
             if (in_array($name, $questionnable)) {
-                if ($this->io->confirm("Do you want the service <fg=yellow;options=bold>{$name}</>")) {
+                if ($this->isStandardMode() ||
+                    $this->io->confirm("Do you want the service <fg=yellow;options=bold>{$name}</>")) {
                     $selectedServices[] = $name;
                 }
             } else {
@@ -161,15 +216,18 @@ class ProjectWizard
      */
     protected function getNetworkName()
     {
-        $pattern = '^[a-zA-Z0-9]*$';
-
+        $default   = str_replace(['-', '_', '.'], '', strtolower(basename(getcwd())));
+        $pattern   = '^[a-zA-Z0-9]*$';
         $validator = function ($value) use ($pattern) {
             return preg_match("/{$pattern}/", $value);
         };
 
+        if ($validator($default) && $this->isStandardMode()) {
+            return $default;
+        }
+
         $message      = 'Please select a name for the containers <fg=yellow;options=bold>Docker Network</>';
         $errorMessage = "The name of the network MUST respect {$pattern}.";
-        $default      = strtolower(basename(getcwd()));
 
         return $this->io->askQuestion($this->getQuestion($message, $default, $validator, $errorMessage));
     }
@@ -179,6 +237,7 @@ class ProjectWizard
      */
     protected function getNetworkTCPPort()
     {
+        $default   = 42;
         $validator = function ($value) {
             if (($value > 0) && ($value <= 65)) {
                 $socket = @fsockopen('127.0.0.1', intval("{$value}080"), $errno, $errstr, 5);
@@ -194,9 +253,12 @@ class ProjectWizard
             return false;
         };
 
+        if ($validator($default) && $this->isStandardMode()) {
+            return $default;
+        }
+
         $message      = 'What is the <fg=yellow;options=bold>TCP Port Prefix</> you want?';
         $errorMessage = 'The TCP Port Prefix is not correct (already used or not between 1 and 65.';
-        $default      = 42;
 
         return (int) $this->io->askQuestion($this->getQuestion($message, $default, $validator, $errorMessage));
     }
@@ -225,5 +287,29 @@ class ProjectWizard
         }
 
         return $question;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isStandardMode()
+    {
+        return self::INIT_STD == $this->mode;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function requireComposerAuth()
+    {
+        return self::INIT_STD !== $this->mode;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isVerbose()
+    {
+        return $this->io->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE;
     }
 }
