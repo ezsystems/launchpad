@@ -304,12 +304,4 @@ END;
     {
         return self::INIT_STD !== $this->mode;
     }
-
-    /**
-     * @return bool
-     */
-    protected function isVerbose()
-    {
-        return $this->io->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE;
-    }
 }
