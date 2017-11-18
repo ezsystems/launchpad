@@ -7,7 +7,6 @@
 namespace eZ\Launchpad\Core;
 
 use eZ\Launchpad\Configuration\Project as ProjectConfiguration;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
