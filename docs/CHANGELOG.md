@@ -2,6 +2,12 @@
 
 ## CHANGELOG
 
+### 1.2.0 
+
+- use Redis for Session for Platform.sh configuration by default
+- Wizard Simplification, to remove the questions in 'standard' mode
+- Fix TCP port mapping with Memached Admin
+
 ### 1.1.0 
 
 - ezplatform-http-cache is enabled when not loaded
