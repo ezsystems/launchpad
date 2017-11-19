@@ -94,7 +94,7 @@ services:
         environment:
             - "MEMCACHE_HOST=memcache"
         ports:
-            - "${PROJECTPORTPREFIX}083:8080"
+            - "${PROJECTPORTPREFIX}083:9083"
 
     # Blackfire
     blackfire:
