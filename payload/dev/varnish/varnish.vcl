@@ -8,7 +8,6 @@
 // - https://github.com/varnish/varnish-modules/blob/master/docs/vmod_xkey.rst
 // - https://www.varnish-cache.org/docs/trunk/users-guide/vcl.html
 //
-// Make sure to at least adjust default parameters.yml, defaults there reflect our testing needs with docker.
 
 vcl 4.0;
 import std;
