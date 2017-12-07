@@ -115,18 +115,23 @@ class ProjectStatusDumper
             );
         };
         $this->io->title('Service Access');
+
+        $adminURI = "/ez";
+        if ($this->dockerClient->isEzPlatform2x()) {
+            $adminURI = "/admin";
+        }
         $services = $this->projectConfiguration->getDockerCompose()->getServices();
         if (isset($services['nginx'])) {
             $this->io->section('Project Web Access');
             $dump('Nginx - Front-end (Development Mode)', '080');
-            $dump('Nginx - Back-end (Development Mode)', '080', '/ez');
+            $dump('Nginx - Back-end (Development Mode)', '080', $adminURI);
 
             if (isset($services['varnish'])) {
                 $dump('Varnish - Front-end (Production Mode)', '082');
-                $dump('Varnish - Back-end (Production Mode)', '082', '/ez');
+                $dump('Varnish - Back-end (Production Mode)', '082', $adminURI);
             } else {
                 $dump('Nginx - Front-end (Production Mode)', '081');
-                $dump('Nginx - Back-end (Production Mode)', '081', '/ez');
+                $dump('Nginx - Back-end (Production Mode)', '081', $adminURI);
             }
         }
 
