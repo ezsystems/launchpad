@@ -50,6 +50,13 @@
     </div>
     <h2 id="installation"><i class="fa fa-magic" aria-hidden="true"></i> {{ "content.install.title"|trans|raw }}</h2>
     <div>
+        <p>Requirements:</p>
+        <ul>
+            <li>PHP and PHP-CURL extension. PHP version 5.6+ or 7+</li>
+            <li>Docker 1.17+</li>
+            <li>Docker Compose 1.16+</li>
+        </ul>
+
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
                 <a href="#installioncurl" aria-controls="installioncurl" role="tab" data-toggle="tab">curl</a>
@@ -87,7 +94,7 @@
         </div>
         <div id="blackfireexports" class="collapse">
             {{ CodeHelper.show(
-            "export BLACKFIRE_CLIENT_ID=xxxx-xxxx-xxxx-xxxx-xxxxx
+                "export BLACKFIRE_CLIENT_ID=xxxx-xxxx-xxxx-xxxx-xxxxx
 export BLACKFIRE_CLIENT_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 export BLACKFIRE_SERVER_ID=xxxx-xxxx-xxxx-xxxx-xxxxx
 export BLACKFIRE_SERVER_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx") }}
@@ -200,25 +207,9 @@ ezplatform/app/config/env/platformsh.php</code></pre>
         {{ CodeHelper.show("~/ez info") }}
         <p>{{ "content.stack.moreorlessservice"|trans|raw }}</p>
 
-        <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active">
-                <a href="#lempstack" aria-controls="lempstack" role="tab" data-toggle="tab">LEMP</a></li>
-            <li role="presentation">
-                <a href="#lampstack" aria-controls="lampstack" role="tab" data-toggle="tab">LAMP
-                    <small>(@todo?)</small>
-                </a></li>
-        </ul>
-        <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="lempstack">
-                <h3>LEMP: Linux Nginx Mysql/MariaDB PHP-FPM</h3>
-                <img src="images/puml/LEMP_architecture.png" class="img-responsive"/>
+        <h3>LEMP: Linux Nginx Mysql/MariaDB PHP-FPM</h3>
+        <img src="images/puml/LEMP_architecture.png" class="img-responsive"/>
 
-            </div>
-            <div role="tabpanel" class="tab-pane" id="lampstack">
-                <h3>LAMP: Linux Apache Mysql/MariaDB PHP(mod_php)</h3>
-                <img src="images/puml/LAMP_architecture.png" class="img-responsive"/>
-            </div>
-        </div>
     </div>
 
     <h2 id="commands"><i class="fa fa-terminal" aria-hidden="true"></i> {{ "content.commands.title"|trans|raw }}</h2>

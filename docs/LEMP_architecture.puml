@@ -1,6 +1,6 @@
 @startuml
 
-title "Development Mode - LEMP"
+title "Development Architecture - LEMP"
 
 cloud "Exposed Ports" {
     () XX080 as SymfonyDevModePort
