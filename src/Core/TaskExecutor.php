@@ -190,7 +190,7 @@ class TaskExecutor
      */
     public function runSymfomyCommand($arguments)
     {
-        $consolePath = $this->dockerClient->isEzPlatform2x() ? "bin/console" : "app/console";
+        $consolePath = $this->dockerClient->isEzPlatform2x() ? 'bin/console' : 'app/console';
 
         return $this->execute("ezplatform/{$consolePath} {$arguments}");
     }

@@ -1,0 +1,181 @@
+{
+    "info": {
+        "name": "eZ Launchpad",
+        "_postman_id": "8c9b1b7c-3cab-0d63-5514-e4712892b3de",
+        "description": "A Collection to test that eZ Launchpad initialize correctly",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Load Home Page",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                            "tests[\"Page loaded\"] = responseBody.has(\"eZ Platform\");",
+                            "tests[\"Status code is 200\"] = responseCode.code === 200;"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "header": [],
+                "body": {},
+                "url": {
+                    "raw": "http://localhost:42080/",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "42080",
+                    "path": [
+                        ""
+                    ]
+                },
+                "description": ""
+            },
+            "response": []
+        },
+        {
+            "name": "Load Admin Page",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "19d338c4-e169-49b3-a383-766756df60ce",
+                        "type": "text/javascript",
+                        "exec": [
+                            "tests[\"Page loaded\"] = responseBody.has(\"eZ Platform\");",
+                            "tests[\"Page loaded 2\"] = responseBody.has(\"Login\");",
+                            "tests[\"Page loaded 3\"] = responseBody.has(\"Password\");",
+                            "tests[\"Page loaded 4\"] = responseBody.has(\"Username\");",
+                            "tests[\"Status code is 200\"] = responseCode.code === 200;"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "header": [],
+                "body": {},
+                "url": {
+                    "raw": "http://localhost:42080/admin/login",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "42080",
+                    "path": [
+                        "admin",
+                        "login"
+                    ]
+                },
+                "description": ""
+            },
+            "response": []
+        },
+        {
+            "name": "Admin Login Failure - DB Test",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                            "tests[\"Login Failed\"] = responseBody.has(\"Bad credentials\");",
+                            "tests[\"Status code is 200\"] = responseCode.code === 200;"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "formdata",
+                    "formdata": [
+                        {
+                            "key": "_username",
+                            "value": "Plopix",
+                            "description": "",
+                            "type": "text"
+                        },
+                        {
+                            "key": "_password",
+                            "value": "Novactive",
+                            "description": "",
+                            "type": "text"
+                        }
+                    ]
+                },
+                "url": {
+                    "raw": "http://localhost:42080/login_check",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "42080",
+                    "path": [
+                        "login_check"
+                    ]
+                },
+                "description": ""
+            },
+            "response": []
+        },
+        {
+            "name": "Admin Login OK - DB Test",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "77b2fdb8-241e-4ff2-a3b6-07700a40fe89",
+                        "type": "text/javascript",
+                        "exec": [
+                            "tests[\"Status code is 302\"] = responseCode.code === 302;",
+                            "tests[\"Login Success\"] = responseBody.has(\"/admin/\");"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "formdata",
+                    "formdata": [
+                        {
+                            "key": "_username",
+                            "value": "admin",
+                            "description": "",
+                            "type": "text"
+                        },
+                        {
+                            "key": "_password",
+                            "value": "publish",
+                            "description": "",
+                            "type": "text"
+                        }
+                    ]
+                },
+                "url": {
+                    "raw": "http://localhost:42080/admin/login_check",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "42080",
+                    "path": [
+                        "admin",
+                        "login_check"
+                    ]
+                },
+                "description": ""
+            },
+            "response": []
+        }
+    ]
+}

@@ -10,15 +10,21 @@ cache:
   - $HOME/.composer/cache
   - vendor
 
-matrix:
-  fast_finish: true
-  include:
-  - php: 5.6
-    env:
-    - EXECUTE_DEPLOYMENT=true
-  - php: 7
-  - php: 7.1
+php:
+  - 5.6
+  - 7.0
+  - 7.1
 
+env:
+  - TEST_COLLECTION=collection-1x.json EZVERSION=1.12.*
+  - TEST_COLLECTION=collection-2x.json EZVERSION=v2.0.0-beta2
+matrix:
+  include:
+    - php: 5.6
+      env: TEST_COLLECTION=collection-1x.json EZVERSION=1.12.* EXECUTE_DEPLOYMENT=true
+  exclude:
+    - php: 5.6
+      env: TEST_COLLECTION=collection-1x.json EZVERSION=1.12.*
 
 before_install:
 - if [[ $EXECUTE_DEPLOYMENT == 'true' && $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then openssl aes-256-cbc -K $encrypted_91e9470aafb9_key -iv $encrypted_91e9470aafb9_iv -in .travis/secrets.tar.enc -out .travis/secrets.tar -d; fi
@@ -35,9 +41,9 @@ script:
 - php vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php tests/Tests/
 - php vendor/bin/phpunit -c tests/ --exclude-group behat
 - php vendor/behat/behat/bin/behat -c tests/behat.yml
-- php bin/ez-prod init --no-interaction -vvv
+- php bin/ez-prod init $EZVERSION --no-interaction -vvv
 - php bin/ez-prod ps
-- travis_retry docker run --net=host -v $(pwd)/tests/postman:/etc/newman -t postman/newman_ubuntu1404 run collection.json
+- travis_retry docker run --net=host -v $(pwd)/tests/postman:/etc/newman -t postman/newman_ubuntu1404 run $TEST_COLLECTION
 
 after_success:
 - if [[ $EXECUTE_DEPLOYMENT == 'true' && $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then ./scripts/travis_deploy.bash ; fi

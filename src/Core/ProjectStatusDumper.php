@@ -116,9 +116,9 @@ class ProjectStatusDumper
         };
         $this->io->title('Service Access');
 
-        $adminURI = "/ez";
+        $adminURI = '/ez';
         if ($this->dockerClient->isEzPlatform2x()) {
-            $adminURI = "/admin";
+            $adminURI = '/admin';
         }
         $services = $this->projectConfiguration->getDockerCompose()->getServices();
         if (isset($services['nginx'])) {

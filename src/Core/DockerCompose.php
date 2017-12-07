@@ -129,7 +129,7 @@ class DockerCompose
                         }
                         if (!$this->hasService('memcache')) {
                             if (preg_match(
-                                '/(CUSTOM_CACHE_POOL|CACHE_HOST|CACHE_MEMCACHED_PORT)/',
+                                '/(CUSTOM_CACHE_POOL|CACHE_HOST|CACHE_POOL|CACHE_DSN|CACHE_MEMCACHED_PORT)/',
                                 $value
                             )) {
                                 return false;

@@ -7,6 +7,10 @@ use Symfony\Component\DependencyInjection\Loader;
 
 $config = new PlatformshConfig();
 
+if (!isset($config->project)) {
+    return;
+}
+
 if (isset($config->relationships['database'][0])) {
     $database = $config->relationships['database'][0];
     $container->setParameter('database_driver', 'pdo_'.$database['scheme']);
@@ -27,3 +31,9 @@ if (isset($config->relationships['cache'][0])) {
     $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../cache_pool'));
     $loader->load($pool.'.yml');
 }
+
+// Disable PHPStormPass
+$container->setParameter('ezdesign.phpstorm.enabled', false);
+
+
+// Sessions are in redis via PHP Config
