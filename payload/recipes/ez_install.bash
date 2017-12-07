@@ -14,15 +14,26 @@ echo "Installation eZ Platform ($REPO:$VERSION:$INIT_DATA) in the container"
 $COMPOSER create-project --no-interaction $REPO ezplatform $VERSION
 cp composer.phar ezplatform
 cd ezplatform
-$COMPOSER require ezsystems/ezplatform-http-cache
 
-# Add to the kernel if not loaded (anticipation here)
-if grep -q "EzSystemsPlatformHttpCacheBundle" app/AppKernel.php
-then
-    echo "EzSystemsPlatformHttpCacheBundle is already loaded."
+MAJOR_VERSION=`echo $VERSION | cut -c 1-2`
+if [[ "$MAJOR_VERSION" == "v2" || "$MAJOR_VERSION" == "2." ]]; then
+    echo "*********************************************************************"
+    echo "The (eventual) previous errors are NORMAL, 2.x is in BETA remember ;)"
+    echo "eZ Launchpad will take care of you, composer update is coming."
+    echo "*********************************************************************"
+    #@todo: remove that when beta is over
+    $COMPOSER update
 else
-    sed -i '/FOSHttpCacheBundle/a new EzSystems\\PlatformHttpCacheBundle\\EzSystemsPlatformHttpCacheBundle(),' app/AppKernel.php
-    echo "EzSystemsPlatformHttpCacheBundle added to the Kernel."
+    # Version 1.x
+    $COMPOSER require ezsystems/ezplatform-http-cache
+    # Add to the kernel if not loaded (anticipation here)
+    if grep -q "EzSystemsPlatformHttpCacheBundle" app/AppKernel.php
+    then
+        echo "EzSystemsPlatformHttpCacheBundle is already loaded."
+    else
+        sed -i '/FOSHttpCacheBundle/a new EzSystems\\PlatformHttpCacheBundle\\EzSystemsPlatformHttpCacheBundle(),' app/AppKernel.php
+        echo "EzSystemsPlatformHttpCacheBundle added to the Kernel."
+    fi
 fi
 
 # Do some cleaning

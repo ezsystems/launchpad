@@ -7,6 +7,7 @@
 namespace eZ\Launchpad\Core\Client;
 
 use eZ\Launchpad\Core\ProcessRunner;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Process\Process;
 
@@ -89,6 +90,16 @@ class Docker
     protected function getProjectPath()
     {
         return $this->options['project-path'];
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEzPlatform2x()
+    {
+        $fs = new Filesystem();
+
+        return $fs->exists("{$this->getProjectPath()}/ezplatform/bin/console");
     }
 
     /**

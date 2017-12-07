@@ -1,0 +1,81 @@
+{
+    "info": {
+        "name": "eZ Launchpad",
+        "_postman_id": "8c9b1b7c-3cab-0d63-5514-e4712892b3de",
+        "description": "A Collection to test that eZ Launchpad initialize correctly",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Load Home Page",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                            "tests[\"Page loaded\"] = responseBody.has(\"eZ Platform\");",
+                            "tests[\"Status code is 200\"] = responseCode.code === 200;"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "header": [],
+                "body": {},
+                "url": {
+                    "raw": "http://localhost:42080/",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "42080",
+                    "path": [
+                        ""
+                    ]
+                },
+                "description": ""
+            },
+            "response": []
+        },
+        {
+            "name": "Load Admin Page",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "19d338c4-e169-49b3-a383-766756df60ce",
+                        "type": "text/javascript",
+                        "exec": [
+                            "tests[\"Page loaded\"] = responseBody.has(\"eZ Platform\");",
+                            "tests[\"Page loaded 2\"] = responseBody.has(\"Login\");",
+                            "tests[\"Page loaded 3\"] = responseBody.has(\"Password\");",
+                            "tests[\"Page loaded 4\"] = responseBody.has(\"Username\");",
+                            "tests[\"Status code is 200\"] = responseCode.code === 200;"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "header": [],
+                "body": {},
+                "url": {
+                    "raw": "http://localhost:42080/admin/login",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "42080",
+                    "path": [
+                        "admin",
+                        "login"
+                    ]
+                },
+                "description": ""
+            },
+            "response": []
+        }
+    ]
+}

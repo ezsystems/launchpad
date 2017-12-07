@@ -2,6 +2,14 @@
 
 ## CHANGELOG
 
+### 1.3.0
+
+- First version ready for 2.x with the new directory structure 
+
+### 1.2.1 
+
+- Apply EZP-28183 change
+
 ### 1.2.0 
 
 - use Redis for Session for Platform.sh configuration by default

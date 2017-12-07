@@ -17,7 +17,8 @@
     "files": [
         "LICENSE",
         "payload/dev/solr/.gitignore",
-        "payload/platformsh/.platform.app.yaml"
+        "payload/platformsh/.platform.app-1x.yaml",
+        "payload/platformsh/.platform.app-2x.yaml"
     ],
     "finder": [
         {
@@ -29,7 +30,7 @@
             "in": "vendor"
         }
     ],
-    "git-commit": "package_version",
+    "git-version": "package_version",
     "main": "bin/ez-prod",
     "key": ".travis/ezlaunchpad-private.pem",
     "output": "ez.phar",
