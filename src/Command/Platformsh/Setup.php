@@ -65,7 +65,19 @@ class Setup extends DockerCommand
 
         // put the files in places
         $fs->mirror("{$this->getPayloadDir()}/platformsh/.platform", "{$this->projectPath}/.platform");
-        $fs->copy("{$this->getPayloadDir()}/platformsh/.platform.app.yaml", "{$this->projectPath}/.platform.app.yaml");
+
+        if ($this->dockerClient->isEzPlatform2x()) {
+            $fs->copy(
+                "{$this->getPayloadDir()}/platformsh/.platform.app-2x.yaml",
+                "{$this->projectPath}/.platform.app.yaml"
+            );
+        } else {
+            $fs->copy(
+                "{$this->getPayloadDir()}/platformsh/.platform.app-1x.yaml",
+                "{$this->projectPath}/.platform.app.yaml"
+            );
+        }
+
         $provisioningName   = $this->projectConfiguration->get('provisioning.folder_name');
         $provisioningFolder = "{$this->projectPath}/{$provisioningName}";
         $fs->copy(

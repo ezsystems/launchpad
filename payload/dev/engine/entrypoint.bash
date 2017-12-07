@@ -17,9 +17,17 @@ mkdir -p /var/www/.composer && chown www-data:www-data /var/www/.composer
 chown www-data:www-data $PROJECTMAPPINGFOLDER
 
 # give the good permissions to www-data in the container
+# 1.x
 if [ -d $PROJECTMAPPINGFOLDER/ezplatform/app/cache ]; then
     chown -R www-data:www-data $PROJECTMAPPINGFOLDER/ezplatform/app/cache
     chown -R www-data:www-data $PROJECTMAPPINGFOLDER/ezplatform/app/logs
+    chown -R www-data:www-data $PROJECTMAPPINGFOLDER/ezplatform/web
+fi
+
+# 2.x
+if [ -d $PROJECTMAPPINGFOLDER/ezplatform/var/cache ]; then
+    chown -R www-data:www-data $PROJECTMAPPINGFOLDER/ezplatform/var/cache
+    chown -R www-data:www-data $PROJECTMAPPINGFOLDER/ezplatform/var/logs
     chown -R www-data:www-data $PROJECTMAPPINGFOLDER/ezplatform/web
 fi
 

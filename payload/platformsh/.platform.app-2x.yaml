@@ -1,4 +1,4 @@
-# eZ Launchpad - Platform.sh file boilerplate - 6/10/2017
+# eZ Launchpad - Platform.sh file boilerplate - ez-2.x
 
 # This file describes an application. You can have multiple applications
 # in the same project.
@@ -40,8 +40,8 @@ disk: 2048
 
 # The mounts that will be performed when the package is deployed.
 mounts:
-    "/ezplatform/app/cache": "shared:files/cache"
-    "/ezplatform/app/logs": "shared:files/logs"
+    "/ezplatform/var/cache": "shared:files/cache"
+    "/ezplatform/var/logs": "shared:files/logs"
     "/ezplatform/web/var": "shared:files/files"
 
 # The hooks that will be performed when the package is deployed.
@@ -50,9 +50,6 @@ hooks:
         set -e
         cd ezplatform
         CONSOLE="bin/console"
-        if [ -f app/console ]; then
-            CONSOLE="app/console"
-        fi
         composer install --no-dev --prefer-dist --no-progress --no-interaction --optimize-autoloader
         rm web/app_dev.php
         php -d memory_limit=-1 -d max_execution_time=3600 $CONSOLE --env=prod assetic:dump
@@ -68,9 +65,6 @@ hooks:
         fi
         cd /app/ezplatform
         CONSOLE="bin/console"
-        if [ -f app/console ]; then
-            CONSOLE="app/console"
-        fi
         php $CONSOLE --env=prod cache:clear
 
 # The configuration of scheduled execution.
