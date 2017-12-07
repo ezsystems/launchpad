@@ -83,10 +83,11 @@
                 {
                     "listen": "test",
                     "script": {
+                        "id": "cdc5f6e6-d02e-4b0f-915d-aa9b4baa229e",
                         "type": "text/javascript",
                         "exec": [
-                            "tests[\"Login Failed\"] = responseBody.has(\"Bad credentials\");",
-                            "tests[\"Status code is 200\"] = responseCode.code === 200;"
+                            "tests[\"Status code is 302\"] = responseCode.code === 302;",
+                            "tests[\"Login failed\"] = responseBody.has(\"/admin/login\");"
                         ]
                     }
                 }
@@ -112,13 +113,14 @@
                     ]
                 },
                 "url": {
-                    "raw": "http://localhost:42080/login_check",
+                    "raw": "http://localhost:42080/admin/login_check",
                     "protocol": "http",
                     "host": [
                         "localhost"
                     ],
                     "port": "42080",
                     "path": [
+                        "admin",
                         "login_check"
                     ]
                 },
@@ -132,11 +134,11 @@
                 {
                     "listen": "test",
                     "script": {
-                        "id": "77b2fdb8-241e-4ff2-a3b6-07700a40fe89",
+                        "id": "0ee8d9b1-8a84-44c0-9940-a5d98245bc6c",
                         "type": "text/javascript",
                         "exec": [
                             "tests[\"Status code is 302\"] = responseCode.code === 302;",
-                            "tests[\"Login Success\"] = responseBody.has(\"/admin/\");"
+                            "tests[\"Login Success\"] = !responseBody.has(\"/admin/login\");"
                         ]
                     }
                 }
