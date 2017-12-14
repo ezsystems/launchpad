@@ -33,6 +33,11 @@ zcat $DB_FILE_PATH | $MYSQL $DATABASE_NAME
 
 echo "Database imported."
 
+if [ ! -d ezplatform ]; then
+    echo "Not managed yet."
+    exit
+fi
+
 if [ -f $STORAGE_FILE_PATH ]; then
     if [ -d "ezplatform/web/var" ]; then
         rm -rf ezplatform/web/var

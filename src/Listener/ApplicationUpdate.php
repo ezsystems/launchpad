@@ -54,7 +54,10 @@ class ApplicationUpdate
 
         if (!in_array(
             $command->getName(),
-            ['list', 'help', 'test', 'docker:initialize', 'docker:create', 'self-update', 'rollback']
+            [
+                'list', 'help', 'test', 'docker:initialize:skeleton', 'docker:initialize', 'docker:create',
+                'self-update', 'rollback',
+            ]
         )
         ) {
             $fs                      = new Filesystem();

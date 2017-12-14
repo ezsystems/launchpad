@@ -7,6 +7,11 @@ COMPOSER="$PHP -d memory_limit=-1 composer.phar"
 REPO=$1
 VERSION=$2
 
+if [ ! -d ezplatform ]; then
+    echo "Not managed yet."
+    exit
+fi
+
 CONSOLE="bin/console"
 if [ -f ezplatform/app/console ]; then
     CONSOLE="app/console"
