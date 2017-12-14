@@ -44,7 +44,7 @@ script:
   - php vendor/behat/behat/bin/behat -c tests/behat.yml
   - php bin/ez-prod init ezsystems/ezplatform $EZVERSION --no-interaction -vvv
   - php bin/ez-prod ps
-  - travis_retry docker run --net=host -v $(pwd)/tests/postman:/etc/newman -t postman/newman_ubuntu1404 run $TEST_COLLECTION
+  - rm -rf var/cache && rm -rf app/cache && docker run --net=host -v $(pwd)/tests/postman:/etc/newman -t postman/newman_ubuntu1404 run $TEST_COLLECTION
 
 after_success:
   - if [[ $EXECUTE_DEPLOYMENT == 'true' && $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then ./scripts/travis_deploy.bash ; fi
