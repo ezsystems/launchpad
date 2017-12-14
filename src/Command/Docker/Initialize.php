@@ -67,17 +67,14 @@ class Initialize extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $fs = new Filesystem();
-        // get the boiler plate
-        // run it with few mount
+        $fs          = new Filesystem();
         $application = $this->getApplication();
         /* @var Application $application */
         $output->writeln($application->getLogo());
 
         // Get the Payload docker-compose.yml
         $compose = new DockerCompose("{$this->getPayloadDir()}/dev/docker-compose.yml");
-
-        $wizard = new ProjectWizard($this->io, $this->projectConfiguration);
+        $wizard  = new ProjectWizard($this->io, $this->projectConfiguration);
 
         // Ask the questions
         list(
@@ -116,7 +113,7 @@ END;
         $iniContent = file_get_contents($phpINIPath);
         $iniContent = str_replace(
             '##MEMCACHE_CONFIG##',
-            in_array('memcache', $selectedServices) ? $conf : '',
+            $compose->hasService('memcache') ? $conf : '',
             $iniContent
         );
 
@@ -126,19 +123,17 @@ sendmail_path = /usr/bin/env catchmail --smtp-ip mailcatcher --smtp-port 1025 -f
 END;
         $iniContent = str_replace(
             '##SENDMAIL_CONFIG##',
-            in_array('mailcatcher', $selectedServices) ? $conf : '',
+            $compose->hasService('mailcatcher') ? $conf : '',
             $iniContent
         );
         $fs->dumpFile($phpINIPath, $iniContent);
         unset($selectedServices);
 
+        // Clean the Compose File
+        $compose->removeUselessEnvironmentsVariables();
+
         // Get the Payload README.md
         $fs->copy("{$this->getPayloadDir()}/README.md", "{$provisioningFolder}/README.md");
-
-        $finalCompose = clone $compose;
-        $compose->cleanForInitialize();
-        // dump the temporary DockerCompose.yml without the mount and env vars in the provisioning folder
-        $compose->dump("{$provisioningFolder}/dev/{$composeFileName}");
 
         // create the local configurations
         $localConfigurations = [
@@ -157,7 +152,7 @@ END;
 
         $this->projectConfiguration->setMultiLocal($localConfigurations);
 
-        // Do the real installation
+        // Create the docker Client
         $options      = [
             'compose-file'             => "{$provisioningFolder}/dev/{$composeFileName}",
             'network-name'             => $networkName,
@@ -169,6 +164,47 @@ END;
         ];
         $dockerClient = new Docker($options, new ProcessRunner());
         $this->projectStatusDumper->setDockerClient($dockerClient);
+
+        // do the real work
+        $this->innerInitialize(
+            $dockerClient,
+            $compose,
+            "{$provisioningFolder}/dev/{$composeFileName}",
+            $input
+        );
+
+        // remove unused solr
+        if (!$compose->hasService('solr')) {
+            $fs->remove("{$provisioningFolder}/dev/solr");
+        }
+        // remove unused varnish
+        if (!$compose->hasService('varnish')) {
+            $fs->remove("{$provisioningFolder}/dev/varnish");
+        }
+
+        $this->projectConfiguration->setEnvironment('dev');
+        $this->projectStatusDumper->dump('ncsi');
+    }
+
+    /**
+     * @param Docker         $dockerClient
+     * @param DockerCompose  $compose
+     * @param string         $composeFilePath
+     * @param InputInterface $input
+     */
+    protected function innerInitialize(
+        Docker $dockerClient,
+        DockerCompose $compose,
+        $composeFilePath,
+        InputInterface $input
+    ) {
+        $tempCompose = clone $compose;
+        $tempCompose->cleanForInitialize();
+        // dump the temporary DockerCompose.yml without the mount and env vars in the provisioning folder
+        $tempCompose->dump($composeFilePath);
+        unset($tempCompose);
+
+        // Do the first pass to get eZ Platform and related files
         $dockerClient->build(['--no-cache']);
         $dockerClient->up(['-d']);
 
@@ -186,20 +222,16 @@ END;
         }
 
         $executor->eZInstall($input->getArgument('version'), $repository, $initialdata);
-        if ($finalCompose->hasService('solr')) {
+        if ($compose->hasService('solr')) {
             $executor->eZInstallSolr();
         }
-        $finalCompose->removeUselessEnvironmentsVariables();
-
-        $finalCompose->dump("{$provisioningFolder}/dev/{$composeFileName}");
+        $compose->dump($composeFilePath);
         $dockerClient->up(['-d']);
         $executor->composerInstall();
 
-        if ($finalCompose->hasService('solr')) {
+        if ($compose->hasService('solr')) {
             $executor->createCore();
             $executor->indexSolr();
         }
-        $this->projectConfiguration->setEnvironment('dev');
-        $this->projectStatusDumper->dump('ncsi');
     }
 }

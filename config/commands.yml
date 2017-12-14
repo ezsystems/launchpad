@@ -43,6 +43,10 @@ services:
         calls:
             - [setRequiredRecipes, [ [ 'composer_install', 'ez_install', 'ez_install_solr' ] ] ]
 
+    eZ\Launchpad\Command\Docker\InitializeSkeleton:
+        calls:
+            - [setRequiredRecipes, [ [ 'composer_install' ] ] ]
+
     eZ\Launchpad\Command\Docker\Create:
         calls:
             - [setRequiredRecipes, [ [ 'composer_install', 'ez_create', 'import_dump', 'ez_install_solr' ] ] ]

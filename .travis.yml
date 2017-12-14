@@ -17,7 +17,7 @@ php:
 
 env:
   - TEST_COLLECTION=collection-1x.json EZVERSION=1.12.*
-  - TEST_COLLECTION=collection-2x.json EZVERSION=v2.0.0-beta2
+  - TEST_COLLECTION=collection-2x.json EZVERSION=v2.0.0-beta3
 
 matrix:
   include:

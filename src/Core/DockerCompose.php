@@ -69,6 +69,28 @@ class DockerCompose
         $this->compose['services'] = $services;
     }
 
+    public function cleanForInitializeSkeleton()
+    {
+        $services = [];
+        foreach ($this->getServices() as $name => $service) {
+            // Solr is not managed here
+            if (in_array($name, ['solr'])) {
+                continue;
+            }
+
+            if (isset($service['volumes'])) {
+                $volumes            = NovaCollection($service['volumes']);
+                $service['volumes'] = $volumes->prune(
+                    function ($value) {
+                        return !preg_match('/ezplatform/', $value);
+                    }
+                )->toArray();
+            }
+            $services[$name] = $service;
+        }
+        $this->compose['services'] = $services;
+    }
+
     public function cleanForInitialize()
     {
         $services = [];
@@ -94,6 +116,8 @@ class DockerCompose
                             'CUSTOM_CACHE_POOL',
                             'CACHE_HOST',
                             'CACHE_MEMCACHED_PORT',
+                            'CACHE_POOL',
+                            'CACHE_DSN',
                             'SEARCH_ENGINE',
                             'SOLR_DSN',
                             'HTTPCACHE_PURGE_SERVER',
