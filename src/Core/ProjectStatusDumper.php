@@ -145,7 +145,7 @@ class ProjectStatusDumper
             $dump('Solr', '983');
         }
 
-        if (isset($services['mailcatcher']) || isset($services['adminer']) || isset($services['memcachedadmin'])) {
+        if (isset($services['mailcatcher']) || isset($services['adminer']) || isset($services['redisadmin'])) {
             $this->io->section('Tools');
             if (isset($services['mailcatcher'])) {
                 $dump('Mailcatcher', '180');
@@ -153,8 +153,8 @@ class ProjectStatusDumper
             if (isset($services['adminer'])) {
                 $dump('Adminer', '084');
             }
-            if (isset($services['memcachedadmin'])) {
-                $dump('Memcache Admin', '083');
+            if (isset($services['redisadmin'])) {
+                $dump('Redis Admin', '083');
             }
         }
     }

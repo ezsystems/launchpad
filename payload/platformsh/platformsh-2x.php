@@ -23,11 +23,11 @@ if (isset($config->relationships['database'][0])) {
 }
 
 if (isset($config->relationships['cache'][0])) {
-    $pool  = 'singlememcached';
+    $pool  = 'cache.redis';
     $cache = $config->relationships['cache'][0];
     $container->setParameter('cache_pool', $pool);
     $container->setParameter('cache_host', $cache['host']);
-    $container->setParameter('cache_memcached_port', $cache['port']);
+    $container->setParameter('cache_redis_port', $cache['port']);
     $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../cache_pool'));
     $loader->load($pool.'.yml');
 }

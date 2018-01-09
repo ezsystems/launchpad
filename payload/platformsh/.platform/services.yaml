@@ -1,7 +1,5 @@
 mysqldb:
     type: 'mysql:10.1'
     disk: 2048
-cache:
-    type: 'memcached:1.4'
 rediscache:
     type: 'redis:3.2'

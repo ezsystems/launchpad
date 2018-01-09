@@ -58,7 +58,7 @@ class Initialize extends Command
         $this->setName('docker:initialize')->setDescription('Initialize the project and all the services.');
         $this->setAliases(['docker:init', 'initialize', 'init']);
         $this->addArgument('repository', InputArgument::OPTIONAL, 'eZ Platform Repository', 'ezsystems/ezplatform');
-        $this->addArgument('version', InputArgument::OPTIONAL, 'eZ Platform Version', '1.12.*');
+        $this->addArgument('version', InputArgument::OPTIONAL, 'eZ Platform Version', '2.*');
         $this->addArgument('initialdata', InputArgument::OPTIONAL, 'eZ Platform Initial', 'clean');
     }
 
@@ -106,14 +106,14 @@ class Initialize extends Command
         // PHP.ini ADAPTATION
         $phpINIPath = "{$provisioningFolder}/dev/engine/php.ini";
         $conf       = <<<END
-; memcache configuration in dev 
-session.save_handler = memcached
-session.save_path = "memcache:11211?persistent=1&weight=1&timeout=1&retry_interval=15"
+; redis configuration in dev 
+session.save_handler = redis
+session.save_path = "tcp://redis:6379"
 END;
         $iniContent = file_get_contents($phpINIPath);
         $iniContent = str_replace(
-            '##MEMCACHE_CONFIG##',
-            $compose->hasService('memcache') ? $conf : '',
+            '##REDIS_CONFIG##',
+            $compose->hasService('redis') ? $conf : '',
             $iniContent
         );
 

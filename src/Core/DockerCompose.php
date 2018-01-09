@@ -115,12 +115,13 @@ class DockerCompose
                         $vars = [
                             'CUSTOM_CACHE_POOL',
                             'CACHE_HOST',
-                            'CACHE_MEMCACHED_PORT',
+                            'CACHE_REDIS_PORT',
                             'CACHE_POOL',
                             'CACHE_DSN',
                             'SEARCH_ENGINE',
                             'SOLR_DSN',
                             'HTTPCACHE_PURGE_SERVER',
+                            'SYMFONY_TMP_DIR',
                         ];
 
                         return !preg_match(
@@ -151,9 +152,9 @@ class DockerCompose
                                 return false;
                             }
                         }
-                        if (!$this->hasService('memcache')) {
+                        if (!$this->hasService('redis')) {
                             if (preg_match(
-                                '/(CUSTOM_CACHE_POOL|CACHE_HOST|CACHE_POOL|CACHE_DSN|CACHE_MEMCACHED_PORT)/',
+                                '/(CUSTOM_CACHE_POOL|CACHE_HOST|CACHE_POOL|CACHE_DSN|CACHE_REDIS_PORT)/',
                                 $value
                             )) {
                                 return false;

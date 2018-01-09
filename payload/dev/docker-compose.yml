@@ -35,14 +35,15 @@ services:
             - "DATABASE_PASSWORD=ezplatform"
             - "SYMFONY_SECRET=eZlaunchpad20Secret09Dev83ModeZ"
             - "DATABASE_HOST=db"
-            - "CUSTOM_CACHE_POOL=singlememcached"
-            - "CACHE_HOST=memcache"
-            - "CACHE_MEMCACHED_PORT=11211"
-            - "CACHE_POOL=cache.memcached"
-            - "CACHE_DSN=memcache:11211"
+            - "CUSTOM_CACHE_POOL=singleredis"
+            - "CACHE_HOST=redis"
+            - "CACHE_REDIS_PORT=6379"
+            - "CACHE_POOL=cache.redis"
+            - "CACHE_DSN=redis:6379"
             - "SEARCH_ENGINE=solr"
             - "SOLR_DSN=http://solr:8983/solr"
             - "HTTPCACHE_PURGE_SERVER=http://varnish:80"
+            - "SYMFONY_TMP_DIR=/tmp/ezplatormcache/"
     db:
         image: mariadb:10.1
         environment:
@@ -85,18 +86,18 @@ services:
         ports:
             - "${PROJECTPORTPREFIX}084:8080"
 
-    # MEMCACHE
-    memcache:
-        image: ilari/alpine-memcached
+    # REDIS
+    redis:
+        image: redis:latest
         depends_on:
             - engine
 
-    memcachedadmin:
-        image: plopix/docker-memcacheadmin
+    redisadmin:
+        image: rediscommander/redis-commander:latest
         environment:
-            - "MEMCACHE_HOST=memcache"
+            - "REDIS_HOSTS=local:redis:6379"
         ports:
-            - "${PROJECTPORTPREFIX}083:9083"
+            - "${PROJECTPORTPREFIX}083:8081"
 
     # Blackfire
     blackfire:

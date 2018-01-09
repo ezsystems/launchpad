@@ -58,7 +58,7 @@ class Setup extends DockerCommand
 
         // Install Tiny help for Platformsh (will be included soon in ezplatform)
         $this->taskExecutor->runComposerCommand(
-            'require platformsh/config-reader --no-interaction --no-scripts --optimize-autoloader --no-update'
+            'require platformsh/config-reader --no-interaction --no-scripts --optimize-autoloader'
         );
         // Dump the project
         $this->taskExecutor->dumpData();
@@ -66,17 +66,11 @@ class Setup extends DockerCommand
         // put the files in places
         $fs->mirror("{$this->getPayloadDir()}/platformsh/.platform", "{$this->projectPath}/.platform");
 
-        if ($this->dockerClient->isEzPlatform2x()) {
-            $fs->copy(
-                "{$this->getPayloadDir()}/platformsh/.platform.app-2x.yaml",
-                "{$this->projectPath}/.platform.app.yaml"
-            );
-        } else {
-            $fs->copy(
-                "{$this->getPayloadDir()}/platformsh/.platform.app-1x.yaml",
-                "{$this->projectPath}/.platform.app.yaml"
-            );
-        }
+        $fs->copy(
+            "{$this->getPayloadDir()}/platformsh/.platform.app-".($this->dockerClient->isEzPlatform2x() ? '2x' : '1x').
+            '.yaml',
+            "{$this->projectPath}/.platform.app.yaml"
+        );
 
         $provisioningName   = $this->projectConfiguration->get('provisioning.folder_name');
         $provisioningFolder = "{$this->projectPath}/{$provisioningName}";
@@ -86,12 +80,13 @@ class Setup extends DockerCommand
             true
         );
         $fs->copy(
-            "{$this->getPayloadDir()}/platformsh/clearmemcache.php",
-            "{$provisioningFolder}/platformsh/clearmemcache.php",
+            "{$this->getPayloadDir()}/platformsh/clearrediscache.php",
+            "{$provisioningFolder}/platformsh/clearrediscache.php",
             true
         );
         $fs->copy(
-            "{$this->getPayloadDir()}/platformsh/platformsh.php",
+            "{$this->getPayloadDir()}/platformsh/platformsh-".($this->dockerClient->isEzPlatform2x() ? '2x' : '1x').
+            '.php',
             "{$this->projectPath}/ezplatform/app/config/env/platformsh.php",
             true
         );
