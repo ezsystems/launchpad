@@ -109,9 +109,11 @@ class ProjectStatusDumper
      */
     protected function dumpDockerSyncCommand()
     {
-        $composeCommand = $this->dockerClient->getSyncClient()->getSyncCommand();
-        $this->io->title("\nDocker Sync command");
-        $this->io->writeln($composeCommand);
+        if ($this->dockerClient->hasSyncCient()) {
+            $composeCommand = $this->dockerClient->getSyncClient()->getSyncCommand();
+            $this->io->title("\nDocker Sync command");
+            $this->io->writeln($composeCommand);
+        }
     }
 
     /**

@@ -77,7 +77,7 @@ class D4M extends Optimizer implements OptimizerInterface
     public function hasPermission(SymfonyStyle $io)
     {
         list($export, $mountPoint) = $this->getHostMapping();
-        $exportLine = "{$export} -mapall=".getenv('USER').':staff localhost';
+        $exportLine                = "{$export} -mapall=".getenv('USER').':staff localhost';
 
         $io->caution('You are on Mac OS X, for optimal performance we recommend to mount the host through NFS.');
         $io->comment(
@@ -99,11 +99,11 @@ This wizard is going to check and to do this step if required:
      */
     public function optimize(SymfonyStyle $io, Command $command)
     {
-        $isD4MScreenExist = $this->isD4MScreenExist();
+        $isD4MScreenExist          = $this->isD4MScreenExist();
         list($export, $mountPoint) = $this->getHostMapping();
-        $isResvReady   = $this->isResvReady();
-        $isExportReady = $this->isExportReady($export);
-        $exportLine    = "{$export} -mapall=".getenv('USER').':staff localhost';
+        $isResvReady               = $this->isResvReady();
+        $isExportReady             = $this->isExportReady($export);
+        $exportLine                = "{$export} -mapall=".getenv('USER').':staff localhost';
 
         if (!$isResvReady) {
             exec('echo "nfs.server.mount.require_resv_port = 0" | sudo tee -a '.static::RESV, $output, $returnCode);

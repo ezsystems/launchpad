@@ -61,11 +61,11 @@ services:
             - nginx
 
     solr:
-        image: solr:6.4.2
+        image: solr:6.6.0
         volumes:
-            - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/solr:/ezsolr:rw"
             - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/solr/entrypoint.bash:/entrypoint.bash:ro"
-            - "${PROJECTCOMPOSEPATH}:${PROJECTMAPPINGFOLDER}:rw"
+        volumes_from:
+            - engine:rw
         ports:
             - "${PROJECTPORTPREFIX}983:8983"
         entrypoint: /entrypoint.bash

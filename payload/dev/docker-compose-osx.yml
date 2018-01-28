@@ -4,11 +4,6 @@ services:
         volumes:
             - "engine-vsync:${PROJECTMAPPINGFOLDER}:nocopy"
             - "solr-vsync:/ezsolr:nocopy"
-    solr:
-        volumes:
-            - "engine-vsync:${PROJECTMAPPINGFOLDER}:nocopy"
-            - "solr-vsync:/ezsolr:nocopy"
-
 volumes:
     engine-vsync:
         external: true
