@@ -215,7 +215,8 @@ END;
      */
     protected function getNetworkName()
     {
-        $default   = str_replace(['-', '_', '.'], '', strtolower(basename(getcwd())));
+        $name      = getenv('USER').basename(getcwd());
+        $default   = str_replace(['-', '_', '.'], '', strtolower($name));
         $pattern   = '^[a-zA-Z0-9]*$';
         $validator = function ($value) use ($pattern) {
             return preg_match("/{$pattern}/", $value);

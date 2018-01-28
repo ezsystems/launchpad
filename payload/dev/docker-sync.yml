@@ -1,0 +1,19 @@
+version: "2"
+options:
+  compose-file-path: '${PROVISIONINGFOLDERNAME}/dev/${COMPOSEFILE}'
+syncs:
+  sync_${PROJECTNETWORKNAME}_engine:
+    sync_strategy: 'native_osx'
+    src: './'
+    sync_userid: '501'
+    sync_excludes:
+        - '.DS_Store'
+        - '.idea'
+        - '.git/*'
+        - '.docker-sync'
+        - 'Makefile'
+
+  sync_${PROJECTNETWORKNAME}_solr:
+    sync_strategy: 'native_osx'
+    src: './provisioning/dev/solr'
+    sync_userid: '501'

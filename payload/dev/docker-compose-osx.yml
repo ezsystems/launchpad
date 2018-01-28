@@ -1,0 +1,18 @@
+version: '2.1'
+services:
+    engine:
+        volumes:
+            - "engine-vsync:${PROJECTMAPPINGFOLDER}:nocopy"
+            - "solr-vsync:/ezsolr:nocopy"
+    solr:
+        volumes:
+            - "engine-vsync:${PROJECTMAPPINGFOLDER}:nocopy"
+            - "solr-vsync:/ezsolr:nocopy"
+
+volumes:
+    engine-vsync:
+        external: true
+        name: sync_${PROJECTNETWORKNAME}_engine
+    solr-vsync:
+        external: true
+        name: sync_${PROJECTNETWORKNAME}_solr

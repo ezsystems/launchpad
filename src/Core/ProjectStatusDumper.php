@@ -74,6 +74,9 @@ class ProjectStatusDumper
         if ($options->contains('c')) {
             $this->dumpComposeCommand();
         }
+        if ($options->contains('z')) {
+            $this->dumpDockerSyncCommand();
+        }
         if ($options->contains('i')) {
             $this->dumpFirstTime();
         }
@@ -98,6 +101,16 @@ class ProjectStatusDumper
     {
         $composeCommand = $this->dockerClient->getComposeCommand();
         $this->io->title("\nDocker Compose command");
+        $this->io->writeln($composeCommand);
+    }
+
+    /**
+     * Dump Sync command.
+     */
+    protected function dumpDockerSyncCommand()
+    {
+        $composeCommand = $this->dockerClient->getSyncClient()->getSyncCommand();
+        $this->io->title("\nDocker Sync command");
         $this->io->writeln($composeCommand);
     }
 
