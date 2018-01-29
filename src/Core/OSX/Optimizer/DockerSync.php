@@ -87,6 +87,6 @@ This wizard is going to check and to do this step if required:
      */
     public function supports($version)
     {
-        return true;
+        return !D4M::isD4MScreenExist() && ($version >= 1712);
     }
 }

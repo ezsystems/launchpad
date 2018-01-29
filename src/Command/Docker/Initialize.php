@@ -230,6 +230,7 @@ END;
             $executor->eZInstallSolr();
         }
         $compose->dump($composeFilePath);
+
         $dockerClient->up(['-d']);
         $executor->composerInstall();
 

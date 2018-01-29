@@ -68,7 +68,7 @@ class D4M extends Optimizer implements OptimizerInterface
     {
         list($export, $mountPoint) = $this->getHostMapping();
 
-        return $this->isResvReady() && $this->isExportReady($export) && $this->isD4MScreenExist();
+        return $this->isResvReady() && $this->isExportReady($export) && self::isD4MScreenExist();
     }
 
     /**
@@ -99,7 +99,7 @@ This wizard is going to check and to do this step if required:
      */
     public function optimize(SymfonyStyle $io, Command $command)
     {
-        $isD4MScreenExist          = $this->isD4MScreenExist();
+        $isD4MScreenExist          = self::isD4MScreenExist();
         list($export, $mountPoint) = $this->getHostMapping();
         $isResvReady               = $this->isResvReady();
         $isExportReady             = $this->isExportReady($export);
@@ -146,7 +146,7 @@ This wizard is going to check and to do this step if required:
             exec($screen.' "'.$cmd.PHP_EOL.'"');
             sleep(5);
 
-            if (!$this->isD4MScreenExist()) {
+            if (!self::isD4MScreenExist()) {
                 throw new RuntimeException(
                     static::SCREEN_NAME.'screen failed to initiate. Mount point will not be ready.'
                 );
@@ -160,7 +160,7 @@ This wizard is going to check and to do this step if required:
     /**
      * @return bool
      */
-    protected function isD4MScreenExist()
+    public static function isD4MScreenExist()
     {
         exec('screen -list | grep -q "'.static::SCREEN_NAME.'";', $output, $return);
 
@@ -212,7 +212,7 @@ This wizard is going to check and to do this step if required:
                 $line = trim($line);
                 if (preg_match("/^nfs\.server\.mount\.require_resv_port/", $line)) {
                     if (strpos($line, '=')) {
-                        return '0' === (string) explode('=', $line)[1];
+                        return '0' == trim(explode('=', $line)[1]);
                     }
                 }
 
