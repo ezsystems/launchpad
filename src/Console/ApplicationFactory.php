@@ -21,14 +21,16 @@ class ApplicationFactory
     /**
      * Create the Application.
      *
-     * @param bool   $autoExit Default: true
-     * @param string $env      Default: prod
+     * @param bool   $autoExit        Default: true
+     * @param string $env             Default: prod
+     * @param string $operatingSystem Default: PHP_OS
      *
      * @return Application
      */
-    public static function create($autoExit = true, $env = 'prod')
+    public static function create($autoExit = true, $env = 'prod', $operatingSystem = PHP_OS)
     {
         define('EZ_HOME', getenv('HOME').'/.ezlaunchpad');
+        define('EZ_ON_OSX', 'Darwin' === $operatingSystem);
         $container = new ContainerBuilder();
         $container->addCompilerPass(new CommandPass($env));
         $container->addCompilerPass(new RegisterListenersPass());
@@ -39,7 +41,7 @@ class ApplicationFactory
         $application->setContainer($container);
         $application->setEnv($env);
         $application->setName('eZ Launchpad');
-        $application->setVersion('@package_version@'.(('prod' != $env) ? '-dev' : ''));
+        $application->setVersion('@package_version@'.(('prod' !== $env) ? '-dev' : ''));
         $application->setAutoExit($autoExit);
 
         return $application;

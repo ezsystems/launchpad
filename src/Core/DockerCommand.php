@@ -17,6 +17,8 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 abstract class DockerCommand extends Command
 {
+    use DockerSyncCommandTrait;
+
     /**
      * @var string
      */
@@ -38,6 +40,14 @@ abstract class DockerCommand extends Command
     protected function configure()
     {
         $this->addOption('env', 'env', InputOption::VALUE_REQUIRED, 'Docker Env', 'dev');
+    }
+
+    /**
+     * @return Docker
+     */
+    public function getDockerClient()
+    {
+        return $this->dockerClient;
     }
 
     /**
@@ -70,6 +80,7 @@ abstract class DockerCommand extends Command
         ];
 
         $this->dockerClient = new Docker($options, new ProcessRunner());
+        $this->dockerSyncClientConnect($this->dockerClient);
         $this->taskExecutor = new TaskExecutor(
             $this->dockerClient,
             $this->projectConfiguration,

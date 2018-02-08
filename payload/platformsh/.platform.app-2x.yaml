@@ -21,8 +21,7 @@ build:
 # side is in the form `<service name>:<endpoint name>`.
 relationships:
     database: "mysqldb:mysql"
-    cache: "cache:memcached"
-    redis: "rediscache:redis"
+    cache: "rediscache:redis"
 
 # The configuration of app when it is exposed to the web.
 web:
@@ -56,7 +55,7 @@ hooks:
 
     deploy: |
         set -e
-        php provisioning/platformsh/clearmemcache.php
+        php provisioning/platformsh/clearrediscache.php
         if [ ! -f ezplatform/web/var/.platform.installed ]; then
             MYSQL_OPTIONS=`php provisioning/platformsh/getmysqlcredentials.php`
             zcat data/ezplatform.sql.gz | mysql $MYSQL_OPTIONS
@@ -79,7 +78,6 @@ runtime:
         - xsl
         - imagick
         - readline
-        - memcached
         - msgpack
         - redis
 
@@ -87,4 +85,4 @@ variables:
     php:
         memory_limit: 256M
         session.save_handler: redis
-        session.save_path: "tcp://redis.internal:6379"
+        session.save_path: "tcp://cache.internal:6379"

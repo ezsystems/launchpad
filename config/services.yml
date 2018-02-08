@@ -13,11 +13,11 @@ services:
         tags:
             - { name: kernel.event_listener, event: console.command, method: onCommandAction }
 
-    ezlaunchpad_d4m.listener:
-        class: eZ\Launchpad\Listener\D4MListener
+    ezlaunchpad_osx.listener:
+        class: eZ\Launchpad\Listener\OSXListener
         arguments:
-            - {env: "%app_env%"}
-            - "@project_configuration"
+            - "@ezlaunchpad_d4m.osx.optimizer"
+            - "@ezlaunchpad_dsync.osx.optimizer"
         tags:
             - { name: kernel.event_listener, event: console.command, method: onCommandAction }
 
@@ -41,3 +41,18 @@ services:
         class: eZ\Launchpad\Core\ProjectStatusDumper
         arguments:
             - "@project_configuration"
+
+    # OSX OPTIMIZER
+
+    ezlaunchpad.osx.optimizer:
+        abstract: true
+        arguments:
+            - "@project_configuration"
+
+    ezlaunchpad_d4m.osx.optimizer:
+        class: eZ\Launchpad\Core\OSX\Optimizer\D4M
+        parent: "ezlaunchpad.osx.optimizer"
+
+    ezlaunchpad_dsync.osx.optimizer:
+        class: eZ\Launchpad\Core\OSX\Optimizer\DockerSync
+        parent: "ezlaunchpad.osx.optimizer"

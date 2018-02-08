@@ -28,7 +28,7 @@ class Context implements BaseContext
      */
     public function __construct()
     {
-        $this->tester = new ApplicationTester(ApplicationFactory::create(false, 'test'));
+        $this->tester = new ApplicationTester(ApplicationFactory::create(false, 'test', "Linux"));
     }
 
     /**

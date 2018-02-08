@@ -70,7 +70,7 @@ class TaskExecutor
         $httpBasics = $this->projectConfiguration->get('composer.http_basic');
         if (is_array($httpBasics)) {
             foreach ($httpBasics as $auth) {
-                if (!isset($auth['host']) || !isset($auth['login']) || !isset($auth['password'])) {
+                if (!isset($auth['host'], $auth['login'], $auth['password'])) {
                     continue;
                 }
                 $processes[] = $this->execute(
@@ -82,7 +82,7 @@ class TaskExecutor
         $tokens = $this->projectConfiguration->get('composer.token');
         if (is_array($tokens)) {
             foreach ($tokens as $auth) {
-                if (!isset($auth['host']) || !isset($auth['value'])) {
+                if (!isset($auth['host'], $auth['value'])) {
                     continue;
                 }
                 $processes[] = $this->execute(
@@ -218,6 +218,9 @@ class TaskExecutor
     protected function execute($command, $user = 'www-data', $service = 'engine')
     {
         $command = $this->dockerClient->getProjectPathContainer().'/'.$command;
+        if ($this->dockerClient->hasSyncCient()) {
+            sleep(2);
+        }
 
         return $this->dockerClient->exec($command, ['--user', $user], $service);
     }

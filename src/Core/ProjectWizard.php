@@ -67,7 +67,7 @@ class ProjectWizard
             $this->getComposerHttpBasicCredentials(),
             $this->getSelectedServices(
                 $compose->getServices(),
-                ['varnish', 'solr', 'mailcatcher', 'adminer', 'memcache', 'memcachedadmin']
+                ['varnish', 'solr', 'mailcatcher', 'adminer', 'redis', 'redisadmin']
             ),
             $this->getProvisioningFolderName(),
             $this->getComposeFileName(),
@@ -215,7 +215,8 @@ END;
      */
     protected function getNetworkName()
     {
-        $default   = str_replace(['-', '_', '.'], '', strtolower(basename(getcwd())));
+        $name      = getenv('USER').basename(getcwd());
+        $default   = str_replace(['-', '_', '.'], '', strtolower($name));
         $pattern   = '^[a-zA-Z0-9]*$';
         $validator = function ($value) use ($pattern) {
             return preg_match("/{$pattern}/", $value);

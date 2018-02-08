@@ -13,7 +13,8 @@ header:
         stack: "Stack"
         commands: "Commandes"
         more: "Plus"
-        d4m: "Mac OS X optimisations avec D4M"
+        d4m: "Mac OS X optimisations - D4M"
+        dockersync: "Mac OS X optimisations - Docker Sync"
         mac-tips: "Mac OS X - Astuces"
         global.configuration: "Configurations globales"
 
@@ -154,6 +155,20 @@ content:
             Alors vous devez ajouter cette configuration pour eZ Launchpad
         example.mounted.host_composer_cache_dir: >
             <em>host_composer_cache_dir</em> permettra lui de partager le cache Composer entre vos projets.
+
+    dockersync:
+        title: "Mac OS X optimizations avec Docker-Sync"
+        blurb: >
+            Pour partager des répertoires entre l'hôte(votre Mac) vers les containers
+            <em>Docker for Mac</em> est très lent.(au moins pour le moment).
+            Donc pour contourner ce problème de performance, <strong>il y a une technique</strong>.
+        workaround: >
+            Cette technique s'appelle <a href="http://docker-sync.io/">Docker Sync</a>.
+            Sans trop rentrer dans les détails, Docker Sync utilise un container externe et des volumes externes pour
+            synchroniser le host and les containers.
+        setup: >
+            Pour le faire fonctionner il faut installer Docker Sync sur le Mac. Ensuite vous devez dire oui quand
+            Launchpad vous demandera d'utiliser Docker Sync. Tout le reste est géré pour vous.
 
     mac-tips:
         title: Mac OS X - Astuces

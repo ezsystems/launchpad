@@ -74,6 +74,9 @@ class ProjectStatusDumper
         if ($options->contains('c')) {
             $this->dumpComposeCommand();
         }
+        if ($options->contains('z')) {
+            $this->dumpDockerSyncCommand();
+        }
         if ($options->contains('i')) {
             $this->dumpFirstTime();
         }
@@ -99,6 +102,18 @@ class ProjectStatusDumper
         $composeCommand = $this->dockerClient->getComposeCommand();
         $this->io->title("\nDocker Compose command");
         $this->io->writeln($composeCommand);
+    }
+
+    /**
+     * Dump Sync command.
+     */
+    protected function dumpDockerSyncCommand()
+    {
+        if ($this->dockerClient->hasSyncCient()) {
+            $composeCommand = $this->dockerClient->getSyncClient()->getSyncCommand();
+            $this->io->title("\nDocker Sync command");
+            $this->io->writeln($composeCommand);
+        }
     }
 
     /**
@@ -145,7 +160,7 @@ class ProjectStatusDumper
             $dump('Solr', '983');
         }
 
-        if (isset($services['mailcatcher']) || isset($services['adminer']) || isset($services['memcachedadmin'])) {
+        if (isset($services['mailcatcher']) || isset($services['adminer']) || isset($services['redisadmin'])) {
             $this->io->section('Tools');
             if (isset($services['mailcatcher'])) {
                 $dump('Mailcatcher', '180');
@@ -153,8 +168,8 @@ class ProjectStatusDumper
             if (isset($services['adminer'])) {
                 $dump('Adminer', '084');
             }
-            if (isset($services['memcachedadmin'])) {
-                $dump('Memcache Admin', '083');
+            if (isset($services['redisadmin'])) {
+                $dump('Redis Admin', '083');
             }
         }
     }

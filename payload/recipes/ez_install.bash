@@ -17,14 +17,7 @@ cd ezplatform
 
 MAJOR_VERSION=`echo $VERSION | cut -c 1-2`
 if [[ "$MAJOR_VERSION" == "v2" || "$MAJOR_VERSION" == "2." ]]; then
-    echo "*********************************************************************"
-    echo "The (eventual) previous errors are NORMAL, 2.x is in BETA remember ;)"
-    echo "eZ Launchpad will take care of you, composer update is coming."
-    echo "*********************************************************************"
-    #@todo: remove that when beta is over
-    rm -rf var/cache
-    $COMPOSER update
-    rm -rf var/cache
+    echo "2.x is on!"
 else
     # Version 1.x
     $COMPOSER require ezsystems/ezplatform-http-cache

@@ -27,6 +27,11 @@ class Docker
     protected $runner;
 
     /**
+     * @var DockerSync
+     */
+    protected $syncClient;
+
+    /**
      * Docker constructor.
      *
      * @param array         $options
@@ -56,8 +61,24 @@ class Docker
         $resolver->setAllowedTypes('network-prefix-port', 'int');
         $resolver->setAllowedTypes('host-machine-mapping', ['null', 'string']);
         $this->options = $resolver->resolve($options);
+        $this->runner  = $runner;
+    }
 
-        $this->runner = $runner;
+    /**
+     * Enabled the Docker Sync Client.
+     */
+    public function enabledDockerSyncClient()
+    {
+        if (EZ_ON_OSX) {
+            $this->syncClient = new DockerSync(
+                [
+                    'compose-file'             => $this->options['compose-file'],
+                    'network-name'             => $this->options['network-name'],
+                    'provisioning-folder-name' => $this->options['provisioning-folder-name'],
+                ],
+                $this->runner
+            );
+        }
     }
 
     /**
@@ -135,6 +156,22 @@ class Docker
     }
 
     /**
+     * @return DockerSync
+     */
+    public function getSyncClient()
+    {
+        return $this->syncClient;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasSyncCient()
+    {
+        return null !== $this->syncClient;
+    }
+
+    /**
      * @param string $service
      *
      * @return Process
@@ -145,22 +182,12 @@ class Docker
     }
 
     /**
-     * @param string $service
-     *
-     * @return Process
-     */
-    public function stop($service = '')
-    {
-        return $this->perform('stop', $service);
-    }
-
-    /**
      * @param array  $args
      * @param string $service
      *
      * @return Process
      */
-    public function build($args = [], $service = '')
+    public function build(array $args = [], $service = '')
     {
         return $this->perform('build', $service, $args);
     }
@@ -171,7 +198,7 @@ class Docker
      *
      * @return Process
      */
-    public function up($args = [], $service = '')
+    public function up(array $args = [], $service = '')
     {
         return $this->perform('up', $service, $args);
     }
@@ -182,19 +209,24 @@ class Docker
      *
      * @return Process
      */
-    public function remove($args = [], $service = '')
+    public function remove(array $args = [], $service = '')
     {
         return $this->perform('rm', $service, $args);
     }
 
     /**
-     * @param array $args
+     * @param string $service
      *
      * @return Process
      */
-    public function down($args = [])
+    public function stop($service = '')
     {
-        return $this->perform('down', '', $args);
+        $result = $this->perform('stop', $service);
+        if ($this->hasSyncCient()) {
+            $this->syncClient->stop();
+        }
+
+        return $result;
     }
 
     /**
@@ -202,7 +234,22 @@ class Docker
      *
      * @return Process
      */
-    public function ps($args = [])
+    public function down(array $args = [])
+    {
+        $result = $this->perform('down', '', $args);
+        if ($this->hasSyncCient()) {
+            $this->syncClient->clean();
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array $args
+     *
+     * @return Process
+     */
+    public function ps(array $args = [])
     {
         return $this->perform('ps', '', $args);
     }
@@ -213,7 +260,7 @@ class Docker
      *
      * @return Process
      */
-    public function logs($args = [], $service = '')
+    public function logs(array $args = [], $service = '')
     {
         return $this->perform('logs', $service, $args);
     }
@@ -224,22 +271,22 @@ class Docker
      *
      * @return Process
      */
-    public function pull($args = [], $service = '')
+    public function pull(array $args = [], $service = '')
     {
         return $this->perform('pull', $service, $args);
     }
 
     /**
-     * @param $command
-     * @param $args
-     * @param $service
+     * @param string $command
+     * @param array  $args
+     * @param string $service
      *
      * @return Process
      */
-    public function exec($command, $args, $service)
+    public function exec($command, array $args, $service)
     {
-        array_push($args, $service);
-        array_push($args, $command);
+        $args[] = $service;
+        $args[] = $command;
 
         return $this->perform('exec', '', $args);
     }
@@ -261,6 +308,7 @@ class Docker
 
         return
             [
+                'PROJECTNETWORKNAME'      => $this->getNetworkName(),
                 'PROJECTPORTPREFIX'       => $this->getNetworkPrefixPort(),
                 'PROJECTCOMPOSEPATH'      => $projectComposePath,
                 'PROVISIONINGFOLDERNAME'  => $this->getProvisioningFolderName(),
@@ -287,15 +335,33 @@ class Docker
      * @param string $action
      * @param string $service
      * @param array  $args
+     * @param false  $dryRun
      *
-     * @return Process
+     * @return Process|string
      */
-    protected function perform($action, $service = '', $args = [])
+    protected function perform($action, $service = '', array $args = [], $dryRun = false)
     {
-        $args    = implode(' ', $args);
-        $command = "docker-compose -p {$this->getNetworkName()} -f {$this->getComposeFileName()}";
+        if ($this->hasSyncCient() && !DockerSync::isOn()) {
+            $this->syncClient->start();
+        }
 
-        return $this->runner->run("{$command} {$action} {$args} {$service} ", $this->getComposeEnvVariables());
+        $stringArgs = implode(' ', $args);
+        $command    = "docker-compose -p {$this->getNetworkName()} -f {$this->getComposeFileName()}";
+        if ($this->hasSyncCient()) {
+            $osxExtension = str_replace('.yml', '-osx.yml', $this->getComposeFileName());
+            $fs           = new Filesystem();
+            if ($fs->exists($osxExtension)) {
+                $command .= " -f {$osxExtension}";
+            }
+        }
+
+        $fullCommand = trim("{$command} {$action} {$stringArgs} {$service} ");
+
+        if (false === $dryRun) {
+            return $this->runner->run($fullCommand, $this->getComposeEnvVariables());
+        }
+
+        return $fullCommand;
     }
 
     /**
@@ -311,8 +377,6 @@ class Docker
             }
         )->implode(' ');
 
-        $command = "docker-compose -p {$this->getNetworkName()} -f {$this->getComposeFileName()}";
-
-        return "{$prefix} {$command}";
+        return "{$prefix} ".$this->perform('', '', [], true);
     }
 }

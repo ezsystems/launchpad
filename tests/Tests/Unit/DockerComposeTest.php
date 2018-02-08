@@ -57,7 +57,7 @@ class DockerComposeTest extends TestCase
             }
             foreach ($service['environment'] as $env) {
                 $this->assertNotRegExp(
-                    "/(CUSTOM_CACHE_POOL|CACHE_HOST|CACHE_MEMCACHED_PORT|SEARCH_ENGINE|SOLR_DSN)/",
+                    "/(CUSTOM_CACHE_POOL|CACHE_HOST|CACHE_REDIS_PORT|SEARCH_ENGINE|SOLR_DSN)/",
                     $env
                 );
             }
@@ -68,16 +68,16 @@ class DockerComposeTest extends TestCase
     {
         return [
             [
-                ['engine', 'memcache'],
+                ['engine', 'redis'],
                 ['SEARCH_ENGINE', 'SOLR_DSN']
             ],
             [
                 ['engine', 'solr'],
-                ['CACHE_HOST', 'CACHE_MEMCACHED_PORT', 'CACHE_MEMCACHED_PORT']
+                ['CACHE_HOST', 'CACHE_REDIS_PORT', 'CACHE_REDIS_PORT']
             ],
             [
                 ['engine'],
-                ['CACHE_HOST', 'CACHE_MEMCACHED_PORT', 'CACHE_MEMCACHED_PORT', 'SEARCH_ENGINE', 'SOLR_DSN']
+                ['CACHE_HOST', 'CACHE_REDIS_PORT', 'CACHE_REDIS_PORT', 'SEARCH_ENGINE', 'SOLR_DSN']
             ]
         ];
     }

@@ -153,6 +153,7 @@ docker:
     public function getDockerClientEnvironmentVariables()
     {
         return [
+            'PROJECTNETWORKNAME'      => 'test',
             "PROJECTPORTPREFIX"       => 42,
             "PROJECTCOMPOSEPATH"      => "../../",
             "PROVISIONINGFOLDERNAME"  => "provisioning",

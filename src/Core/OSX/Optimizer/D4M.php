@@ -4,17 +4,18 @@
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
 
-namespace eZ\Launchpad\Listener;
+namespace eZ\Launchpad\Core\OSX\Optimizer;
 
-use eZ\Launchpad\Configuration\Project as ProjectConfiguration;
-use Symfony\Component\Console\Event\ConsoleCommandEvent;
+use eZ\Launchpad\Core\Client\DockerSync as DockerSyncClient;
+use eZ\Launchpad\Core\Command;
+use RuntimeException;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class D4MListener.
  */
-class D4MListener
+class D4M extends Optimizer implements OptimizerInterface
 {
     /**
      * File to set the NFS exports.
@@ -29,27 +30,6 @@ class D4MListener
     const SCREEN_NAME = 'd4m';
 
     /**
-     * @var array
-     */
-    protected $parameters;
-
-    /**
-     * @var ProjectConfiguration
-     */
-    protected $projectConfiguration;
-
-    /**
-     * ApplicationUpdate constructor.
-     *
-     * @param $configuration
-     */
-    public function __construct($parameters, ProjectConfiguration $configuration)
-    {
-        $this->parameters           = $parameters;
-        $this->projectConfiguration = $configuration;
-    }
-
-    /**
      * @param SymfonyStyle $io
      *
      * @return bool
@@ -58,9 +38,7 @@ class D4MListener
     {
         exec('sudo nfsd restart', $output, $returnCode);
         if (0 != $returnCode) {
-            $io->error('NFSD restart failed.');
-
-            return false;
+            throw new RuntimeException('NFSD restart failed.');
         }
         $io->success('NFSD restarted.');
 
@@ -84,47 +62,53 @@ class D4MListener
     }
 
     /**
-     * @param SymfonyStyle $io
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    protected function checkAndInstall(SymfonyStyle $io)
+    public function isEnabled()
     {
-        if (!$this->isDockerInstalled()) {
-            $io->error('You need to install Docker for Mac before to run that command.');
-
-            return false;
-        }
-
-        $isD4MScreenExist          = $this->isD4MScreenExist();
         list($export, $mountPoint) = $this->getHostMapping();
-        $isResvReady               = $this->isResvReady();
-        $isExportReady             = $this->isExportReady($export);
+
+        return $this->isResvReady() && $this->isExportReady($export) && self::isD4MScreenExist();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasPermission(SymfonyStyle $io)
+    {
+        list($export, $mountPoint) = $this->getHostMapping();
         $exportLine                = "{$export} -mapall=".getenv('USER').':staff localhost';
 
-        if (!$isResvReady || !$isExportReady || !$isD4MScreenExist) {
-            $io->caution('You are on Mac OS X, for optimal performance we recommend to mount the host through NFS.');
-            $io->comment(
-                "
-This wizard is going to:
+        $io->caution('You are on Mac OS X, for optimal performance we recommend to mount the host through NFS.');
+        $io->comment(
+            "
+This wizard is going to check and to do this step if required:
 - Add <comment>{$exportLine}</comment> in <comment>".static::EXPORTS.'</comment>
 - Add <comment>nfs.server.mount.require_resv_port = 0</comment> in <comment>'.static::RESV."</comment>
 - Add restart your nfsd server: <comment>nfsd restart</comment>
 - Communicate with the Docker Moby VM and add the mount point
     <comment>{$export}</comment> -> <comment>{$mountPoint}</comment>
             "
-            );
-            if (!$io->confirm('Do you want to setup your Mac as an NFS export?')) {
-                return true;
-            }
-        }
+        );
+
+        return $io->confirm('Do you want to setup your Mac as an NFS export?');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function optimize(SymfonyStyle $io, Command $command)
+    {
+        $isD4MScreenExist          = self::isD4MScreenExist();
+        list($export, $mountPoint) = $this->getHostMapping();
+        $isResvReady               = $this->isResvReady();
+        $isExportReady             = $this->isExportReady($export);
+        $exportLine                = "{$export} -mapall=".getenv('USER').':staff localhost';
 
         if (!$isResvReady) {
             exec('echo "nfs.server.mount.require_resv_port = 0" | sudo tee -a '.static::RESV, $output, $returnCode);
             if (0 != $returnCode) {
-                $io->error('Writing in '.static::RESV.' failed.');
-
-                return false;
+                throw new RuntimeException('Writing in '.static::RESV.' failed.');
             }
             $io->success(static::RESV.' updated.');
             if (!$this->restartNFSD($io)) {
@@ -135,14 +119,10 @@ This wizard is going to:
         if (!$isExportReady) {
             exec("echo \"{$exportLine}\" | sudo tee -a ".static::EXPORTS, $output, $returnCode);
             if (0 != $returnCode) {
-                $io->error('Writing in '.static::EXPORTS.' failed.');
-
-                return false;
+                throw new RuntimeException('Writing in '.static::EXPORTS.' failed.');
             }
             $io->success(static::EXPORTS.' updated.');
-            if (!$this->restartNFSD($io)) {
-                return false;
-            }
+            $this->restartNFSD($io);
         }
 
         if (!$isD4MScreenExist) {
@@ -166,19 +146,11 @@ This wizard is going to:
             exec($screen.' "'.$cmd.PHP_EOL.'"');
             sleep(5);
 
-            if (!$this->isD4MScreenExist()) {
-                $io->error(static::SCREEN_NAME.'screen failed to initiate. Mount point will not be ready.');
-
-                return false;
+            if (!self::isD4MScreenExist()) {
+                throw new RuntimeException(
+                    static::SCREEN_NAME.'screen failed to initiate. Mount point will not be ready.'
+                );
             }
-
-            //@todo: test the real mount point
-            // screen -r d4m
-            // mount
-            // we should have something like:
-            //192.168.65.1:/Users/plopix on /Users/plopix/ type nfs (rw,relatime,vers=3,rsize=65536,wsize=65536,namlen=255,hard,nolock,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=192.168.65.1,mountvers=3,mountproto=tcp,local_lock=all,addr=192.168.65.1)
-            // and not just /Users/plopix with osfs
-
             $io->success('Moby VM mount succeed.');
         }
 
@@ -186,35 +158,13 @@ This wizard is going to:
     }
 
     /**
-     * @param ConsoleCommandEvent $event
-     */
-    public function onCommandAction(ConsoleCommandEvent $event)
-    {
-        if ('Darwin' != php_uname('s')) {
-            return;
-        }
-        $command = $event->getCommand();
-        // don't bother for those command
-        if (in_array($command->getName(), ['self-update', 'rollback', 'list', 'help', 'test'])) {
-            return;
-        }
-        $success = $this->checkAndInstall(new SymfonyStyle($event->getInput(), $event->getOutput()));
-
-        if (!$success) {
-            $event->disableCommand();
-        }
-
-        return;
-    }
-
-    /**
      * @return bool
      */
-    protected function isD4MScreenExist()
+    public static function isD4MScreenExist()
     {
         exec('screen -list | grep -q "'.static::SCREEN_NAME.'";', $output, $return);
 
-        return 0 == $return;
+        return 0 === $return;
     }
 
     /**
@@ -224,7 +174,7 @@ This wizard is going to:
     {
         exec('which -s docker', $output, $return);
 
-        return 0 == $return;
+        return 0 === $return;
     }
 
     /**
@@ -242,7 +192,7 @@ This wizard is going to:
                 $export = addcslashes($export, '/.');
                 $line   = trim($line);
 
-                return 1 == preg_match("#^{$export}#", $line);
+                return 1 === preg_match("#^{$export}#", $line);
             }
         );
     }
@@ -262,12 +212,33 @@ This wizard is going to:
                 $line = trim($line);
                 if (preg_match("/^nfs\.server\.mount\.require_resv_port/", $line)) {
                     if (strpos($line, '=')) {
-                        return '0' == (string) explode('=', $line)[1];
+                        return '0' == trim(explode('=', $line)[1]);
                     }
                 }
 
                 return false;
             }
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function init(Command $command)
+    {
+        //nothing to do here.
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supports($version)
+    {
+        if (DockerSyncClient::isOn()) {
+            return false;
+        }
+
+        return $version < 1712;
     }
 }

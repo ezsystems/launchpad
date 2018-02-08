@@ -7,7 +7,7 @@ cloud "Exposed Ports" {
     () XX081 as SymfonyProdModePort
     () XX082 as SymfonyProdModeVarnishPort
 
-    () XX083 as MemcacheAdminPort
+    () XX083 as RedisAdminPort
     () XX983 as SorlPort
     () XX084 as DatabaseAdminPort
     () XX306 as DatabaseEnginePort
@@ -28,13 +28,13 @@ node "MySQL or MariaDB" as db {
     database "ezplatform" as StandardDB
 }
 
-node "Memcache/Redis" as appcache {
+node "Redis" as appcache {
 }
 
 node "Varnish 4.x" as varnish {
 }
 
-node "Memcache/Redis Admin" as memcacheadmin {
+node "Redis Admin" as redisadmin {
 }
 
 node "Mailcatcher" as mailcatcher {
@@ -46,10 +46,10 @@ node "Adminer" as dbadmin {
 node "Solr" as solr {
 }
 
-MemcacheAdminPort -> memcacheadmin: Web Interface
+RedisAdminPort -> redisadmin: Web Interface
 DatabaseEnginePort ---> db: TCP forward
 MailcatcherPort -> mailcatcher: Web Interface
-DatabaseAdminPort -> dbadmin: Web Interface
+DatabaseAdminPort --> dbadmin: Web Interface
 SorlPort -> solr
 
 SymfonyDevModePort --> DEV: Web
@@ -65,7 +65,7 @@ engine --> appcache
 engine --> mailcatcher
 engine ---> solr
 
-memcacheadmin --> appcache
-dbadmin --> db
+redisadmin --> appcache
+dbadmin ---> db
 
 @enduml

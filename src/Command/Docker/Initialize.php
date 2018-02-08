@@ -10,6 +10,7 @@ use eZ\Launchpad\Console\Application;
 use eZ\Launchpad\Core\Client\Docker;
 use eZ\Launchpad\Core\Command;
 use eZ\Launchpad\Core\DockerCompose;
+use eZ\Launchpad\Core\DockerSyncCommandTrait;
 use eZ\Launchpad\Core\ProcessRunner;
 use eZ\Launchpad\Core\ProjectStatusDumper;
 use eZ\Launchpad\Core\ProjectWizard;
@@ -24,6 +25,8 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class Initialize extends Command
 {
+    use DockerSyncCommandTrait;
+
     /**
      * @var ProjectStatusDumper
      */
@@ -58,7 +61,7 @@ class Initialize extends Command
         $this->setName('docker:initialize')->setDescription('Initialize the project and all the services.');
         $this->setAliases(['docker:init', 'initialize', 'init']);
         $this->addArgument('repository', InputArgument::OPTIONAL, 'eZ Platform Repository', 'ezsystems/ezplatform');
-        $this->addArgument('version', InputArgument::OPTIONAL, 'eZ Platform Version', '1.12.*');
+        $this->addArgument('version', InputArgument::OPTIONAL, 'eZ Platform Version', '2.*');
         $this->addArgument('initialdata', InputArgument::OPTIONAL, 'eZ Platform Initial', 'clean');
     }
 
@@ -106,14 +109,14 @@ class Initialize extends Command
         // PHP.ini ADAPTATION
         $phpINIPath = "{$provisioningFolder}/dev/engine/php.ini";
         $conf       = <<<END
-; memcache configuration in dev 
-session.save_handler = memcached
-session.save_path = "memcache:11211?persistent=1&weight=1&timeout=1&retry_interval=15"
+; redis configuration in dev 
+session.save_handler = redis
+session.save_path = "tcp://redis:6379"
 END;
         $iniContent = file_get_contents($phpINIPath);
         $iniContent = str_replace(
-            '##MEMCACHE_CONFIG##',
-            $compose->hasService('memcache') ? $conf : '',
+            '##REDIS_CONFIG##',
+            $compose->hasService('redis') ? $conf : '',
             $iniContent
         );
 
@@ -163,6 +166,7 @@ END;
             'composer-cache-dir'       => $this->projectConfiguration->get('docker.host_composer_cache_dir'),
         ];
         $dockerClient = new Docker($options, new ProcessRunner());
+        $this->dockerSyncClientConnect($dockerClient);
         $this->projectStatusDumper->setDockerClient($dockerClient);
 
         // do the real work
@@ -226,6 +230,7 @@ END;
             $executor->eZInstallSolr();
         }
         $compose->dump($composeFilePath);
+
         $dockerClient->up(['-d']);
         $executor->composerInstall();
 
