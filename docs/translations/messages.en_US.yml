@@ -14,6 +14,7 @@ header:
         commands: "Commands"
         more: "More"
         d4m: "Mac OS X optimizations with D4M"
+        dockersync: "Mac OS X optimizations with Docker Sync"
         mac-tips: "Mac OS X - Tips"
         global.configuration: "Global configurations"
 
@@ -29,7 +30,7 @@ content:
     intro:
         blurb: "An tool that will help you build an %ez% project on top of %docker% in less than 5 minutes."
         well: >
-            You will end up with a full <strong>Docker stack</strong>where the source-code
+            You will end up with a full <strong>Docker stack</strong> where the source-code
             is on your host for you <strong>to start coding</strong> right away!
 
     demo:
@@ -134,7 +135,7 @@ content:
         fileexample.description.dockersectionisnext: "<em>docker</em> section is described in the next section."
 
     d4m:
-        title: "Mac OS X optimizations with D4M"
+        title: "Mac OS X optimizations - D4M Approach"
         blurb: >
             When it comes to share folder from the Host(your mac) to containers
             <em>Docker for Mac</em> is slow. (at least for now).
@@ -153,6 +154,19 @@ content:
             Then you need to add this configuration for eZ Launchpad
         example.mounted.host_composer_cache_dir: >
             <em>host_composer_cache_dir</em> will allow you to share the composer cache for all your projects.
+
+    dockersync:
+        title: "Mac OS X optimizations - Docker-Sync Approach"
+        blurb: >
+            When it comes to share folder from the Host(your mac) to containers
+            <em>Docker for Mac</em> is slow. (at least for now).
+            Then to manage this performance issue, <strong>there is a workaround</strong>.
+        workaround: >
+            This workaround is called <a href="http://docker-sync.io/">Docker Sync</a>.
+            Without entering into the details, Docker Sync will use an external container and external volumes to sync host and containers.
+        setup: >
+            To make it work, you need to install Docker Sync on your Mac. Then you need to say yes to the wizard when
+            it will ask you to use the Docker Sync approach. That is it! Everything else is managed for you.
 
     mac-tips:
         title: Mac OS X - Tips

@@ -69,6 +69,7 @@
                     <ul class="dropdown-menu ezlp-submenu">
                         <li><a href="#stack">Stack</a></li>
                         <li><a href="#d4m">Mac OS X optimalisering med D4M</a></li>
+                        <li><a href="#docker-sync">Mac OS X optimizations with Docker Sync</a></li>
                         <li><a href="#mac-tips">Mac OS X - Tips</a></li>
                         <li><a href="#home">Global konfigurasjon</a></li>
                     </ul>
@@ -104,6 +105,19 @@
         <p><i class="fa fa-code" aria-hidden="true"></i> Du får en komplett <strong>Docker stack</strong> hvor kildekoden er på din lokale maskin. Alt klart så du kan <strong>starte å kode</strong> med det samme!
 </p>
     </div>
+
+    <div class="alert alert-danger" role="alert">
+        <p>
+            <i class="fa fa-apple" aria-hidden="true"></i> OSX Users: do not upgrade after
+            <em>Docker for Mac version 17.09.1-ce, build 19e2cf6</em><br/>
+                                                           With Docker for Mac 17.12 there are multiple issues with Mac OSX, referenced by the two approaches we are using to optimize
+                                                           performances on OSX. (<a href="https://github.com/IFSight/d4m-nfs/issues/55" target="_blank">d4m-nfs</a> and
+            <a href="https://github.com/docker/for-mac/issues/2417" target="_blank"> docker-sync</a>)<br/>
+                                                           If you did already, you can downgrade here:
+            <a href="https://download.docker.com/mac/stable/21090/Docker.dmg" target="_blank">Docker for Mac version 17.09</a>
+        </p>
+    </div>
+
 
     <h2 id="screencast"><i class="fa fa-play" aria-hidden="true"></i> Demo</h2>
     <div>
@@ -457,6 +471,18 @@ composer:
         <p><em>docker</em> er beskrevet i neste seksjon.</p>
 
     </div>
+
+    <h2 id="docker-sync"><i class="fa fa-refresh" aria-hidden="true"></i> Mac OS X optimizations - Docker-Sync Approach
+    </h2>
+    <div>
+        <p>When it comes to share folder from the Host(your mac) to containers <em>Docker for Mac</em> is slow. (at least for now). Then to manage this performance issue, <strong>there is a workaround</strong>.
+</p>
+        <p>This workaround is called <a href="http://docker-sync.io/">Docker Sync</a>. Without entering into the details, Docker Sync will use an external container and external volumes to sync host and containers.
+</p>
+        <p>To make it work, you need to install Docker Sync on your Mac. Then you need to say yes to the wizard when it will ask you to use the Docker Sync approach. That is it! Everything else is managed for you.
+</p>
+    </div>
+
     <h2 id="d4m"><i class="fa fa-space-shuttle" aria-hidden="true"></i> Mac OS X optimalisering med D4M</h2>
     <div>
         <p>Når det gjelder deling av mappe/filer fra din lokale Mac til Docker containere er <em>Docker for Mac</em> tregt. (ihvertfall foreløpig) For å håndtere dette ytelseseproblemet er det en <strong>midlertidig løsning</strong>.

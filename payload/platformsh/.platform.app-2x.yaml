@@ -85,4 +85,4 @@ variables:
     php:
         memory_limit: 256M
         session.save_handler: redis
-        session.save_path: "tcp://redis.internal:6379"
+        session.save_path: "tcp://cache.internal:6379"
