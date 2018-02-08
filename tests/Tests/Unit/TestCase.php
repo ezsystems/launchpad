@@ -169,6 +169,7 @@ docker:
             'DOCKER_HOST'             => getenv('DOCKER_HOST'),
             'DOCKER_CERT_PATH'        => getenv('DOCKER_CERT_PATH'),
             'DOCKER_TLS_VERIFY'       => getenv('DOCKER_TLS_VERIFY'),
+            'PATH'                    => getenv('PATH'),
         ];
     }
 }
