@@ -22,6 +22,7 @@ build:
 relationships:
     database: "mysqldb:mysql"
     cache: "rediscache:redis"
+    sessions: 'redissession:redis'
 
 # The configuration of app when it is exposed to the web.
 web:
@@ -42,16 +43,17 @@ mounts:
     "/ezplatform/var/cache": "shared:files/cache"
     "/ezplatform/var/logs": "shared:files/logs"
     "/ezplatform/web/var": "shared:files/files"
+    # Uncomment if you want to use DFS clustering:
+    #"/dfsdata": "shared:files/dfsdata"
 
 # The hooks that will be performed when the package is deployed.
 hooks:
     build: |
         set -e
         cd ezplatform
-        CONSOLE="bin/console"
         composer install --no-dev --prefer-dist --no-progress --no-interaction --optimize-autoloader
         rm web/app_dev.php
-        php -d memory_limit=-1 -d max_execution_time=3600 $CONSOLE --env=prod assetic:dump
+        php -d memory_limit=-1 -d max_execution_time=3600 bin/console assetic:dump
 
     deploy: |
         set -e
@@ -62,9 +64,9 @@ hooks:
             tar xvzf data/storage.tar.gz -C ezplatform/web/
             touch ezplatform/web/var/.platform.installed
         fi
-        cd /app/ezplatform
-        CONSOLE="bin/console"
-        php $CONSOLE --env=prod cache:clear
+        cd ezplatform
+        rm -Rf var/cache/$SYMFONY_ENV
+        bin/console cache:clear
 
 # The configuration of scheduled execution.
 # see http://symfony.com/doc/current/components/console/introduction.html
@@ -80,9 +82,23 @@ runtime:
         - readline
         - msgpack
         - redis
+        #- apcu
+        #- name: 'blackfire'
+        #  configuration:
+        #      server_id: 'xxxx-xxx-xxx-xxx-xxxx'
+        #      server_token: 'xxxx'
+
 
 variables:
     php:
         memory_limit: 256M
+        # framework -> session -> handler_id => in your config set to null will use default session handler from php.ini
         session.save_handler: redis
-        session.save_path: "tcp://cache.internal:6379"
+        session.save_path: "tcp://sessions.internal:6379"
+    env:
+        # For enterprise cluster, disable Symfony Proxy & instead use Fastly Bundle available on eZ Platform Enterprise
+        #SYMFONY_HTTP_CACHE: 0
+        # Change this to dev if you want to run site & commands in dev
+        SYMFONY_ENV: prod
+        # Uncomment if you want to use DFS clustering:
+        #PLATFORMSH_DFS_NFS_PATH: 'dfsdata'
