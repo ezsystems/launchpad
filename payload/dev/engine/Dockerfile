@@ -5,3 +5,7 @@ COPY entrypoint.bash /entrypoint.bash
 RUN chmod +x /entrypoint.bash
 ENTRYPOINT ["/entrypoint.bash"]
 CMD ["php-fpm"]
+
+ARG PROJECTMAPPINGFOLDER
+RUN mkdir -p ${PROJECTMAPPINGFOLDER}/ezplatform
+WORKDIR ${PROJECTMAPPINGFOLDER}/ezplatform
