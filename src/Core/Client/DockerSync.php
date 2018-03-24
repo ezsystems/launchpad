@@ -136,6 +136,7 @@ class DockerSync
                 'PROVISIONINGFOLDERNAME' => $this->getProvisioningFolderName(),
                 'COMPOSEFILE'            => $this->getComposeFileName(),
                 'HOME'                   => getenv('HOME'),
+                'PATH'                    => getenv('PATH')
             ];
     }
 
