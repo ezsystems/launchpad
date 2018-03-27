@@ -8,5 +8,7 @@ if [ ! -f /ezsolr/server/ez/solr.xml ]; then
     sed -i -e 's/<maxTime>${solr.autoSoftCommit.maxTime:-1}<\/maxTime>/<maxTime>${solr.autoSoftCommit.maxTime:20}<\/maxTime>/g' /ezsolr/server/ez/template/solrconfig.xml
 fi
 
+chmod 777 /ezsolr/server/ez/collection1
+
 /opt/solr/bin/solr -s /ezsolr/server/ez -f
 /opt/solr/bin/solr create_core -c collection1 -d /ezsolr/server/ez/template
