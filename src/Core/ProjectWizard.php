@@ -107,7 +107,7 @@ END;
         $credentials    = [];
         $endString      = '<fg=yellow;options=bold>Composer HTTP-BASIC</> for this project?';
         $questionString = 'Do you want to set '.$endString;
-        while ($this->io->confirm($questionString, $this->mode === self::INIT_STD_COMPOSER_AUTH)) {
+        while ($this->io->confirm($questionString, self::INIT_STD_COMPOSER_AUTH === $this->mode)) {
             list($host, $login, $password) = $this->getOneComposerHttpBasic();
 
             $credentials[]  = [$host, $login, $password];

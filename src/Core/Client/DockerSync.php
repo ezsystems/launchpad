@@ -132,11 +132,11 @@ class DockerSync
     {
         return
             [
-                'PROJECTNETWORKNAME'     => $this->getNetworkName(),
-                'PROVISIONINGFOLDERNAME' => $this->getProvisioningFolderName(),
-                'COMPOSEFILE'            => $this->getComposeFileName(),
-                'HOME'                   => getenv('HOME'),
-                'PATH'                    => getenv('PATH')
+                'PROJECTNETWORKNAME'      => $this->getNetworkName(),
+                'PROVISIONINGFOLDERNAME'  => $this->getProvisioningFolderName(),
+                'COMPOSEFILE'             => $this->getComposeFileName(),
+                'HOME'                    => getenv('HOME'),
+                'PATH'                    => getenv('PATH'),
             ];
     }
 
