@@ -22,16 +22,16 @@ class ProjectWizard
      */
     protected $projectConfiguration;
 
-    const INIT_STD              = 'standard';
-    const INIT_STD_COMPOER_AUTH = 'standard-with-composer-auth';
-    const INIT_EXPERT           = 'expert';
+    const INIT_STD               = 'standard';
+    const INIT_STD_COMPOSER_AUTH = 'standard-with-composer-auth';
+    const INIT_EXPERT            = 'expert';
 
     /**
      * @var array
      */
     protected static $modes = [
         self::INIT_STD,
-        self::INIT_STD_COMPOER_AUTH,
+        self::INIT_STD_COMPOSER_AUTH,
         self::INIT_EXPERT,
     ];
 
@@ -82,7 +82,7 @@ class ProjectWizard
     public function getInitializationMode()
     {
         $standard     = self::INIT_STD;
-        $withComposer = self::INIT_STD_COMPOER_AUTH;
+        $withComposer = self::INIT_STD_COMPOSER_AUTH;
         $expert       = self::INIT_EXPERT;
         $question     = <<<END
 eZ Launchpad will install a new architecture for you.
@@ -107,7 +107,7 @@ END;
         $credentials    = [];
         $endString      = '<fg=yellow;options=bold>Composer HTTP-BASIC</> for this project?';
         $questionString = 'Do you want to set '.$endString;
-        while ($this->io->confirm($questionString, false)) {
+        while ($this->io->confirm($questionString, $this->mode === self::INIT_STD_COMPOSER_AUTH)) {
             list($host, $login, $password) = $this->getOneComposerHttpBasic();
 
             $credentials[]  = [$host, $login, $password];
