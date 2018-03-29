@@ -152,7 +152,7 @@ class TaskExecutor
         $fs                  = new Filesystem();
         if ($fs->exists($ezSolrCollectionDir)) {
             $fs->mkdir("{$ezSolrCollectionDir}/data");
-            $fs->chmod("{$ezSolrCollectionDir}/data", 777);
+            $fs->chmod("{$ezSolrCollectionDir}/data", 0777);
         }
 
         return $this->execute(
