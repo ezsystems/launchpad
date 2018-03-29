@@ -16,20 +16,6 @@ cp composer.phar ezplatform
 cd ezplatform
 
 MAJOR_VERSION=`echo $VERSION | cut -c 1-2`
-if [[ "$MAJOR_VERSION" == "v2" || "$MAJOR_VERSION" == "2." ]]; then
-    echo "2.x is on!"
-else
-    # Version 1.x
-    $COMPOSER require ezsystems/ezplatform-http-cache
-    # Add to the kernel if not loaded (anticipation here)
-    if grep -q "EzSystemsPlatformHttpCacheBundle" app/AppKernel.php
-    then
-        echo "EzSystemsPlatformHttpCacheBundle is already loaded."
-    else
-        sed -i '/FOSHttpCacheBundle/a new EzSystems\\PlatformHttpCacheBundle\\EzSystemsPlatformHttpCacheBundle(),' app/AppKernel.php
-        echo "EzSystemsPlatformHttpCacheBundle added to the Kernel."
-    fi
-fi
 
 # Do some cleaning
 ## Files
