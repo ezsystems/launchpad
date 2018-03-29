@@ -66,7 +66,7 @@ class TaskExecutor
         $provisioningFolder  = $this->projectConfiguration->get('provisioning.folder_name');
         $ezSolrCollectionDir = "{$provisioningFolder}/dev/solr/server/ez/collection1";
         $fs                  = new Filesystem();
-        if (!$fs->exists($ezSolrCollectionDir)) {
+        if ($fs->exists($ezSolrCollectionDir)) {
             $fs->mkdir("{$ezSolrCollectionDir}/data");
             $fs->chmod("{$ezSolrCollectionDir}/data", 0777);
         }
