@@ -9,6 +9,7 @@ namespace eZ\Launchpad\Core;
 use eZ\Launchpad\Configuration\Project as ProjectConfiguration;
 use eZ\Launchpad\Core\Client\Docker as DockerClient;
 use Novactive\Collection\Collection;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
 /**
@@ -143,8 +144,19 @@ class TaskExecutor
         $recipe = 'ez_install_solr';
         $this->checkRecipeAvailability($recipe);
 
+        $provisioningFolder = $this->projectConfiguration->get('provisioning.folder_name');
+        // Fix a permissions issue with data/
+        // we ensure that Solr will be able to write on data/ which is owned by the user hosts
+        // @todo: find a way to do better
+        $ezSolrCollectionDir = "{$provisioningFolder}/dev/solr/server/ez/collection1";
+        $fs                  = new Filesystem();
+        if ($fs->exists($ezSolrCollectionDir)) {
+            $fs->mkdir("{$ezSolrCollectionDir}/data");
+            $fs->chmod("{$ezSolrCollectionDir}/data", 777);
+        }
+
         return $this->execute(
-            "{$recipe}.bash {$this->projectConfiguration->get('provisioning.folder_name')} CREATE_CORE",
+            "{$recipe}.bash {$provisioningFolder} CREATE_CORE",
             'solr',
             'solr'
         );

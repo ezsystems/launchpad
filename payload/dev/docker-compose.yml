@@ -60,7 +60,7 @@ services:
             - nginx
 
     solr:
-        image: solr:6.6.0
+        image: solr:6.6
         volumes:
             - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/solr/entrypoint.bash:/entrypoint.bash:ro"
         volumes_from:
@@ -71,6 +71,8 @@ services:
         depends_on:
             - engine
         environment:
+            - DEV_UID
+            - DEV_GID
             - PROJECTMAPPINGFOLDER
 
     # Mailcatcher
