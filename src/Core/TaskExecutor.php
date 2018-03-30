@@ -238,9 +238,6 @@ class TaskExecutor
     protected function execute($command, $user = 'www-data', $service = 'engine')
     {
         $command = $this->dockerClient->getProjectPathContainer().'/'.$command;
-        if ($this->dockerClient->hasSyncCient()) {
-            sleep(2);
-        }
 
         return $this->dockerClient->exec($command, ['--user', $user], $service);
     }

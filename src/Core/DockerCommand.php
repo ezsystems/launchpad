@@ -17,8 +17,6 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 abstract class DockerCommand extends Command
 {
-    use DockerSyncCommandTrait;
-
     /**
      * @var string
      */
@@ -80,7 +78,6 @@ abstract class DockerCommand extends Command
         ];
 
         $this->dockerClient = new Docker($options, new ProcessRunner());
-        $this->dockerSyncClientConnect($this->dockerClient);
         $this->taskExecutor = new TaskExecutor(
             $this->dockerClient,
             $this->projectConfiguration,

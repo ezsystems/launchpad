@@ -27,11 +27,6 @@ class Docker
     protected $runner;
 
     /**
-     * @var DockerSync
-     */
-    protected $syncClient;
-
-    /**
      * Docker constructor.
      *
      * @param array         $options
@@ -62,23 +57,6 @@ class Docker
         $resolver->setAllowedTypes('host-machine-mapping', ['null', 'string']);
         $this->options = $resolver->resolve($options);
         $this->runner  = $runner;
-    }
-
-    /**
-     * Enabled the Docker Sync Client.
-     */
-    public function enabledDockerSyncClient()
-    {
-        if (EZ_ON_OSX) {
-            $this->syncClient = new DockerSync(
-                [
-                    'compose-file'             => $this->options['compose-file'],
-                    'network-name'             => $this->options['network-name'],
-                    'provisioning-folder-name' => $this->options['provisioning-folder-name'],
-                ],
-                $this->runner
-            );
-        }
     }
 
     /**
@@ -156,22 +134,6 @@ class Docker
     }
 
     /**
-     * @return DockerSync
-     */
-    public function getSyncClient()
-    {
-        return $this->syncClient;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasSyncCient()
-    {
-        return null !== $this->syncClient;
-    }
-
-    /**
      * @param string $service
      *
      * @return Process
@@ -221,12 +183,7 @@ class Docker
      */
     public function stop($service = '')
     {
-        $result = $this->perform('stop', $service);
-        if ($this->hasSyncCient()) {
-            $this->syncClient->stop();
-        }
-
-        return $result;
+        return $this->perform('stop', $service);
     }
 
     /**
@@ -236,12 +193,7 @@ class Docker
      */
     public function down(array $args = [])
     {
-        $result = $this->perform('down', '', $args);
-        if ($this->hasSyncCient()) {
-            $this->syncClient->clean();
-        }
-
-        return $result;
+        return $this->perform('down', '', $args);
     }
 
     /**
@@ -342,19 +294,16 @@ class Docker
      */
     protected function perform($action, $service = '', array $args = [], $dryRun = false)
     {
-        if ($this->hasSyncCient() && !DockerSync::isOn()) {
-            $this->syncClient->start();
-        }
-
         $stringArgs = implode(' ', $args);
         $command    = "docker-compose -p {$this->getNetworkName()} -f {$this->getComposeFileName()}";
-        if ($this->hasSyncCient()) {
-            $osxExtension = str_replace('.yml', '-osx.yml', $this->getComposeFileName());
-            $fs           = new Filesystem();
-            if ($fs->exists($osxExtension)) {
-                $command .= " -f {$osxExtension}";
-            }
-        }
+
+        //@todo: don't do that when using D4m
+
+//            $osxExtension = str_replace('.yml', '-osx.yml', $this->getComposeFileName());
+//            $fs           = new Filesystem();
+//            if ($fs->exists($osxExtension)) {
+//                $command .= " -f {$osxExtension}";
+//            }
 
         $fullCommand = trim("{$command} {$action} {$stringArgs} {$service} ");
 

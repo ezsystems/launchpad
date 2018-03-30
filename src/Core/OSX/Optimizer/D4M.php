@@ -6,7 +6,6 @@
 
 namespace eZ\Launchpad\Core\OSX\Optimizer;
 
-use eZ\Launchpad\Core\Client\DockerSync as DockerSyncClient;
 use eZ\Launchpad\Core\Command;
 use RuntimeException;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -235,10 +234,6 @@ This wizard is going to check and to do this step if required:
      */
     public function supports($version)
     {
-        if (DockerSyncClient::isOn()) {
-            return false;
-        }
-
         return $version < 1712;
     }
 }

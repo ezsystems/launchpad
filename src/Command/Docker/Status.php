@@ -44,7 +44,7 @@ class Status extends DockerCommand
         $this->addArgument(
             'options',
             InputArgument::OPTIONAL,
-            'n: Docker Network, c: Docker Compose, s: Service Access, z: Docker Sync',
+            'n: Docker Network, c: Docker Compose, s: Service Access',
             'ncsz'
         );
     }

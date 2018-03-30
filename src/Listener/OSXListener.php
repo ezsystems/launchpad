@@ -8,7 +8,6 @@ namespace eZ\Launchpad\Listener;
 
 use eZ\Launchpad\Core\Command;
 use eZ\Launchpad\Core\OSX\Optimizer\D4M;
-use eZ\Launchpad\Core\OSX\Optimizer\DockerSync;
 use eZ\Launchpad\Core\OSX\Optimizer\OptimizerInterface;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -23,12 +22,11 @@ class OSXListener
     /**
      * OSXListener constructor.
      *
-     * @param D4M        $d4mOptimizer
-     * @param DockerSync $dockerSyncOptimizer
+     * @param D4M $d4mOptimizer
      */
-    public function __construct(D4M $d4mOptimizer, DockerSync $dockerSyncOptimizer)
+    public function __construct(D4M $d4mOptimizer)
     {
-        $this->optimizers = [$d4mOptimizer, $dockerSyncOptimizer];
+        $this->optimizers = [$d4mOptimizer];
     }
 
     /**
