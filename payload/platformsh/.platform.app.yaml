@@ -20,7 +20,7 @@ build:
 # to the application in the PLATFORM_RELATIONSHIPS variable. The right-hand
 # side is in the form `<service name>:<endpoint name>`.
 relationships:
-    database: "mysqldb:mysql"
+    database: "mysqldb:user"
     cache: "rediscache:redis"
     sessions: 'redissession:redis'
 
@@ -57,7 +57,6 @@ hooks:
 
     deploy: |
         set -e
-        php provisioning/platformsh/clearrediscache.php
         if [ ! -f ezplatform/web/var/.platform.installed ]; then
             MYSQL_OPTIONS=`php provisioning/platformsh/getmysqlcredentials.php`
             zcat data/ezplatform.sql.gz | mysql $MYSQL_OPTIONS
@@ -66,6 +65,7 @@ hooks:
         fi
         cd ezplatform
         rm -Rf var/cache/$SYMFONY_ENV
+        bin/console cache:pool:clear cache.redis
         bin/console cache:clear
 
 # The configuration of scheduled execution.
@@ -88,13 +88,9 @@ runtime:
         #      server_id: 'xxxx-xxx-xxx-xxx-xxxx'
         #      server_token: 'xxxx'
 
-
 variables:
     php:
         memory_limit: 256M
-        # framework -> session -> handler_id => in your config set to null will use default session handler from php.ini
-        session.save_handler: redis
-        session.save_path: "tcp://sessions.internal:6379"
     env:
         # For enterprise cluster, disable Symfony Proxy & instead use Fastly Bundle available on eZ Platform Enterprise
         #SYMFONY_HTTP_CACHE: 0

@@ -56,10 +56,6 @@ class Setup extends DockerCommand
             }
         }
 
-        // Install Tiny help for Platformsh (will be included soon in ezplatform)
-        $this->taskExecutor->runComposerCommand(
-            'require platformsh/config-reader --no-interaction --no-scripts --optimize-autoloader'
-        );
         // Dump the project
         $this->taskExecutor->dumpData();
 
@@ -67,8 +63,7 @@ class Setup extends DockerCommand
         $fs->mirror("{$this->getPayloadDir()}/platformsh/.platform", "{$this->projectPath}/.platform");
 
         $fs->copy(
-            "{$this->getPayloadDir()}/platformsh/.platform.app-".($this->dockerClient->isEzPlatform2x() ? '2x' : '1x').
-            '.yaml',
+            "{$this->getPayloadDir()}/platformsh/.platform.app.yaml",
             "{$this->projectPath}/.platform.app.yaml"
         );
 
@@ -77,17 +72,6 @@ class Setup extends DockerCommand
         $fs->copy(
             "{$this->getPayloadDir()}/platformsh/getmysqlcredentials.php",
             "{$provisioningFolder}/platformsh/getmysqlcredentials.php",
-            true
-        );
-        $fs->copy(
-            "{$this->getPayloadDir()}/platformsh/clearrediscache.php",
-            "{$provisioningFolder}/platformsh/clearrediscache.php",
-            true
-        );
-        $fs->copy(
-            "{$this->getPayloadDir()}/platformsh/platformsh-".($this->dockerClient->isEzPlatform2x() ? '2x' : '1x').
-            '.php',
-            "{$this->projectPath}/ezplatform/app/config/env/platformsh.php",
             true
         );
 
