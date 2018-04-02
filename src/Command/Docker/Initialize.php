@@ -162,7 +162,7 @@ END;
             'host-machine-mapping'     => $this->projectConfiguration->get('docker.host_machine_mapping'),
             'composer-cache-dir'       => $this->projectConfiguration->get('docker.host_composer_cache_dir'),
         ];
-        $dockerClient = new Docker($options, new ProcessRunner());
+        $dockerClient = new Docker($options, new ProcessRunner(), $this->optimizer);
         $this->projectStatusDumper->setDockerClient($dockerClient);
 
         // do the real work

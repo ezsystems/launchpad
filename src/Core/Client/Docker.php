@@ -6,6 +6,8 @@
 
 namespace eZ\Launchpad\Core\Client;
 
+use eZ\Launchpad\Core\OSX\Optimizer\NFSVolumes;
+use eZ\Launchpad\Core\OSX\Optimizer\OptimizerInterface;
 use eZ\Launchpad\Core\ProcessRunner;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -27,12 +29,18 @@ class Docker
     protected $runner;
 
     /**
+     * @var OptimizerInterface
+     */
+    protected $optimizer;
+
+    /**
      * Docker constructor.
      *
-     * @param array         $options
-     * @param ProcessRunner $runner
+     * @param array                   $options
+     * @param ProcessRunner           $runner
+     * @param OptimizerInterface|null $optimizer
      */
-    public function __construct($options, ProcessRunner $runner)
+    public function __construct($options, ProcessRunner $runner, OptimizerInterface $optimizer = null)
     {
         $resolver = new OptionsResolver();
         $defaults = [
@@ -55,8 +63,9 @@ class Docker
         $resolver->setAllowedTypes('provisioning-folder-name', 'string');
         $resolver->setAllowedTypes('network-prefix-port', 'int');
         $resolver->setAllowedTypes('host-machine-mapping', ['null', 'string']);
-        $this->options = $resolver->resolve($options);
-        $this->runner  = $runner;
+        $this->options   = $resolver->resolve($options);
+        $this->runner    = $runner;
+        $this->optimizer = $optimizer;
     }
 
     /**
@@ -297,14 +306,13 @@ class Docker
         $stringArgs = implode(' ', $args);
         $command    = "docker-compose -p {$this->getNetworkName()} -f {$this->getComposeFileName()}";
 
-        //@todo: don't do that when using D4m
-
-//            $osxExtension = str_replace('.yml', '-osx.yml', $this->getComposeFileName());
-//            $fs           = new Filesystem();
-//            if ($fs->exists($osxExtension)) {
-//                $command .= " -f {$osxExtension}";
-//            }
-
+        if ($this->optimizer instanceof NFSVolumes) {
+            $osxExtension = str_replace('.yml', '-osx.yml', $this->getComposeFileName());
+            $fs           = new Filesystem();
+            if ($fs->exists($osxExtension)) {
+                $command .= " -f {$osxExtension}";
+            }
+        }
         $fullCommand = trim("{$command} {$action} {$stringArgs} {$service} ");
 
         if (false === $dryRun) {

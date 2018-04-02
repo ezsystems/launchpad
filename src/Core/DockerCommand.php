@@ -77,7 +77,7 @@ abstract class DockerCommand extends Command
             'composer-cache-dir'       => $this->projectConfiguration->get('docker.host_composer_cache_dir'),
         ];
 
-        $this->dockerClient = new Docker($options, new ProcessRunner());
+        $this->dockerClient = new Docker($options, new ProcessRunner(), $this->optimizer);
         $this->taskExecutor = new TaskExecutor(
             $this->dockerClient,
             $this->projectConfiguration,

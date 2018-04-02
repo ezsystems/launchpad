@@ -2,12 +2,11 @@ version: '2.1'
 services:
     engine:
         volumes:
-            - "engine-vsync:${PROJECTMAPPINGFOLDER}:nocopy"
-            - "solr-vsync:/ezsolr:nocopy"
+            - "nfsmount:${PROJECTMAPPINGFOLDER}"
 volumes:
-    engine-vsync:
-        external: true
-        name: sync_${PROJECTNETWORKNAME}_engine
-    solr-vsync:
-        external: true
-        name: sync_${PROJECTNETWORKNAME}_solr
+  nfsmount:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=host.docker.internal,lock
+      device: ":${PROJECTCOMPOSEPATH}/"

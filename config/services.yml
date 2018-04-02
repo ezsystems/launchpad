@@ -17,6 +17,7 @@ services:
         class: eZ\Launchpad\Listener\OSXListener
         arguments:
             - "@ezlaunchpad_d4m.osx.optimizer"
+            - "@ezlaunchpad_nfsvolumes.osx.optimizer"
         tags:
             - { name: kernel.event_listener, event: console.command, method: onCommandAction }
 
@@ -52,4 +53,6 @@ services:
         class: eZ\Launchpad\Core\OSX\Optimizer\D4M
         parent: "ezlaunchpad.osx.optimizer"
 
-
+    ezlaunchpad_nfsvolumes.osx.optimizer:
+        class: eZ\Launchpad\Core\OSX\Optimizer\NFSVolumes
+        parent: "ezlaunchpad.osx.optimizer"
