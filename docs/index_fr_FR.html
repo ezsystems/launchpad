@@ -68,8 +68,6 @@
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu ezlp-submenu">
                         <li><a href="#stack">Stack</a></li>
-                        <li><a href="#d4m">Mac OS X optimisations - D4M</a></li>
-                        <li><a href="#docker-sync">Mac OS X optimisations - Docker Sync</a></li>
                         <li><a href="#mac-tips">Mac OS X - Astuces</a></li>
                         <li><a href="#home">Configurations globales</a></li>
                     </ul>
@@ -105,19 +103,6 @@
         <p><i class="fa fa-code" aria-hidden="true"></i> Vous aurez une <strong>stack Docker complète</strong> avec le code source sur l'hôte <strong>prêt à développer</strong> directement !
 </p>
     </div>
-
-    <div class="alert alert-danger" role="alert">
-        <p>
-            <i class="fa fa-apple" aria-hidden="true"></i> OSX Users: do not upgrade after
-            <em>Docker for Mac version 17.09.1-ce, build 19e2cf6</em><br/>
-                                                           With Docker for Mac 17.12 there are multiple issues with Mac OSX, referenced by the two approaches we are using to optimize
-                                                           performances on OSX. (<a href="https://github.com/IFSight/d4m-nfs/issues/55" target="_blank">d4m-nfs</a> and
-            <a href="https://github.com/docker/for-mac/issues/2417" target="_blank"> docker-sync</a>)<br/>
-                                                           If you did already, you can downgrade here:
-            <a href="https://download.docker.com/mac/stable/21090/Docker.dmg" target="_blank">Docker for Mac version 17.09</a>
-        </p>
-    </div>
-
 
     <h2 id="screencast"><i class="fa fa-play" aria-hidden="true"></i> Demonstration</h2>
     <div>
@@ -243,7 +228,7 @@ export BLACKFIRE_SERVER_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
                 <p>eZ Launchpad va vous accompagner dans la création avec quelques questions.</p>
                 <div class="alert alert-info" role="alert">
                     <p>
-                        <i class="fa fa-apple" aria-hidden="true"></i> Les utilisateurs de Mac OS X auront des questions spéciales pour installer <a href='#d4m' class='alert-link'>D4M</a>.
+                        <i class="fa fa-apple" aria-hidden="true"></i> Les utilisateurs de Mac OS X auront des questions spéciales pour installer <a href='#mac-tips' class='alert-link'>NFS</a>.
                     </p>
                 </div>
                 <p>A la fin de la procédure, cette étape auront été fait pour vous:</p>
@@ -472,92 +457,90 @@ composer:
 
     </div>
 
-    <h2 id="docker-sync"><i class="fa fa-refresh" aria-hidden="true"></i> Mac OS X optimizations avec Docker-Sync
-    </h2>
+    <h2 id="mac-tips"><i class="fa fa-apple" aria-hidden="true"></i> Mac OS X - Tips</h2>
     <div>
-        <p>Pour partager des répertoires entre l'hôte(votre Mac) vers les containers <em>Docker for Mac</em> est très lent.(au moins pour le moment). Donc pour contourner ce problème de performance, <strong>il y a une technique</strong>.
+        <p>Pour partager des répertoires entre l'hôte(votre Mac) vers les containers <em>Docker for Mac</em> est très lent.(au moins pour le moment). Donc pour contourner ce problème de performance, <strong>il y a une technique</strong>. NFS! C'est étrange en effet, mais oui NFS est bien plus rapide que le montage par défaut! Avant la dernière version de Docker pour Mac, nous utilisions <a href="https://github.com/IFSight/d4m-nfs">D4M</a> mais depuis la version 18.03 nous pouvons directement monter le host via un volume depuis le container.
 </p>
-        <p>Cette technique s'appelle <a href="http://docker-sync.io/">Docker Sync</a>. Sans trop rentrer dans les détails, Docker Sync utilise un container externe et des volumes externes pour synchroniser le host and les containers.
-</p>
-        <p>Pour le faire fonctionner il faut installer Docker Sync sur le Mac. Ensuite vous devez dire oui quand Launchpad vous demandera d'utiliser Docker Sync. Tout le reste est géré pour vous.
-</p>
-    </div>
 
-    <h2 id="d4m"><i class="fa fa-space-shuttle" aria-hidden="true"></i> Mac OS X optimisations avec D4M</h2>
-    <div>
-        <p>Pour partager des répertoires entre l'hôte(votre Mac) vers les containers <em>Docker for Mac</em> est très lent.(au moins pour le moment). Donc pour contourner ce problème de performance, <strong>il y a une technique</strong>.
-</p>
-        <p>Cette technique s'appelle <a href="https://github.com/IFSight/d4m-nfs">D4M</a>. Sans trop rentrer dans les détails, D4M utilise la MobbyVM qui fait touner le démon Docker du Mac et monte les répertoires via NFS.
-</p>
-        <p>Note: C'est étrange en effet, mais oui NFS est bien plus rapide que le montage par défaut!</p>
-        <p>Vous avez deux manières de configurer D4M:</p>
-        <ul>
-            <li>de manière transparente: alors il n'y a pas de configuration spéciale pour eZ Launchpad</li>
-            <li>en limitant le répertoire exporté: Dans ce cas vous devez avertir eZ Launchpad</li>
-        </ul>
+        <h3>Migrer depuis D4M-NFS</h3>
 
-        <p>Si vous n'etes pas en mode transparent, disons que vous avez exporté</p>
-
-        <div class="highlight">
-            <button class="to-clipboard">
-                <i class="fa fa-clipboard" aria-hidden="true"></i> Copier
-            </button>
-            <pre><code># /etc/exports
-/Users/bob/MyProjects -mapall=bob:staff localhost
-            </code></pre>
-        </div>
-
-        <p>Et donc vous avez monté ce répertoire dans <em>/data/MYPROJECTS</em> de la MobyVM (through D4M). Alors vous devez ajouter cette configuration pour eZ Launchpad
+        <p>D'abord vous devez ajouter une option a votre <strong>/ect/exports</strong>, le <strong>-alldirs</strong>
 </p>
         <div class="highlight">
             <button class="to-clipboard">
                 <i class="fa fa-clipboard" aria-hidden="true"></i> Copier
             </button>
-            <pre><code># ~/.ezlaunchpad/ez.yml
-docker:
-    host_machine_mapping: "/Users/bob/MyProjects:/data/MYPROJECTS"
-    host_composer_cache_dir: "/data/MYPROJECTS/.composer_cache"
-            </code></pre>
+            <pre>$ cat /etc/exports<code>
+/Users/plopix -mapall=plopix:staff -alldirs localhost</code></pre>
         </div>
-        <p><em>host_composer_cache_dir</em> permettra lui de partager le cache Composer entre vos projets.
+        <p>Ensuite vous devez mettre à jour la version de <em>docker-compose</em> dans votre fichier <strong>provisioning/dev/docker-compose.yml</strong> vers <strong>2.1</strong>. Ensuite vous devez créer un novueau fichier <strong>provisioning/dev/docker-compose-osx.yml</strong>. Avec ce contenu:
 </p>
-    </div>
-    <h2 id="mac-tips"><i class="fa fa-apple" aria-hidden="true"></i> Mac OS X - Astuces</h2>
-    <div>
-        <p>Même avec D4M et le partage NFS les performances peuvent être améliorées. Ce qui suit est clairement une astuce mais une astuce qui fonctionne parfaitement bien!<br /> Voici la technique dans votre kernel:
+        <div class="highlight">
+            <button class="to-clipboard">
+                <i class="fa fa-clipboard" aria-hidden="true"></i> Copier
+            </button>
+            <pre>$ cat provisioning/dev/docker-compose-osx.yml<code>
+version: '2.1'
+services:
+    engine:
+        volumes:
+            - "nfsmount:${PROJECTMAPPINGFOLDER}"
+volumes:
+  nfsmount:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=host.docker.internal,lock
+      device: ":${PROJECTCOMPOSEPATH}/"
+</code></pre>
+        </div>
+        <p>Une fois que c'est configuré, vous pouvez <strong>dumpdata</strong> (pour backuper), clean et re-create le projet:
+</p>
+        <div class="highlight">
+            <button class="to-clipboard">
+                <i class="fa fa-clipboard" aria-hidden="true"></i> Copier
+            </button>
+            <pre><code>$ ~/ez dumpdata; ~/ez clean; ~/ez create</code></pre>
+        </div>
+        <p>Si vous aviez un mapping special, corrigé le:
+</p>
+        <div class="highlight">
+            <button class="to-clipboard">
+                <i class="fa fa-clipboard" aria-hidden="true"></i> Copier
+            </button>
+            <pre><code>docker:
+        host_machine_mapping: "/Users/plopix:/Users/plopix"
+        host_composer_cache_dir: "/Users/plopix/.composer_cache</code></pre>
+        </div>
+
+        <p>C'est tout
+</p>
+
+        <h3>Le cache dans le container</h3>
+        <p>Même avec D4M et le partage NFS les performances peuvent être améliorées. Ce qui suit est clairement une astuce mais une astuce qui fonctionne parfaitement bien!<br /> Voici la technique dans votre env vous avez une ligne:
 </p>
 
         <div class="highlight">
             <button class="to-clipboard">
                 <i class="fa fa-clipboard" aria-hidden="true"></i> Copier
             </button>
-            <pre><code># ezplatform/app/AppKernel.php
-public function getCacheDir()
-    {
-        if ($this->getEnvironment() == "prod" && getenv("RUNNING_ENV") == "DOCKER") {
-            return '/tmp/cache/'.$this->environment;
-        }
-
-        // approach to optimize the cache in DEV
-        $generateCacheFile = $this->rootDir.'/cache/'.$this->environment."/created";
-        if (
-            (getenv("RUNNING_ENV") == "DOCKER") &&
-            ($this->getEnvironment() == "dev") &&
-            (file_exists($generateCacheFile)) &&
-            (filemtime($generateCacheFile) > (time() - 600))
-        ) {
-            return '/tmp/cache/'.$this->environment;
-        } else {
-            if (is_dir($this->rootDir.'/cache/'.$this->environment)) {
-                touch($generateCacheFile);
-            }
-        }
-
-        return $this->rootDir.'/cache/'.$this->environment;
-    }</code></pre>
+            <pre># provisioning/dev/docker-compose.yml<code>
+engine:
+    environment:
+        - "SYMFONY_TMP_DIR=/tmp/ezplatormcache/"</code></pre>
         </div>
-        <p>D'abord en mode "prod" on ne store pas le cache sur le host, donc c'est toujours rapide.<br /> Ensuite en mode "dev", on store le cache sur le host qu'une fois toute les 10min (pour avoir l'autocompletion avec votre PHPStorm!).</p>
+        <p>Si vous voulez que le cache soit généré sur votre host, pour PHPStorm par exemple, supprimer cette ligne:
+</p>
+        <div class="highlight">
+            <button class="to-clipboard">
+                <i class="fa fa-clipboard" aria-hidden="true"></i> Copier
+            </button>
+            <pre><code>$ ~/ez up; ~/ez stop; ~/ez start</code></pre>
+        </div>
     </div>
+
+
+    <p>Enjoy!</p>
 
     </div>
 

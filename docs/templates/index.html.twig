@@ -282,75 +282,81 @@ composer:
 
     </div>
 
-    <h2 id="d4m"><i class="fa fa-space-shuttle" aria-hidden="true"></i> {{ "content.d4m.title"|trans|raw }}</h2>
-    <div>
-        <p>{{ "content.d4m.blurb"|trans|raw }}</p>
-        <p>{{ "content.d4m.workaround"|trans|raw }}</p>
-        <p>{{ "content.d4m.nfsfaster"|trans|raw }}</p>
-        <p>{{ "content.d4m.setup"|trans|raw }}</p>
-        <ul>
-            <li>{{ "content.d4m.setup.1"|trans|raw }}</li>
-            <li>{{ "content.d4m.setup.2"|trans|raw }}</li>
-        </ul>
-
-        <p>{{ "content.d4m.example"|trans|raw }}</p>
-
-        <div class="highlight">
-            <button class="to-clipboard">
-                <i class="fa fa-clipboard" aria-hidden="true"></i> {{ "other.copy"|trans|raw }}
-            </button>
-            <pre><code># /etc/exports
-/Users/bob/MyProjects -mapall=bob:staff localhost
-            </code></pre>
-        </div>
-
-        <p>{{ "content.d4m.example.mounted"|trans|raw }}</p>
-        <div class="highlight">
-            <button class="to-clipboard">
-                <i class="fa fa-clipboard" aria-hidden="true"></i> {{ "other.copy"|trans|raw }}
-            </button>
-            <pre><code># ~/.ezlaunchpad/ez.yml
-docker:
-    host_machine_mapping: "/Users/bob/MyProjects:/data/MYPROJECTS"
-    host_composer_cache_dir: "/data/MYPROJECTS/.composer_cache"
-            </code></pre>
-        </div>
-        <p>{{ "content.d4m.example.mounted.host_composer_cache_dir"|trans|raw }}</p>
-    </div>
     <h2 id="mac-tips"><i class="fa fa-apple" aria-hidden="true"></i> {{ "content.mac-tips.title"|trans|raw }}</h2>
     <div>
-        <p>{{ "content.mac-tips.blurb"|trans|raw }}</p>
+        <p>{{ "content.mac-tips.nfs_explanation.blurb"|trans|raw }}</p>
+
+        <h3>{{ "content.mac-tips.nfs_explanation.update.title"|trans|raw }}</h3>
+
+        <p>{{ "content.mac-tips.nfs_explanation.update.1"|trans|raw }}</p>
+        <div class="highlight">
+            <button class="to-clipboard">
+                <i class="fa fa-clipboard" aria-hidden="true"></i> {{ "other.copy"|trans|raw }}
+            </button>
+            <pre>$ cat /etc/exports<code>
+/Users/plopix -mapall=plopix:staff -alldirs localhost</code></pre>
+        </div>
+        <p>{{ "content.mac-tips.nfs_explanation.update.2"|trans|raw }}</p>
+        <div class="highlight">
+            <button class="to-clipboard">
+                <i class="fa fa-clipboard" aria-hidden="true"></i> {{ "other.copy"|trans|raw }}
+            </button>
+            <pre>$ cat provisioning/dev/docker-compose-osx.yml<code>
+version: '2.1'
+services:
+    engine:
+        volumes:
+            - "nfsmount:${PROJECTMAPPINGFOLDER}"
+volumes:
+  nfsmount:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=host.docker.internal,lock
+      device: ":${PROJECTCOMPOSEPATH}/"
+</code></pre>
+        </div>
+        <p>{{ "content.mac-tips.nfs_explanation.update.3"|trans|raw }}</p>
+        <div class="highlight">
+            <button class="to-clipboard">
+                <i class="fa fa-clipboard" aria-hidden="true"></i> {{ "other.copy"|trans|raw }}
+            </button>
+            <pre><code>$ ~/ez dumpdata; ~/ez clean; ~/ez create</code></pre>
+        </div>
+        <p>{{ "content.mac-tips.nfs_explanation.update.4"|trans|raw }}</p>
+        <div class="highlight">
+            <button class="to-clipboard">
+                <i class="fa fa-clipboard" aria-hidden="true"></i> {{ "other.copy"|trans|raw }}
+            </button>
+            <pre><code>docker:
+        host_machine_mapping: "/Users/plopix:/Users/plopix"
+        host_composer_cache_dir: "/Users/plopix/.composer_cache</code></pre>
+        </div>
+
+        <p>{{ "content.mac-tips.nfs_explanation.update.5"|trans|raw }}</p>
+
+        <h3>{{ "content.mac-tips.containercache.title"|trans|raw }}</h3>
+        <p>{{ "content.mac-tips.containercache.blurb"|trans|raw }}</p>
 
         <div class="highlight">
             <button class="to-clipboard">
                 <i class="fa fa-clipboard" aria-hidden="true"></i> {{ "other.copy"|trans|raw }}
             </button>
-            <pre><code># ezplatform/app/AppKernel.php
-public function getCacheDir()
-    {
-        if ($this->getEnvironment() == "prod" && getenv("RUNNING_ENV") == "DOCKER") {
-            return '/tmp/cache/'.$this->environment;
-        }
-
-        // approach to optimize the cache in DEV
-        $generateCacheFile = $this->rootDir.'/cache/'.$this->environment."/created";
-        if (
-            (getenv("RUNNING_ENV") == "DOCKER") &&
-            ($this->getEnvironment() == "dev") &&
-            (file_exists($generateCacheFile)) &&
-            (filemtime($generateCacheFile) > (time() - 600))
-        ) {
-            return '/tmp/cache/'.$this->environment;
-        } else {
-            if (is_dir($this->rootDir.'/cache/'.$this->environment)) {
-                touch($generateCacheFile);
-            }
-        }
-
-        return $this->rootDir.'/cache/'.$this->environment;
-    }</code></pre>
+            <pre># provisioning/dev/docker-compose.yml<code>
+engine:
+    environment:
+        - "SYMFONY_TMP_DIR=/tmp/ezplatormcache/"</code></pre>
         </div>
-        <p>{{ "content.mac-tips.explanation"|trans|raw }}</p>
+        <p>{{ "content.mac-tips.containercache.explanation"|trans|raw }}</p>
+        <div class="highlight">
+            <button class="to-clipboard">
+                <i class="fa fa-clipboard" aria-hidden="true"></i> {{ "other.copy"|trans|raw }}
+            </button>
+            <pre><code>$ ~/ez up; ~/ez stop; ~/ez start</code></pre>
+        </div>
     </div>
+
+
+    <p>Enjoy!</p>
 
 {% endblock %}
