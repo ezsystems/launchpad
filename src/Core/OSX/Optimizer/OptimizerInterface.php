@@ -27,13 +27,6 @@ interface OptimizerInterface
     public function hasPermission(SymfonyStyle $io);
 
     /**
-     * @param Command $command
-     *
-     * @return bool
-     */
-    public function init(Command $command);
-
-    /**
      * @param SymfonyStyle $io
      * @param Command      $command
      *

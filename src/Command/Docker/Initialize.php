@@ -10,7 +10,6 @@ use eZ\Launchpad\Console\Application;
 use eZ\Launchpad\Core\Client\Docker;
 use eZ\Launchpad\Core\Command;
 use eZ\Launchpad\Core\DockerCompose;
-use eZ\Launchpad\Core\DockerSyncCommandTrait;
 use eZ\Launchpad\Core\ProcessRunner;
 use eZ\Launchpad\Core\ProjectStatusDumper;
 use eZ\Launchpad\Core\ProjectWizard;
@@ -25,8 +24,6 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class Initialize extends Command
 {
-    use DockerSyncCommandTrait;
-
     /**
      * @var ProjectStatusDumper
      */
@@ -165,8 +162,7 @@ END;
             'host-machine-mapping'     => $this->projectConfiguration->get('docker.host_machine_mapping'),
             'composer-cache-dir'       => $this->projectConfiguration->get('docker.host_composer_cache_dir'),
         ];
-        $dockerClient = new Docker($options, new ProcessRunner());
-        $this->dockerSyncClientConnect($dockerClient);
+        $dockerClient = new Docker($options, new ProcessRunner(), $this->optimizer);
         $this->projectStatusDumper->setDockerClient($dockerClient);
 
         // do the real work

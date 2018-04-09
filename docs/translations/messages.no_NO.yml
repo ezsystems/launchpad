@@ -53,7 +53,7 @@ content:
                 Dette er installasjon fra bunn av.
                 Du må kjøre denne når du starter et helt nytt eZ Platform prosjekt.
         init.willaskquestion: "Her vil eZ Launchpad spørre deg en del spørsmål."
-        init.macosxwarning: "Mac OS X brukerer har en wizard for å konfigurere <a href='#d4m' class='alert-link'>D4M</a>."
+        init.macosxwarning: "Mac OS X brukerer har en wizard for å konfigurere <a href='#mac-tips' class='alert-link'>NFS</a>."
         init.end.steps: "På Slutten av prosessen vil følgende gjøres for deg:"
         init.end.steps.1: "Konfigurere prosjektet ditt lokalt."
         init.end.steps.2: "Laste ned(pull) de korrekte imagene til din Docker Daemon."
@@ -101,27 +101,6 @@ content:
             Legg merke til at denne konfigurasjonen er global og vil ikke bli inkludert i hvert enkelt prosjekt (dvs i CVS/Git basen).
             Men det vil bli inkludert i din lokale stack.
         fileexample.description.dockersectionisnext: "<em>docker</em> er beskrevet i neste seksjon."
-
-    d4m:
-        title: "Mac OS X optimalisering med D4M"
-        blurb: >
-            Når det gjelder deling av mappe/filer fra din lokale Mac til Docker containere
-            er <em>Docker for Mac</em> tregt. (ihvertfall foreløpig)
-            For å håndtere dette ytelseseproblemet er det en <strong>midlertidig løsning</strong>.
-        workaround: >
-            Denne midlertidig løsningen heter a href="https://github.com/IFSight/d4m-nfs">D4M</a>.
-            Uten å gå i detaljer bruker D4M MobbyVM som kjører ved siden av Docker for Mac og NFS monterer det på din Mac.
-        nfsfaster: "NB: det kan høres rart ut, men ja, NFS er raskere en standard diskmontering."
-        setup: "Når du bruker D4M kan du konfigurere det ved:"
-        setup.1: "gjennosiktig metode: Ingen konfigurasjon påkrevet med eZ Launchpad"
-        setup.2: "begrensning av mappen du eksporterer: Her må du si ifra til eZ Launchpad"
-
-        example: "Dersom du har tilpasset D4M konfigurasjonen, feks dersom du har eksportert"
-        example.mounted: >
-            Og dersom du har montert denne eksporten i <em>/data/MYPROJECTS</em> i MobyVM (gjennom D4M).
-            Da må du legge til denne konfigurasjonen i eZ Launchpad
-        example.mounted.host_composer_cache_dir: >
-            <em>host_composer_cache_dir</em> tillater deg å dele composer cache for alle dine prosjekter.
 
 other:
     copy: "Kopier"

@@ -6,6 +6,8 @@
 
 namespace eZ\Launchpad\Core\Client;
 
+use eZ\Launchpad\Core\OSX\Optimizer\NFSVolumes;
+use eZ\Launchpad\Core\OSX\Optimizer\OptimizerInterface;
 use eZ\Launchpad\Core\ProcessRunner;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -27,17 +29,18 @@ class Docker
     protected $runner;
 
     /**
-     * @var DockerSync
+     * @var OptimizerInterface
      */
-    protected $syncClient;
+    protected $optimizer;
 
     /**
      * Docker constructor.
      *
-     * @param array         $options
-     * @param ProcessRunner $runner
+     * @param array                   $options
+     * @param ProcessRunner           $runner
+     * @param OptimizerInterface|null $optimizer
      */
-    public function __construct($options, ProcessRunner $runner)
+    public function __construct($options, ProcessRunner $runner, OptimizerInterface $optimizer = null)
     {
         $resolver = new OptionsResolver();
         $defaults = [
@@ -60,25 +63,9 @@ class Docker
         $resolver->setAllowedTypes('provisioning-folder-name', 'string');
         $resolver->setAllowedTypes('network-prefix-port', 'int');
         $resolver->setAllowedTypes('host-machine-mapping', ['null', 'string']);
-        $this->options = $resolver->resolve($options);
-        $this->runner  = $runner;
-    }
-
-    /**
-     * Enabled the Docker Sync Client.
-     */
-    public function enabledDockerSyncClient()
-    {
-        if (EZ_ON_OSX) {
-            $this->syncClient = new DockerSync(
-                [
-                    'compose-file'             => $this->options['compose-file'],
-                    'network-name'             => $this->options['network-name'],
-                    'provisioning-folder-name' => $this->options['provisioning-folder-name'],
-                ],
-                $this->runner
-            );
-        }
+        $this->options   = $resolver->resolve($options);
+        $this->runner    = $runner;
+        $this->optimizer = $optimizer;
     }
 
     /**
@@ -156,22 +143,6 @@ class Docker
     }
 
     /**
-     * @return DockerSync
-     */
-    public function getSyncClient()
-    {
-        return $this->syncClient;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasSyncCient()
-    {
-        return null !== $this->syncClient;
-    }
-
-    /**
      * @param string $service
      *
      * @return Process
@@ -221,12 +192,7 @@ class Docker
      */
     public function stop($service = '')
     {
-        $result = $this->perform('stop', $service);
-        if ($this->hasSyncCient()) {
-            $this->syncClient->stop();
-        }
-
-        return $result;
+        return $this->perform('stop', $service);
     }
 
     /**
@@ -236,12 +202,7 @@ class Docker
      */
     public function down(array $args = [])
     {
-        $result = $this->perform('down', '', $args);
-        if ($this->hasSyncCient()) {
-            $this->syncClient->clean();
-        }
-
-        return $result;
+        return $this->perform('down', '', $args);
     }
 
     /**
@@ -342,20 +303,16 @@ class Docker
      */
     protected function perform($action, $service = '', array $args = [], $dryRun = false)
     {
-        if ($this->hasSyncCient() && !DockerSync::isOn()) {
-            $this->syncClient->start();
-        }
-
         $stringArgs = implode(' ', $args);
         $command    = "docker-compose -p {$this->getNetworkName()} -f {$this->getComposeFileName()}";
-        if ($this->hasSyncCient()) {
+
+        if ($this->optimizer instanceof NFSVolumes) {
             $osxExtension = str_replace('.yml', '-osx.yml', $this->getComposeFileName());
             $fs           = new Filesystem();
             if ($fs->exists($osxExtension)) {
                 $command .= " -f {$osxExtension}";
             }
         }
-
         $fullCommand = trim("{$command} {$action} {$stringArgs} {$service} ");
 
         if (false === $dryRun) {

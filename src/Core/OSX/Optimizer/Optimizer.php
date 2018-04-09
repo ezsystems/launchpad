@@ -8,6 +8,9 @@ namespace eZ\Launchpad\Core\OSX\Optimizer;
 
 use eZ\Launchpad\Configuration\Project as ProjectConfiguration;
 
+/**
+ * Class Optimizer.
+ */
 abstract class Optimizer
 {
     /**

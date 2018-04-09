@@ -14,7 +14,6 @@ header:
         commands: "Commands"
         more: "More"
         d4m: "Mac OS X optimizations with D4M"
-        dockersync: "Mac OS X optimizations with Docker Sync"
         mac-tips: "Mac OS X - Tips"
         global.configuration: "Global configurations"
 
@@ -58,7 +57,7 @@ content:
                 That is the from scratch installation.
                 You need to do that when you have nothing and you want to start a new project with eZ Platform.
         init.willaskquestion: "From here eZ Launchpad will ask you a bunch of question to configure your project."
-        init.macosxwarning: "Mac OS X users will have a wizard to set up <a href='#d4m' class='alert-link'>D4M</a>."
+        init.macosxwarning: "Mac OS X users will have a wizard to set up <a href='#mac-tips' class='alert-link'>NFS</a>."
         init.end.steps: "At the end of the procedure those steps will be done for you:"
         init.end.steps.1: "Configuration your project locally."
         init.end.steps.2: "Download(pull) the correct image on your Docker Daemon."
@@ -134,49 +133,42 @@ content:
             But it will be including in your local stack.
         fileexample.description.dockersectionisnext: "<em>docker</em> section is described in the next section."
 
-    d4m:
-        title: "Mac OS X optimizations - D4M Approach"
-        blurb: >
-            When it comes to share folder from the Host(your mac) to containers
-            <em>Docker for Mac</em> is slow. (at least for now).
-            Then to manage this performance issue, <strong>there is a workaround</strong>.
-        workaround: >
-            This workaround is called <a href="https://github.com/IFSight/d4m-nfs">D4M</a>.
-            Without entering into the details, D4M uses the MobbyVM that runs beside Docker for Mac and NFS mounts your mac.
-        nfsfaster: "Note: It might be odd, but yes NFS is faster than the default mount."
-        setup: "Still when you use D4M, you can set it up:"
-        setup.1: "in a transparent way: Then no configuration is required with eZ Launchpad"
-        setup.2: "limitating the folder that you export: In this case, you need to tell it to eZ Launchpad"
-
-        example: "If you have customized the D4M configuration, let's say, that you have exported"
-        example.mounted: >
-            And you have mounted this exported folder in <em>/data/MYPROJECTS</em> in the MobyVM (through D4M).
-            Then you need to add this configuration for eZ Launchpad
-        example.mounted.host_composer_cache_dir: >
-            <em>host_composer_cache_dir</em> will allow you to share the composer cache for all your projects.
-
-    dockersync:
-        title: "Mac OS X optimizations - Docker-Sync Approach"
-        blurb: >
-            When it comes to share folder from the Host(your mac) to containers
-            <em>Docker for Mac</em> is slow. (at least for now).
-            Then to manage this performance issue, <strong>there is a workaround</strong>.
-        workaround: >
-            This workaround is called <a href="http://docker-sync.io/">Docker Sync</a>.
-            Without entering into the details, Docker Sync will use an external container and external volumes to sync host and containers.
-        setup: >
-            To make it work, you need to install Docker Sync on your Mac. Then you need to say yes to the wizard when
-            it will ask you to use the Docker Sync approach. That is it! Everything else is managed for you.
-
     mac-tips:
         title: Mac OS X - Tips
-        blurb: >
+        nfs_explanation.blurb: >
+            When it comes to share folder from the Host(your mac) to containers
+            <em>Docker for Mac</em> is slow. (at least for now).
+            Then to manage this performance issue, <strong>there is a workaround</strong>.
+            NFS! Yes, It might be odd, but yes NFS is faster than the default mount.
+            Before the last version of Docker for Mac, we were using <a href="https://github.com/IFSight/d4m-nfs">D4M</a>
+            but since Docker for Mac 18.03 we can directly mount the host as a volume from the container.
+
+        nfs_explanation.update.title: "Update from D4M-NFS"
+        nfs_explanation.update.1: >
+            First you need to add an option to your <strong>/ect/exports</strong>, spot the <strong>-alldirs</strong>
+
+        nfs_explanation.update.2: >
+            Second you need to update the version of <em>docker-compose</em> in your
+            <strong>provisioning/dev/docker-compose.yml</strong> file to <strong>2.1</strong>. And you need to create a
+            new file named: <strong>provisioning/dev/docker-compose-osx.yml</strong>. With this content:
+
+        nfs_explanation.update.3: >
+            Once the setup is up-to-date, you can <strong>dumpdata</strong> (to backup), clean, and re-create the project again:
+
+        nfs_explanation.update.4: >
+            If you were using a special mapping, fix it:
+
+        nfs_explanation.update.5: >
+            That is it!
+
+        containercache.title: "Store cache in the container"
+        containercache.blurb: >
             Even with D4M and the NFS mount, performances can be optimized. The following is clearly a trick. But a
-            trick that works pretty well!<br /> Here is the magic, in your kernel:
-        explanation: >
-            First in "prod" mode we don't store the cache on the host, then it is always fast.<br />
-            Second in "dev" mode, we store the cache on the host, only 1 time every 10min (to get the autocompletion for
-            your PHPStorm!).
+            trick that works pretty well!<br /> Here is the magic, in your env you have this line
+
+        containercache.explanation: >
+            If you want the cache to be generated on your host for PHPStorm for instance, just remove that line:
+
 other:
     copy: "Copy"
     soon: "Coming soon..."

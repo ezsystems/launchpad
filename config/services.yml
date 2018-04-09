@@ -5,54 +5,40 @@ parameters:
 
 services:
 
-    ezlaunchpad_update.listener:
-        class: eZ\Launchpad\Listener\ApplicationUpdate
+    _defaults:
+        autowire: true
+
+    eZ\Launchpad\Listener\ApplicationUpdate:
         arguments:
             - {env: "%app_env%", dir: "%app_dir%", url: "%ez_phar%", version: "%ez_phar_version%"}
             - "@project_configuration"
         tags:
             - { name: kernel.event_listener, event: console.command, method: onCommandAction }
 
-    ezlaunchpad_osx.listener:
-        class: eZ\Launchpad\Listener\OSXListener
-        arguments:
-            - "@ezlaunchpad_d4m.osx.optimizer"
-            - "@ezlaunchpad_dsync.osx.optimizer"
-        tags:
-            - { name: kernel.event_listener, event: console.command, method: onCommandAction }
-
-    ezlaunchpad_command_exception.listener:
-        class: eZ\Launchpad\Listener\CommandException
+    eZ\Launchpad\Listener\CommandException:
         tags:
             - { name: kernel.event_listener, event: console.error, method: onExceptionAction }
 
-    ezlaunchpad_command_start.listener:
-        class: eZ\Launchpad\Listener\CommandStart
+    eZ\Launchpad\Listener\CommandStart:
         tags:
             - { name: kernel.event_listener, event: console.command, method: onCommandAction }
 
 
-    ezlaunchpad_command_terminate.listener:
-        class: eZ\Launchpad\Listener\CommandTerminate
+    eZ\Launchpad\Listener\CommandTerminate:
         tags:
             - { name: kernel.event_listener, event: console.terminate, method: onTerminateAction }
 
-    ezlaunchpad_project.information.dumper:
-        class: eZ\Launchpad\Core\ProjectStatusDumper
-        arguments:
-            - "@project_configuration"
+    eZ\Launchpad\Core\ProjectStatusDumper: ~
+
+    eZ\Launchpad\Listener\OSXListener:
+        class:
+        arguments: [!tagged ezlaunchpad.osx.optimizer]
+        tags:
+            - { name: kernel.event_listener, event: console.command, method: onCommandAction }
 
     # OSX OPTIMIZER
+    eZ\Launchpad\Core\OSX\Optimizer\D4M:
+        tags: [ezlaunchpad.osx.optimizer]
 
-    ezlaunchpad.osx.optimizer:
-        abstract: true
-        arguments:
-            - "@project_configuration"
-
-    ezlaunchpad_d4m.osx.optimizer:
-        class: eZ\Launchpad\Core\OSX\Optimizer\D4M
-        parent: "ezlaunchpad.osx.optimizer"
-
-    ezlaunchpad_dsync.osx.optimizer:
-        class: eZ\Launchpad\Core\OSX\Optimizer\DockerSync
-        parent: "ezlaunchpad.osx.optimizer"
+    eZ\Launchpad\Core\OSX\Optimizer\NFSVolumes:
+        tags: [ezlaunchpad.osx.optimizer]

@@ -17,8 +17,7 @@
     "files": [
         "LICENSE",
         "payload/dev/solr/.gitignore",
-        "payload/platformsh/.platform.app-1x.yaml",
-        "payload/platformsh/.platform.app-2x.yaml"
+        "payload/platformsh/.platform.app.yaml"
     ],
     "finder": [
         {

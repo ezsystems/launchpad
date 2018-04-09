@@ -14,7 +14,6 @@ header:
         commands: "Commandes"
         more: "Plus"
         d4m: "Mac OS X optimisations - D4M"
-        dockersync: "Mac OS X optimisations - Docker Sync"
         mac-tips: "Mac OS X - Astuces"
         global.configuration: "Configurations globales"
 
@@ -58,7 +57,7 @@ content:
                 C'est l'installation en partant de zéro.
                 Vous devez utiliser cela quand vous n'avez pas encore de projet, que vous voulez installer eZ Platform.
         init.willaskquestion: "eZ Launchpad va vous accompagner dans la création avec quelques questions."
-        init.macosxwarning: "Les utilisateurs de Mac OS X auront des questions spéciales pour installer <a href='#d4m' class='alert-link'>D4M</a>."
+        init.macosxwarning: "Les utilisateurs de Mac OS X auront des questions spéciales pour installer <a href='#mac-tips' class='alert-link'>NFS</a>."
         init.end.steps: "A la fin de la procédure, cette étape auront été fait pour vous:"
         init.end.steps.1: "Configuration locale du projet."
         init.end.steps.2: "Téléchargement(pull) des bonnes images Docker sur votre local démon Docker."
@@ -134,52 +133,41 @@ content:
             Mais elle sera utilisé dans votre stack Docker locale.
         fileexample.description.dockersectionisnext: "La section <em>docker</em> est décrite dans la prochaine section."
 
-    d4m:
-        title: "Mac OS X optimisations avec D4M"
-        blurb: >
-            Pour partager des répertoires entre l'hôte(votre Mac) vers les containers
-            <em>Docker for Mac</em> est très lent.(au moins pour le moment).
-            Donc pour contourner ce problème de performance, <strong>il y a une technique</strong>.
-        workaround: >
-            Cette technique s'appelle <a href="https://github.com/IFSight/d4m-nfs">D4M</a>.
-            Sans trop rentrer dans les détails, D4M utilise la MobbyVM qui fait touner le démon Docker du Mac et monte
-            les répertoires via NFS.
-        nfsfaster: "Note: C'est étrange en effet, mais oui NFS est bien plus rapide que le montage par défaut!"
-        setup: "Vous avez deux manières de configurer D4M:"
-        setup.1: "de manière transparente: alors il n'y a pas de configuration spéciale pour eZ Launchpad"
-        setup.2: "en limitant le répertoire exporté: Dans ce cas vous devez avertir eZ Launchpad"
-
-        example: "Si vous n'etes pas en mode transparent, disons que vous avez exporté"
-        example.mounted: >
-            Et donc vous avez monté ce répertoire dans <em>/data/MYPROJECTS</em> de la MobyVM (through D4M).
-            Alors vous devez ajouter cette configuration pour eZ Launchpad
-        example.mounted.host_composer_cache_dir: >
-            <em>host_composer_cache_dir</em> permettra lui de partager le cache Composer entre vos projets.
-
-    dockersync:
-        title: "Mac OS X optimizations avec Docker-Sync"
-        blurb: >
-            Pour partager des répertoires entre l'hôte(votre Mac) vers les containers
-            <em>Docker for Mac</em> est très lent.(au moins pour le moment).
-            Donc pour contourner ce problème de performance, <strong>il y a une technique</strong>.
-        workaround: >
-            Cette technique s'appelle <a href="http://docker-sync.io/">Docker Sync</a>.
-            Sans trop rentrer dans les détails, Docker Sync utilise un container externe et des volumes externes pour
-            synchroniser le host and les containers.
-        setup: >
-            Pour le faire fonctionner il faut installer Docker Sync sur le Mac. Ensuite vous devez dire oui quand
-            Launchpad vous demandera d'utiliser Docker Sync. Tout le reste est géré pour vous.
-
     mac-tips:
-        title: Mac OS X - Astuces
-        blurb: >
+        title: Mac OS X - Tips
+        nfs_explanation.blurb: >
+            Pour partager des répertoires entre l'hôte(votre Mac) vers les containers
+            <em>Docker for Mac</em> est très lent.(au moins pour le moment).
+            Donc pour contourner ce problème de performance, <strong>il y a une technique</strong>.
+            NFS! C'est étrange en effet, mais oui NFS est bien plus rapide que le montage par défaut!
+            Avant la dernière version de Docker pour Mac, nous utilisions <a href="https://github.com/IFSight/d4m-nfs">D4M</a>
+            mais depuis la version 18.03 nous pouvons directement monter le host via un volume depuis le container.
+        nfs_explanation.update.title: "Migrer depuis D4M-NFS"
+        nfs_explanation.update.1: >
+            D'abord vous devez ajouter une option a votre <strong>/ect/exports</strong>, le <strong>-alldirs</strong>
+        nfs_explanation.update.2: >
+            Ensuite vous devez mettre à jour la version de <em>docker-compose</em> dans votre fichier
+            <strong>provisioning/dev/docker-compose.yml</strong> vers <strong>2.1</strong>. Ensuite vous devez créer
+            un novueau fichier <strong>provisioning/dev/docker-compose-osx.yml</strong>. Avec ce contenu:
+
+        nfs_explanation.update.3: >
+            Une fois que c'est configuré, vous pouvez <strong>dumpdata</strong> (pour backuper), clean et re-create le projet:
+
+        nfs_explanation.update.4: >
+            Si vous aviez un mapping special, corrigé le:
+
+        nfs_explanation.update.5: >
+            C'est tout
+
+        containercache.title: "Le cache dans le container"
+        containercache.blurb: >
             Même avec D4M et le partage NFS les performances peuvent être améliorées. Ce qui suit est clairement une
             astuce mais une astuce qui fonctionne parfaitement bien!<br />
-            Voici la technique dans votre kernel:
-        explanation: >
-            D'abord en mode "prod" on ne store pas le cache sur le host, donc c'est toujours rapide.<br />
-            Ensuite en mode "dev", on store le cache sur le host qu'une fois toute les 10min (pour avoir
-            l'autocompletion avec votre PHPStorm!).
+            Voici la technique dans votre env vous avez une ligne:
+
+        containercache.explanation: >
+            Si vous voulez que le cache soit généré sur votre host, pour PHPStorm par exemple, supprimer cette ligne:
+
 other:
     copy: "Copier"
     soon: "Bientôt disponible..."

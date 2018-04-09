@@ -7,6 +7,7 @@
 namespace eZ\Launchpad\Core;
 
 use eZ\Launchpad\Configuration\Project as ProjectConfiguration;
+use eZ\Launchpad\Core\OSX\Optimizer\OptimizerInterface;
 use Novactive\Collection\Collection;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -42,6 +43,11 @@ abstract class Command extends BaseCommand
      * @var Collection
      */
     protected $requiredRecipes;
+
+    /**
+     * @var OptimizerInterface
+     */
+    protected $optimizer;
 
     /**
      * {@inheritdoc}
@@ -111,5 +117,13 @@ abstract class Command extends BaseCommand
         }
 
         return $this->requiredRecipes;
+    }
+
+    /**
+     * @param OptimizerInterface $optimizer
+     */
+    public function setOptimizer($optimizer)
+    {
+        $this->optimizer = $optimizer;
     }
 }

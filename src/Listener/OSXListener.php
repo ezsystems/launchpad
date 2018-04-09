@@ -7,8 +7,6 @@
 namespace eZ\Launchpad\Listener;
 
 use eZ\Launchpad\Core\Command;
-use eZ\Launchpad\Core\OSX\Optimizer\D4M;
-use eZ\Launchpad\Core\OSX\Optimizer\DockerSync;
 use eZ\Launchpad\Core\OSX\Optimizer\OptimizerInterface;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -23,12 +21,11 @@ class OSXListener
     /**
      * OSXListener constructor.
      *
-     * @param D4M        $d4mOptimizer
-     * @param DockerSync $dockerSyncOptimizer
+     * @param iterable $optimizers
      */
-    public function __construct(D4M $d4mOptimizer, DockerSync $dockerSyncOptimizer)
+    public function __construct($optimizers)
     {
-        $this->optimizers = [$d4mOptimizer, $dockerSyncOptimizer];
+        $this->optimizers = $optimizers;
     }
 
     /**
@@ -54,12 +51,18 @@ class OSXListener
             foreach ($this->optimizers as $optimizer) {
                 /** @var OptimizerInterface $optimizer */
                 if ($optimizer->supports($version) &&
-                    $optimizer->init($command) &&
                     !$optimizer->isEnabled() &&
                     $optimizer->hasPermission($io)) {
                     $optimizer->optimize($io, $command);
                     // only one allowed
                     break;
+                }
+            }
+            // one of them has been enable
+            foreach ($this->optimizers as $optimizer) {
+                /** @var OptimizerInterface $optimizer */
+                if ($optimizer->supports($version) && $optimizer->isEnabled()) {
+                    $command->setOptimizer($optimizer);
                 }
             }
         } catch (\Exception $e) {
