@@ -18,7 +18,7 @@
         "symfony/filesystem": "~3.4",
         "novactive/collection": "^1.0",
         "symfony/options-resolver": "~3.4",
-        "padraic/phar-updater": "dev-use-curl",
+        "padraic/phar-updater": "^1.0.6",
         "symfony/event-dispatcher": "~3.4",
         "nesbot/carbon": "^1.22"
     },
