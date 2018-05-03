@@ -22,7 +22,7 @@ build:
 relationships:
     database: "mysqldb:user"
     cache: "rediscache:redis"
-    sessions: 'redissession:redis'
+    redissession: 'redissession:redis'
 
 # The configuration of app when it is exposed to the web.
 web:
