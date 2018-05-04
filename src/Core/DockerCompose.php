@@ -118,6 +118,8 @@ class DockerCompose
                             'CACHE_REDIS_PORT',
                             'CACHE_POOL',
                             'CACHE_DSN',
+                            'SESSION_STORAGE_HOST',
+                            'SESSION_STORAGE_DSN',
                             'SEARCH_ENGINE',
                             'SOLR_DSN',
                             'HTTPCACHE_PURGE_SERVER',
@@ -154,7 +156,7 @@ class DockerCompose
                         }
                         if (!$this->hasService('redis')) {
                             if (preg_match(
-                                '/(CUSTOM_CACHE_POOL|CACHE_HOST|CACHE_POOL|CACHE_DSN|CACHE_REDIS_PORT)/',
+                                '/(CUSTOM_CACHE_POOL|CACHE_HOST|CACHE_POOL|CACHE_DSN|CACHE_REDIS_PORT|SESSION_STORAGE_HOST|SESSION_STORAGE_DSN|)/',
                                 $value
                             )) {
                                 return false;
