@@ -42,7 +42,7 @@ services:
             - "CACHE_DSN=redis:6379"
             - "SEARCH_ENGINE=solr"
             - "SOLR_DSN=http://solr:8983/solr"
-            - "SYMFONY_TMP_DIR=/tmp/ezplatormcache/"
+            - "SYMFONY_TMP_DIR=/tmp/ezplatformcache/"
     db:
         image: mariadb:10.1
         environment:
