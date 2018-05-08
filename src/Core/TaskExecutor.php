@@ -56,23 +56,6 @@ class TaskExecutor
     }
 
     /**
-     * Manage permissions.
-     */
-    public function handlePermissions()
-    {
-        // Fix a permissions issue with data/
-        // we ensure that Solr will be able to write on data/ which is owned by the user hosts
-        // @todo: find a way to do better
-        $provisioningFolder  = $this->projectConfiguration->get('provisioning.folder_name');
-        $ezSolrCollectionDir = "{$provisioningFolder}/dev/solr/server/ez/collection1";
-        $fs                  = new Filesystem();
-        if ($fs->exists($ezSolrCollectionDir)) {
-            $fs->mkdir("{$ezSolrCollectionDir}/data");
-            $fs->chmod("{$ezSolrCollectionDir}/data", 0777);
-        }
-    }
-
-    /**
      * @return Process[]
      */
     public function composerInstall()
