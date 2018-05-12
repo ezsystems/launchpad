@@ -9,7 +9,6 @@ namespace eZ\Launchpad\Core;
 use eZ\Launchpad\Configuration\Project as ProjectConfiguration;
 use eZ\Launchpad\Core\Client\Docker as DockerClient;
 use Novactive\Collection\Collection;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
 /**
