@@ -57,8 +57,6 @@ class Create extends DockerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->taskExecutor->handlePermissions();
-
         $this->dockerClient->build(['--no-cache']);
         $this->dockerClient->up(['-d']);
 

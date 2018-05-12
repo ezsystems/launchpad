@@ -9,7 +9,6 @@ namespace eZ\Launchpad\Core;
 use eZ\Launchpad\Configuration\Project as ProjectConfiguration;
 use eZ\Launchpad\Core\Client\Docker as DockerClient;
 use Novactive\Collection\Collection;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
 /**
@@ -52,23 +51,6 @@ class TaskExecutor
     {
         if (!$this->recipes->contains($recipe)) {
             throw new \RuntimeException("Recipe {$recipe} is not available.");
-        }
-    }
-
-    /**
-     * Manage permissions.
-     */
-    public function handlePermissions()
-    {
-        // Fix a permissions issue with data/
-        // we ensure that Solr will be able to write on data/ which is owned by the user hosts
-        // @todo: find a way to do better
-        $provisioningFolder  = $this->projectConfiguration->get('provisioning.folder_name');
-        $ezSolrCollectionDir = "{$provisioningFolder}/dev/solr/server/ez/collection1";
-        $fs                  = new Filesystem();
-        if ($fs->exists($ezSolrCollectionDir)) {
-            $fs->mkdir("{$ezSolrCollectionDir}/data");
-            $fs->chmod("{$ezSolrCollectionDir}/data", 0777);
         }
     }
 
