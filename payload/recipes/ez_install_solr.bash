@@ -41,7 +41,13 @@ if [ $ACTION == "CREATE_CORE" ]; then
         sleep 2
     done
     echo "Solr is running"
-    /opt/solr/bin/solr create_core -c collection1 -d $DESTINATION_TEMPLATE
-    echo "Core created."
+
+    SOLR_CORES=${SOLR_CORES:-collection1}
+    for core in $SOLR_CORES
+    do
+        /opt/solr/bin/solr create_core -c ${core} -d $DESTINATION_TEMPLATE
+        echo "Core ${core} created."
+    done
+
 fi
 

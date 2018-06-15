@@ -2,6 +2,11 @@
 
 ## CHANGELOG
 
+### 1.4.0
+
+- Add SOLR_CORES env variable on solr container to define the core(s) name. (default = "collection1")
+- Add DATABASE_PREFIXES env variable on engine container. This var define the prefix used to name the db connection vars (default = "DATABASE"). It's possible to define multiple prefixes to handle multiple db.
+
 ### 1.3.0
 
 - First version ready for 2.x with the new directory structure 

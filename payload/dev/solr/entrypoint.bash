@@ -10,4 +10,10 @@ if [ ! -f /ezsolr/server/ez/solr.xml ]; then
 fi
 
 /opt/solr/bin/solr -s /ezsolr/server/ez -f
-/opt/solr/bin/solr create_core -c collection1 -d /ezsolr/server/ez/template
+
+SOLR_CORES=${SOLR_CORES:-collection1}
+for core in $SOLR_CORES
+do
+    /opt/solr/bin/solr create_core -c ${core}  -d /ezsolr/server/ez/template
+    echo "Core ${core} created."
+done
