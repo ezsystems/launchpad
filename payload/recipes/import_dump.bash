@@ -2,13 +2,6 @@
 
 cd $PROJECTMAPPINGFOLDER
 
-# Wait for the DB
-while ! mysqladmin ping -h"$DATABASE_HOST" -u"$DATABASE_USER" -p"$DATABASE_PASSWORD" --silent; do
-    echo "."
-    sleep 1
-done
-echo ""
-
 DUMP_DIR="$(pwd)/data"
 if [ "$1" != "" ] && [ -d "$1" ]; then
     if [[ "$1" =~ ^/ ]]; then
@@ -16,22 +9,39 @@ if [ "$1" != "" ] && [ -d "$1" ]; then
     fi
 fi
 
-DB_FILE_NAME="$DATABASE_NAME"
-STORAGE_FILE_NAME="storage"
+DATABASE_PREFIXES=${DATABASE_PREFIXES:-DATABASE}
 
+for prefix in $DATABASE_PREFIXES
+do
+    DATABASE_NAME_VAR=${prefix}_NAME
+    DATABASE_HOST_VAR=${prefix}_HOST
+    DATABASE_USER_VAR=${prefix}_USER
+    DATABASE_PASSWORD_VAR=${prefix}_PASSWORD
+
+    # Wait for the DB
+    while ! mysqladmin ping -h"${!DATABASE_HOST_VAR}" -u"${!DATABASE_USER_VAR}" -p"${!DATABASE_PASSWORD_VAR}" --silent; do
+        echo -n "."
+        sleep 1
+    done
+    echo ""
+
+    DB_FILE_NAME="${!DATABASE_NAME_VAR}"
+    DB_FILE_PATH="$DUMP_DIR/$DB_FILE_NAME.sql"
+
+    MYSQL="mysql -h${!DATABASE_HOST_VAR} -u${!DATABASE_USER_VAR} -p${!DATABASE_PASSWORD_VAR}"
+
+    echo "Importing ${!DATABASE_NAME_VAR} database."
+    zcat $DB_FILE_PATH | $MYSQL ${!DATABASE_NAME_VAR}
+    echo "${!DATABASE_NAME_VAR} database imported."
+done
+
+
+STORAGE_FILE_NAME="storage"
 if [ "$2" != "" ]; then
-    DB_FILE_NAME="$2"
     STORAGE_FILE_NAME="$2_storage"
 fi
 
-DB_FILE_PATH="$DUMP_DIR/$DB_FILE_NAME.sql"
 STORAGE_FILE_PATH="$DUMP_DIR/$STORAGE_FILE_NAME.tar.gz"
-
-MYSQL="mysql -h$DATABASE_HOST -u$DATABASE_USER -p$DATABASE_PASSWORD"
-
-zcat $DB_FILE_PATH | $MYSQL $DATABASE_NAME
-
-echo "Database imported."
 
 if [ ! -d ezplatform ]; then
     echo "Not managed yet."

@@ -30,6 +30,7 @@ services:
             - PROJECTMAPPINGFOLDER
             - DEV_UID
             - DEV_GID
+            - DATABASE_PREFIXES=DATABASE
             - "DATABASE_USER=root"
             - "DATABASE_NAME=ezplatform"
             - "DATABASE_PASSWORD=ezplatform"
@@ -74,6 +75,7 @@ services:
             - DEV_UID
             - DEV_GID
             - PROJECTMAPPINGFOLDER
+            - SOLR_CORES=collection1
 
     # Mailcatcher
     mailcatcher:
