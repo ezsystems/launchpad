@@ -17,13 +17,6 @@ mkdir -p /var/www/.composer && chown www-data:www-data /var/www/.composer
 chown www-data:www-data $PROJECTMAPPINGFOLDER
 
 # give the good permissions to www-data in the container and remove the cache on start
-# 1.x
-if [ -d $PROJECTMAPPINGFOLDER/ezplatform/app/cache ]; then
-    rm -rf $PROJECTMAPPINGFOLDER/ezplatform/app/cache
-    chown -R www-data:www-data $PROJECTMAPPINGFOLDER/ezplatform/app/logs
-    chown -R www-data:www-data $PROJECTMAPPINGFOLDER/ezplatform/web
-fi
-
 # 2.x
 if [ -d $PROJECTMAPPINGFOLDER/ezplatform/var/cache ]; then
     rm -rf $PROJECTMAPPINGFOLDER/ezplatform/var/cache
@@ -31,5 +24,12 @@ if [ -d $PROJECTMAPPINGFOLDER/ezplatform/var/cache ]; then
     chown -R www-data:www-data $PROJECTMAPPINGFOLDER/ezplatform/var/logs
     chown -R www-data:www-data $PROJECTMAPPINGFOLDER/ezplatform/web
 fi
+
+if [ ! -f /usr/local/bin/composer ];
+then
+    echo "WARNING: you don't have the last image of the PHP ENGINE"
+    echo "TO FIX RUN: ~/ez docker:update"
+fi
+/usr/local/bin/composer self-update
 
 exec "$@"

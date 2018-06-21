@@ -3,7 +3,7 @@
 cd $PROJECTMAPPINGFOLDER
 
 PHP="php"
-COMPOSER="$PHP -d memory_limit=-1 composer.phar"
+COMPOSER="$PHP -d memory_limit=-1 /usr/local/bin/composer"
 REPO=$1
 VERSION=$2
 INIT_DATA=$3
@@ -30,7 +30,6 @@ echo "Installation eZ Platform ($REPO:$VERSION:$INIT_DATA) in the container"
 
 # Install
 $COMPOSER create-project --no-interaction $REPO ezplatform $VERSION
-cp composer.phar ezplatform
 cd ezplatform
 
 MAJOR_VERSION=`echo $VERSION | cut -c 1-2`

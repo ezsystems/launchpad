@@ -3,7 +3,7 @@
 cd $PROJECTMAPPINGFOLDER
 
 PHP="php"
-COMPOSER="$PHP -d memory_limit=-1 composer.phar"
+COMPOSER="$PHP -d memory_limit=-1 /usr/local/bin/composer"
 REPO=$1
 VERSION=$2
 
@@ -36,7 +36,6 @@ if [ -f ezplatform/app/console ]; then
 fi
 
 # Install
-cp composer.phar ezplatform
 cd ezplatform
 
 $COMPOSER install --no-interaction

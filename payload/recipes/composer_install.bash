@@ -13,8 +13,13 @@ while true ; do
     sleep 2
 done
 echo ""
+
+if [ ! -f /usr/local/bin/composer ];
+then
+    echo "WARNING: you don't have the last image of the PHP ENGINE"
+    echo "TO FIX RUN: ~/ez docker:update"
+fi
+
+/usr/local/bin/composer self-update
+
 sleep 2
-
-echo "Installation Composer in the container"
-curl -sS https://getcomposer.org/installer | php
-
