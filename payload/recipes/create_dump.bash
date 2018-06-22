@@ -2,14 +2,8 @@
 
 cd $PROJECTMAPPINGFOLDER
 
-mkdir -p data
 
-# Wait for the DB
-while ! mysqladmin ping -h"$DATABASE_HOST" -u"$DATABASE_USER" -p"$DATABASE_PASSWORD" --silent; do
-    echo -n "."
-    sleep 1
-done
-echo ""
+mkdir -p data
 
 DUMP_DIR="$(pwd)/data"
 if [ "$1" != "" ] && [ -d "$1" ]; then
@@ -18,19 +12,38 @@ if [ "$1" != "" ] && [ -d "$1" ]; then
     fi
 fi
 
-DB_FILE_NAME="$DATABASE_NAME"
+DATABASE_PREFIXES=${DATABASE_PREFIXES:-DATABASE}
+
+for prefix in $DATABASE_PREFIXES
+do
+    DATABASE_NAME_VAR=${prefix}_NAME
+    DATABASE_HOST_VAR=${prefix}_HOST
+    DATABASE_USER_VAR=${prefix}_USER
+    DATABASE_PASSWORD_VAR=${prefix}_PASSWORD
+    
+    # Wait for the DB
+    while ! mysqladmin ping -h"${!DATABASE_HOST_VAR}" -u"${!DATABASE_USER_VAR}" -p"${!DATABASE_PASSWORD_VAR}" --silent; do
+        echo -n "."
+        sleep 1
+    done
+    echo ""
+    
+    DB_FILE_NAME="${!DATABASE_NAME_VAR}"
+    
+    MYSQLDUMP="mysqldump -h${!DATABASE_HOST_VAR} -u${!DATABASE_USER_VAR} -p${!DATABASE_PASSWORD_VAR}"
+
+    echo "Dumping ${!DATABASE_NAME_VAR} database."
+    $MYSQLDUMP ${!DATABASE_NAME_VAR} > $DUMP_DIR/$DB_FILE_NAME.sql
+    gzip -f $DUMP_DIR/$DB_FILE_NAME.sql
+    echo "${!DATABASE_NAME_VAR} database dumped."
+done
+
+
 STORAGE_FILE_NAME="storage"
 
 if [ "$2" != "" ]; then
-    DB_FILE_NAME="$2"
     STORAGE_FILE_NAME="$2_storage"
 fi
-
-MYSQLDUMP="mysqldump -h$DATABASE_HOST -u$DATABASE_USER -p$DATABASE_PASSWORD"
-
-$MYSQLDUMP $DATABASE_NAME > $DUMP_DIR/$DB_FILE_NAME.sql
-gzip -f $DUMP_DIR/$DB_FILE_NAME.sql
-echo "Database dumped."
 
 if [ -d $PROJECTMAPPINGFOLDER/ezplatform/web/var ]; then
     cd $PROJECTMAPPINGFOLDER/ezplatform/web

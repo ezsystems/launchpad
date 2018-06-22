@@ -73,8 +73,9 @@ class TaskExecutor
                 if (!isset($auth['host'], $auth['login'], $auth['password'])) {
                     continue;
                 }
-                $processes[] = $this->execute(
-                    'composer.phar config --global'." http-basic.{$auth['host']} {$auth['login']} {$auth['password']}"
+                $processes[] = $this->globalExecute(
+                    '/usr/local/bin/composer config --global'.
+                    " http-basic.{$auth['host']} {$auth['login']} {$auth['password']}"
                 );
             }
         }
@@ -85,8 +86,8 @@ class TaskExecutor
                 if (!isset($auth['host'], $auth['value'])) {
                     continue;
                 }
-                $processes[] = $this->execute(
-                    'composer.phar config --global'." github-oauth.{$auth['host']} {$auth['value']}"
+                $processes[] = $this->globalExecute(
+                    '/usr/local/bin/composer config --global'." github-oauth.{$auth['host']} {$auth['value']}"
                 );
             }
         }
@@ -204,8 +205,8 @@ class TaskExecutor
      */
     public function runComposerCommand($arguments)
     {
-        return $this->execute(
-            'ezplatform/composer.phar --working-dir='.$this->dockerClient->getProjectPathContainer().'/ezplatform '.
+        return $this->globalExecute(
+            '/usr/local/bin/composer --working-dir='.$this->dockerClient->getProjectPathContainer().'/ezplatform '.
             $arguments
         );
     }
@@ -221,6 +222,18 @@ class TaskExecutor
     {
         $command = $this->dockerClient->getProjectPathContainer().'/'.$command;
 
+        return $this->globalExecute($command, $user, $service);
+    }
+
+    /**
+     * @param string $command
+     * @param string $user
+     * @param string $service
+     *
+     * @return \Symfony\Component\Process\Process
+     */
+    protected function globalExecute($command, $user = 'www-data', $service = 'engine')
+    {
         return $this->dockerClient->exec($command, ['--user', $user], $service);
     }
 }

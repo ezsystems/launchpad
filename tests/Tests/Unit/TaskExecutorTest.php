@@ -53,11 +53,11 @@ class TaskExecutorTest extends TestCase
 
         $this->assertEquals("{$startWith} {$path}/composer_install.bash", $suffixes[0]);
         $this->assertEquals(
-            "{$startWith} {$path}/composer.phar config --global http-basic.ez.no login novactive",
+            "{$startWith} /usr/local/bin/composer config --global http-basic.ez.no login novactive",
             $suffixes[1]
         );
         $this->assertEquals(
-            "{$startWith} {$path}/composer.phar config --global http-basic.plopix.net login pass",
+            "{$startWith} /usr/local/bin/composer config --global http-basic.plopix.net login pass",
             $suffixes[2]
         );
     }

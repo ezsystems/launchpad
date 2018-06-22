@@ -31,8 +31,5 @@ class CommandTerminate
                 $fs->remove("{$command->getProjectPath()}/{$recipe}.bash");
             }
         );
-        if ($fs->exists("{$command->getProjectPath()}/composer.phar")) {
-            $fs->remove("{$command->getProjectPath()}/composer.phar");
-        }
     }
 }
