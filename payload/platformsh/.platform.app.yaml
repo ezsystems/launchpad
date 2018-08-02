@@ -74,6 +74,9 @@ hooks:
 #    symfony:
 #        spec: "*/20 * * * *"
 #        cmd: "php cron.php example:test"
+#    ezplatform:
+#        spec: "* * * * *"
+#        cmd: "cd ezplatform; php php bin/console ezplatform:cron:run --env=prod"
 
 runtime:
     extensions:
