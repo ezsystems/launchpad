@@ -44,6 +44,12 @@ services:
             - "SEARCH_ENGINE=solr"
             - "SOLR_DSN=http://solr:8983/solr"
             - "SYMFONY_TMP_DIR=/tmp/ezplatformcache/"
+            - "XDEBUG_ENABLE=true"
+            - "XDEBUG_REMOTE_AUTOSTART=1"
+            - "XDEBUG_REMOTE_CONNECT_BACK=off"
+            - "XDEBUG_REMOTE_HOST=10.254.254.254"
+            - "XDEBUG_IDEKEY=PHPSTORM"
+            - "XDEBUG_REMOTE_PORT=9005"
     db:
         image: mariadb:10.1
         environment:
