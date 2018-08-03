@@ -32,4 +32,6 @@ then
 fi
 /usr/local/bin/composer self-update
 
+sh $(dirname $0)/scripts/configure-xdebug.sh
+
 exec "$@"
