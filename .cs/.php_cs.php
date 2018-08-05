@@ -21,6 +21,7 @@ return PhpCsFixer\Config::create()
                                 'phpdoc_no_package'           => false,
                                 'phpdoc_inline_tag'           => false,
                                 'cast_spaces'                 => false,
+                                'no_superfluous_phpdoc_tags'  => true,
                             ]
                         )
                         ->setFinder($finder);

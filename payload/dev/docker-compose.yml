@@ -110,3 +110,9 @@ services:
             - BLACKFIRE_CLIENT_TOKEN
             - BLACKFIRE_SERVER_ID
             - BLACKFIRE_SERVER_TOKEN
+
+    # Mysql-Proxy
+    mysqlproxy:
+        image: plopix/docker-mysqlproxyprofiler
+        environment:
+        - 'BACKEND=db:3306'

@@ -13,9 +13,6 @@ use Symfony\Component\Console\Event\ConsoleErrorEvent;
  */
 class CommandException
 {
-    /**
-     * @param ConsoleErrorEvent $event
-     */
     public function onExceptionAction(ConsoleErrorEvent $event)
     {
         //@todo logs

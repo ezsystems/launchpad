@@ -68,15 +68,15 @@ hooks:
         bin/console cache:pool:clear cache.redis
         bin/console cache:clear
 
-# The configuration of scheduled execution.
-# see http://symfony.com/doc/current/components/console/introduction.html
-#crons:
-#    symfony:
-#        spec: "*/20 * * * *"
-#        cmd: "php cron.php example:test"
-#    ezplatform:
-#        spec: "* * * * *"
-#        cmd: "cd ezplatform; php php bin/console ezplatform:cron:run --env=prod"
+crons:
+    minute:
+        # NOTE: Platform.sh PS does not execute every minute, so might sometimes miss jobs scheduled for a given time
+        spec: "* * * * *"
+        cmd: "php bin/console ezplatform:cron:run"
+    weekly:
+        spec: "0 0 * * 0"
+        cmd: "php bin/console ezplatform:check-urls"
+
 
 runtime:
     extensions:

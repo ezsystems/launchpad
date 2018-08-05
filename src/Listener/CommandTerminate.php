@@ -15,9 +15,6 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class CommandTerminate
 {
-    /**
-     * @param ConsoleTerminateEvent $event
-     */
     public function onTerminateAction(ConsoleTerminateEvent $event)
     {
         /** @var Command $command */

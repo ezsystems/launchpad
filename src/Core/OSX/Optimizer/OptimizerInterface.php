@@ -20,18 +20,10 @@ interface OptimizerInterface
     public function isEnabled();
 
     /**
-     * @param SymfonyStyle $io
-     *
      * @return bool
      */
     public function hasPermission(SymfonyStyle $io);
 
-    /**
-     * @param SymfonyStyle $io
-     * @param Command      $command
-     *
-     * @return mixed
-     */
     public function optimize(SymfonyStyle $io, Command $command);
 
     /**

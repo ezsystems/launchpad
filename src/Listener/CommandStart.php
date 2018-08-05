@@ -15,9 +15,6 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class CommandStart
 {
-    /**
-     * @param ConsoleCommandEvent $event
-     */
     public function onCommandAction(ConsoleCommandEvent $event)
     {
         /** @var Command $command */
