@@ -103,30 +103,6 @@ class Initialize extends Command
             0755
         );
 
-        // PHP.ini ADAPTATION
-        $phpINIPath = "{$provisioningFolder}/dev/engine/php.ini";
-        $conf       = <<<END
-; redis configuration in dev 
-session.save_handler = redis
-session.save_path = "tcp://redis:6379"
-END;
-        $iniContent = file_get_contents($phpINIPath);
-        $iniContent = str_replace(
-            '##REDIS_CONFIG##',
-            $compose->hasService('redis') ? $conf : '',
-            $iniContent
-        );
-
-        $conf       = <<<END
-; mailcatcher configuration in dev 
-sendmail_path = /usr/bin/env catchmail --smtp-ip mailcatcher --smtp-port 1025 -f docker@localhost
-END;
-        $iniContent = str_replace(
-            '##SENDMAIL_CONFIG##',
-            $compose->hasService('mailcatcher') ? $conf : '',
-            $iniContent
-        );
-        $fs->dumpFile($phpINIPath, $iniContent);
         unset($selectedServices);
 
         // Clean the Compose File
@@ -218,7 +194,7 @@ END;
         $initialdata = $input->getArgument('initialdata');
 
         if ('clean' === $initialdata && false !== strpos($repository, 'ezplatform-ee')) {
-            $initialdata = 'studio-clean';
+            $initialdata = 'ezplatform-ee-clean';
         }
 
         $executor->eZInstall($input->getArgument('version'), $repository, $initialdata);

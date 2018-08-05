@@ -67,7 +67,7 @@ class ProjectWizard
             $this->getComposerHttpBasicCredentials(),
             $this->getSelectedServices(
                 $compose->getServices(),
-                ['varnish', 'solr', 'mailcatcher', 'adminer', 'redis', 'redisadmin']
+                ['varnish', 'solr', 'adminer', 'redisadmin']
             ),
             $this->getProvisioningFolderName(),
             $this->getComposeFileName(),
