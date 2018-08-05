@@ -33,9 +33,6 @@ class TaskExecutor
 
     /**
      * Executor constructor.
-     *
-     * @param DockerClient         $dockerClient
-     * @param ProjectConfiguration $configuration
      */
     public function __construct(DockerClient $dockerClient, ProjectConfiguration $configuration, Collection $recipes)
     {

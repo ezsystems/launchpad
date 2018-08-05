@@ -37,9 +37,6 @@ class ApplicationUpdate
         $this->projectConfiguration = $configuration;
     }
 
-    /**
-     * @param ConsoleCommandEvent $event
-     */
     public function onCommandAction(ConsoleCommandEvent $event)
     {
         $env     = $this->parameters['env'];

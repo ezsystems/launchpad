@@ -24,8 +24,6 @@ class Status extends DockerCommand
 
     /**
      * Status constructor.
-     *
-     * @param ProjectStatusDumper $projectStatusDumper
      */
     public function __construct(ProjectStatusDumper $projectStatusDumper)
     {

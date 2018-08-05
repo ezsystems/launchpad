@@ -57,9 +57,6 @@ abstract class Command extends BaseCommand
         $this->io = new SymfonyStyle($input, $output);
     }
 
-    /**
-     * @param ProjectConfiguration $configuration
-     */
     public function setProjectConfiguration(ProjectConfiguration $configuration)
     {
         $this->projectConfiguration = $configuration;

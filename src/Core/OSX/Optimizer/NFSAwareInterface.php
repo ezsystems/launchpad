@@ -24,8 +24,6 @@ interface NFSAwareInterface
     const RESV = '/etc/nfs.conf';
 
     /**
-     * @param SymfonyStyle $io
-     *
      * @return bool
      */
     public function restartNFSD(SymfonyStyle $io);
@@ -45,15 +43,10 @@ interface NFSAwareInterface
      */
     public function isResvReady();
 
-    /**
-     * @param SymfonyStyle $io
-     * @param string       $exportLine
-     */
     public function setupNFS(SymfonyStyle $io, $exportOptions);
 
     /**
-     * @param SymfonyStyle $io
-     * @param string       $exportLine
+     * @param string $exportLine
      */
     public function standardNFSConfigurationMessage(SymfonyStyle $io, $exportLine);
 

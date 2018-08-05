@@ -26,9 +26,6 @@ class DockerCompose
         $this->compose = Yaml::parse(file_get_contents($filePath));
     }
 
-    /**
-     * @return mixed
-     */
     public function getServices()
     {
         return $this->compose['services'];

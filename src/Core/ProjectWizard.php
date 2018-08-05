@@ -42,9 +42,6 @@ class ProjectWizard
 
     /**
      * ProjectWizard constructor.
-     *
-     * @param SymfonyStyle         $io
-     * @param ProjectConfiguration $configuration
      */
     public function __construct(SymfonyStyle $io, ProjectConfiguration $configuration)
     {
@@ -53,8 +50,6 @@ class ProjectWizard
     }
 
     /**
-     * @param DockerCompose $compose
-     *
      * @return array
      */
     public function __invoke(DockerCompose $compose)

@@ -36,9 +36,7 @@ class Docker
     /**
      * Docker constructor.
      *
-     * @param array                   $options
-     * @param ProcessRunner           $runner
-     * @param OptimizerInterface|null $optimizer
+     * @param array $options
      */
     public function __construct($options, ProcessRunner $runner, OptimizerInterface $optimizer = null)
     {
@@ -126,17 +124,11 @@ class Docker
         return $this->options['provisioning-folder-name'];
     }
 
-    /**
-     * @return mixed
-     */
     protected function getHostExportedPath()
     {
         return explode(':', $this->options['host-machine-mapping'])[0];
     }
 
-    /**
-     * @return mixed
-     */
     protected function getMachineMountPath()
     {
         return explode(':', $this->options['host-machine-mapping'])[1];
@@ -153,7 +145,6 @@ class Docker
     }
 
     /**
-     * @param array  $args
      * @param string $service
      *
      * @return Process
@@ -164,7 +155,6 @@ class Docker
     }
 
     /**
-     * @param array  $args
      * @param string $service
      *
      * @return Process
@@ -175,7 +165,6 @@ class Docker
     }
 
     /**
-     * @param array  $args
      * @param string $service
      *
      * @return Process
@@ -196,8 +185,6 @@ class Docker
     }
 
     /**
-     * @param array $args
-     *
      * @return Process
      */
     public function down(array $args = [])
@@ -206,8 +193,6 @@ class Docker
     }
 
     /**
-     * @param array $args
-     *
      * @return Process
      */
     public function ps(array $args = [])
@@ -216,7 +201,6 @@ class Docker
     }
 
     /**
-     * @param array  $args
      * @param string $service
      *
      * @return Process
@@ -227,7 +211,6 @@ class Docker
     }
 
     /**
-     * @param array  $args
      * @param string $service
      *
      * @return Process
@@ -239,7 +222,6 @@ class Docker
 
     /**
      * @param string $command
-     * @param array  $args
      * @param string $service
      *
      * @return Process
@@ -296,7 +278,6 @@ class Docker
     /**
      * @param string $action
      * @param string $service
-     * @param array  $args
      * @param false  $dryRun
      *
      * @return Process|string

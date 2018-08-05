@@ -31,8 +31,6 @@ class Initialize extends Command
 
     /**
      * Status constructor.
-     *
-     * @param ProjectStatusDumper $projectStatusDumper
      */
     public function __construct(ProjectStatusDumper $projectStatusDumper)
     {
@@ -163,10 +161,7 @@ class Initialize extends Command
     }
 
     /**
-     * @param Docker         $dockerClient
-     * @param DockerCompose  $compose
-     * @param string         $composeFilePath
-     * @param InputInterface $input
+     * @param string $composeFilePath
      */
     protected function innerInitialize(
         Docker $dockerClient,

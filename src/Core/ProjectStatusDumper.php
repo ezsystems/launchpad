@@ -33,8 +33,6 @@ class ProjectStatusDumper
 
     /**
      * ProjectStatusDumper constructor.
-     *
-     * @param ProjectConfiguration $projectConfiguration
      */
     public function __construct(ProjectConfiguration $projectConfiguration)
     {

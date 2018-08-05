@@ -28,9 +28,6 @@ class OSXListener
         $this->optimizers = $optimizers;
     }
 
-    /**
-     * @param ConsoleCommandEvent $event
-     */
     public function onCommandAction(ConsoleCommandEvent $event)
     {
         if (!EZ_ON_OSX) {

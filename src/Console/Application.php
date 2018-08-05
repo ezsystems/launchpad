@@ -133,8 +133,6 @@ class Application extends BaseApplication
 
     /**
      * Load the configuration file.
-     *
-     * @param InputInterface $input
      */
     protected function loadConfiguration(InputInterface $input)
     {

@@ -78,7 +78,6 @@ class Project
 
     /**
      * @param string $name
-     * @param mixed  $value
      */
     public function setLocal($name, $value)
     {
@@ -87,7 +86,6 @@ class Project
 
     /**
      * @param string $name
-     * @param mixed  $value
      */
     public function setGlobal($name, $value)
     {
