@@ -13,6 +13,7 @@ if [ "$DEV_UID" -ne "$ORIG_UID" ] || [ "$DEV_GID" -ne "$ORIG_GID" ]; then
 fi
 
 # Create .composer in advance and set the permissions
+mkdir -p /var/www/composer_cache && chown www-data:www-data /var/www/composer_cache
 mkdir -p /var/www/.composer && chown www-data:www-data /var/www/.composer
 chown www-data:www-data $PROJECTMAPPINGFOLDER
 
