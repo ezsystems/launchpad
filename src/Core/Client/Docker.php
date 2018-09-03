@@ -231,6 +231,11 @@ class Docker
         $args[] = $service;
         $args[] = $command;
 
+        // Disable TTY if is not supported by the host (CI)
+        if (!$this->runner->hasTty()) {
+            array_unshift($args, '-T');
+        }
+
         return $this->perform('exec', '', $args);
     }
 

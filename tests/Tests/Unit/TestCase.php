@@ -144,6 +144,10 @@ docker:
                 )
             );
 
+        $processRunnerMock
+            ->method('hasTty')
+            ->willReturn(true);
+
         return new Docker($options, $processRunnerMock);
     }
 
