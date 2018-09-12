@@ -6,16 +6,8 @@
 
 namespace eZ\Launchpad\Tests\Unit;
 
-use eZ\Launchpad\Core\Client\Docker;
-use eZ\Launchpad\Core\ProcessRunner;
-
 class DockerClientTest extends TestCase
 {
-
-    /**
-     * @var Docker
-     */
-    protected $client;
 
     /**
      * @var array
@@ -28,13 +20,12 @@ class DockerClientTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->client               = $this->getDockerClient();
         $this->environmentVariables = $this->getDockerClientEnvironmentVariables();
     }
 
     public function testEnvVariables()
     {
-        $this->assertEquals($this->environmentVariables, $this->client->getComposeEnvVariables());
+        $this->assertEquals($this->environmentVariables, $this->getDockerClient()->getComposeEnvVariables());
     }
 
     public function testGetCommand()
@@ -48,7 +39,7 @@ class DockerClientTest extends TestCase
         )->implode(' ');
 
         $expected = "{$prefix} docker-compose -p test -f ".$this->getDockerComposeFilePath();
-        $this->assertEquals($expected, $this->client->getComposeCommand());
+        $this->assertEquals($expected, $this->getDockerClient()->getComposeCommand());
     }
 
     public function getTestedActions()
@@ -71,6 +62,9 @@ class DockerClientTest extends TestCase
             ['exec', ['/bin/bash', ['-q', '-ez'], 'plop'], 'exec -q -ez plop /bin/bash'],
             ['exec', ['/bin/bash', [], 'plop'], 'exec plop /bin/bash'],
 
+            // no tty
+            ['exec', ['/bin/bash', ['-q', '-ez'], 'plop'], 'exec -T -q -ez plop /bin/bash', false],
+            ['exec', ['/bin/bash', [], 'plop'], 'exec -T plop /bin/bash', false],
         ];
     }
 
@@ -78,16 +72,21 @@ class DockerClientTest extends TestCase
      * @dataProvider getTestedActions
      *
      * @param string $method
-     * @param array  $args
+     * @param array $args
      * @param string $expectedCommandSuffix
+     * @param bool $hasTty
      */
-    public function testRun($method, $args, $expectedCommandSuffix)
+    public function testRun($method, $args, $expectedCommandSuffix, $hasTty = true)
     {
-        $command       = "docker-compose -p test -f ".$this->getDockerComposeFilePath();
-        $mockedResults = call_user_func_array([$this->client, $method], $args);
+        $client        = $this->getDockerClient($hasTty);
+        $mockedResults = call_user_func_array([$client, $method], $args);
+
         $this->assertCount(2, $mockedResults);
         $this->assertEquals($mockedResults[1], $this->environmentVariables);
-        $suffix = trim(str_replace($command, '', $mockedResults[0]));
+
+        $command = "docker-compose -p test -f " . $this->getDockerComposeFilePath();
+        $suffix  = trim(str_replace($command, '', $mockedResults[0]));
+
         $this->assertEquals($expectedCommandSuffix, $suffix);
     }
 }
