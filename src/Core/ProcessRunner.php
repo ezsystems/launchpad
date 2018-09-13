@@ -20,10 +20,12 @@ class ProcessRunner
     public function run($command, $envVars)
     {
         $process = new Process(escapeshellcmd($command), null, $envVars);
-        if ('WIN' !== strtoupper(substr(PHP_OS, 0, 3))) {
+        $process->setTimeout(2 * 3600);
+
+        if ($this->hasTty()) {
             $process->setTty(true);
         }
-        $process->setTimeout(2 * 3600);
+
         try {
             return $process->mustRun();
         } catch (ProcessFailedException $e) {
@@ -38,5 +40,26 @@ class ProcessRunner
         }
 
         return null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasTty()
+    {
+        // Extracted from \Symfony\Component\Process\Process::setTty
+        if ('\\' === \DIRECTORY_SEPARATOR) {
+            // Windows platform does not have TTY
+            $isTtySupported = false;
+        } else {
+            // TTY mode requires /dev/tty to be read/writable.
+            $isTtySupported = (bool) @proc_open('echo 1 >/dev/null', [
+                ['file', '/dev/tty', 'r'],
+                ['file', '/dev/tty', 'w'],
+                ['file', '/dev/tty', 'w'],
+            ], $pipes);
+        }
+
+        return $isTtySupported;
     }
 }
