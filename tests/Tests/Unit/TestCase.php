@@ -120,9 +120,10 @@ docker:
     }
 
     /**
+     * @param bool $hasTty
      * @return Docker
      */
-    public function getDockerClient()
+    public function getDockerClient($hasTty = true)
     {
         $options = [
             'compose-file'             => $this->getDockerComposeFilePath(),
@@ -143,6 +144,10 @@ docker:
                     }
                 )
             );
+
+        $processRunnerMock
+            ->method('hasTty')
+            ->willReturn($hasTty);
 
         return new Docker($options, $processRunnerMock);
     }
