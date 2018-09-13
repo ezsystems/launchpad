@@ -21,7 +21,7 @@ build:
 # side is in the form `<service name>:<endpoint name>`.
 relationships:
     database: "mysqldb:user"
-    cache: "rediscache:redis"
+    rediscache: "rediscache:redis"
     redissession: 'redissession:redis'
 
 # The configuration of app when it is exposed to the web.

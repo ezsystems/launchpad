@@ -20,6 +20,6 @@ then
     echo "TO FIX RUN: ~/ez docker:update"
 fi
 
-/usr/local/bin/composer self-update
+/usr/local/bin/composer self-update > /dev/null 2>&1
 
 sleep 2
