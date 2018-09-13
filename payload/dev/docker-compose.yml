@@ -30,7 +30,8 @@ services:
             - PROJECTMAPPINGFOLDER
             - DEV_UID
             - DEV_GID
-            - DATABASE_PREFIXES=DATABASE
+            - "EZP_TEST_REST_HOST=nginx"
+            - "DATABASE_PREFIXES=DATABASE"
             - "DATABASE_USER=root"
             - "DATABASE_NAME=ezplatform"
             - "DATABASE_PASSWORD=ezplatform"
