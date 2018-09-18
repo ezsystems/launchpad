@@ -30,7 +30,7 @@ do
 done
 
 if [ "$CREATE_CORES" = true ]; then
-    echo "Try to start solr on background..."
+    echo "Start solr on background to create missing cores"
     /opt/solr/bin/solr -s /ezsolr/server/ez
 
     for core in $SOLR_CORES
@@ -40,7 +40,7 @@ if [ "$CREATE_CORES" = true ]; then
             echo "Core ${core} created."
         fi
     done
-    echo "Try to stop background solr..."
+    echo "Stop background solr"
     /opt/solr/bin/solr stop
 fi
 
