@@ -84,7 +84,7 @@ class OSXListener
         }
         list($version, $build) = explode(',', $output[0]);
         unset($build);
-        $result                      = preg_replace('/([^ ]*) ([^ ]*) ([0-9\\.]*)-([a-zA-z]*)/ui', '$3', $version);
+        $result                      = preg_replace('/([^ ]*) ([^ ]*) ([0-9\\.]*)-?([a-zA-z]*)/ui', '$3', $version);
         list($major, $minor, $patch) = explode('.', $result);
         unset($patch);
         $normalizedVersion = (int) $major * 100 + $minor;
