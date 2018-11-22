@@ -57,7 +57,12 @@ class Initialize extends Command
         $this->setAliases(['docker:init', 'initialize', 'init']);
         $this->addArgument('repository', InputArgument::OPTIONAL, 'eZ Platform Repository', 'ezsystems/ezplatform');
         $this->addArgument('version', InputArgument::OPTIONAL, 'eZ Platform Version', '2.*');
-        $this->addArgument('initialdata', InputArgument::OPTIONAL, 'eZ Platform installer. Composer install script like "ezplatform-install" checked for first, if not using as argument for install command directly)', 'clean');
+        $this->addArgument(
+            'initialdata',
+            InputArgument::OPTIONAL,
+            'Installer: If avaiable uses "composer run-script <initialdata>", if not uses ezplatform:install command',
+            'clean'
+        );
     }
 
     /**
