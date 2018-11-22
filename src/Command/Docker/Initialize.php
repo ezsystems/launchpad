@@ -57,7 +57,12 @@ class Initialize extends Command
         $this->setAliases(['docker:init', 'initialize', 'init']);
         $this->addArgument('repository', InputArgument::OPTIONAL, 'eZ Platform Repository', 'ezsystems/ezplatform');
         $this->addArgument('version', InputArgument::OPTIONAL, 'eZ Platform Version', '2.*');
-        $this->addArgument('initialdata', InputArgument::OPTIONAL, 'eZ Platform Initial', 'clean');
+        $this->addArgument(
+            'initialdata',
+            InputArgument::OPTIONAL,
+            'Installer: If avaiable uses "composer run-script <initialdata>", if not uses ezplatform:install command',
+            'clean'
+        );
     }
 
     /**
@@ -190,6 +195,8 @@ class Initialize extends Command
 
         if ('clean' === $initialdata && false !== strpos($repository, 'ezplatform-ee')) {
             $initialdata = 'ezplatform-ee-clean';
+        } elseif ('clean' === $initialdata && false !== strpos($repository, 'ezcommerce')) {
+            $initialdata = 'ezcommerce-install';
         }
 
         $executor->eZInstall($input->getArgument('version'), $repository, $initialdata);

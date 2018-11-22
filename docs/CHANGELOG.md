@@ -2,6 +2,11 @@
 
 ## CHANGELOG
 
+### ?.?.?
+
+- Add support for calling composer ezplatform-install (script) on "initialdata" argument
+
+
 ### 1.4.0
 
 - Add SOLR_CORES env variable on solr container to define the core(s) name. (default = "collection1")

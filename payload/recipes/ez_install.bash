@@ -45,7 +45,15 @@ if [ -f app/console ]; then
     CONSOLE="app/console"
 fi
 
-$PHP $CONSOLE ezplatform:install $INIT_DATA
+
+# Prefer install via composer alias (added in v2.2, required for eZ Commerce)
+if $COMPOSER run-script -l | grep -q " $INIT_DATA "; then
+   $COMPOSER run-script $INIT_DATA
+else
+    $PHP $CONSOLE ezplatform:install $INIT_DATA
+fi
+
+
 
 echo "Installation OK"
 
