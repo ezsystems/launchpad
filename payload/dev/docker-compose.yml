@@ -42,6 +42,8 @@ services:
             - "CACHE_REDIS_PORT=6379"
             - "CACHE_POOL=cache.redis"
             - "CACHE_DSN=redis:6379"
+            - "SESSION_HANDLER_ID=ezplatform.core.session.handler.native_redis"
+            - "SESSION_SAVE_PATH=redis:6379"
             - "SEARCH_ENGINE=solr"
             - "SOLR_DSN=http://solr:8983/solr"
             - "SYMFONY_TMP_DIR=/tmp/ezplatformcache/"

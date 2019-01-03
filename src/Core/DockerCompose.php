@@ -151,7 +151,7 @@ class DockerCompose
                         }
                         if (!$this->hasService('redis')) {
                             if (preg_match(
-                                '/(CUSTOM_CACHE_POOL|CACHE_HOST|CACHE_POOL|CACHE_DSN|CACHE_REDIS_PORT)/',
+                                '/(CUSTOM_CACHE_POOL|CACHE_HOST|CACHE_POOL|CACHE_DSN|CACHE_REDIS_PORT|SESSION_HANDLER_ID|SESSION_SAVE_PATH)/',
                                 $value
                             )) {
                                 return false;
