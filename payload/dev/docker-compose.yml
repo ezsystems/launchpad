@@ -99,7 +99,7 @@ services:
     redisadmin:
         image: rediscommander/redis-commander:latest
         environment:
-            - "REDIS_HOSTS=local:redis:6379"
+            - REDIS_HOST=redis
         ports:
             - "${PROJECTPORTPREFIX}083:8081"
 
