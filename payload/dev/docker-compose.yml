@@ -24,6 +24,7 @@ services:
             - "${PROJECTCOMPOSEPATH}:${PROJECTMAPPINGFOLDER}:rw"
             - "${HOST_COMPOSER_CACHE_DIR}:${COMPOSER_CACHE_DIR}:rw"
             - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/solr:/ezsolr:rw"
+        working_dir: /var/www/html/project/ezplatform
         shm_size: 754M
         environment:
             - COMPOSER_CACHE_DIR

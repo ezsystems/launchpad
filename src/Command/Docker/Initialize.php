@@ -93,6 +93,14 @@ class Initialize extends Command
 
         $compose->filterServices($selectedServices);
 
+        $fs->mkdir("ezplatform");
+        $fs->chmod(
+            [
+                "ezplatform",
+            ],
+            0755
+        );
+
         // start the scafolding of the Payload
         $provisioningFolder = "{$this->projectPath}/{$provisioningName}";
         $fs->mkdir("{$provisioningFolder}/dev");
