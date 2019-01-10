@@ -36,7 +36,7 @@ MAJOR_VERSION=`echo $VERSION | cut -c 1-2`
 
 # Do some cleaning
 ## Files
-rm .env .platform.app.yaml Dockerfile .travis.yml
+rm .env .platform.app.yaml .travis.yml
 ## Folder
 rm -rf .platform bin/.ci bin/.travis
 
