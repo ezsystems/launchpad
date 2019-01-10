@@ -24,7 +24,7 @@ if [ $ACTION == "INDEX" ]; then
         sleep 2
     done
     # wait cores
-    sleep 5
+    sleep 15
     echo "Solr is running"
     cd $PROJECTMAPPINGFOLDER/ezplatform
     CONSOLE="bin/console"
