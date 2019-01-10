@@ -120,6 +120,7 @@ content:
         title: "Common Commands"
         blurb: "eZ Launchpad is done to help you with a local Docker stack."
         list: "To do so, here is the command available to you:"
+        extra: "When you want to provide extra arguments to a Symfony command, you have to wrap everything (command + arguments) inside quotes:"
 
     configuration:
         title: "Global configuration"
