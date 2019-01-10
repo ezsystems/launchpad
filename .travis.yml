@@ -22,10 +22,10 @@ env:
 
 matrix:
   include:
-    - php: 7.1
+    - php: 7.2
       env: TEST_COLLECTION=collection-2x.json EZVERSION=2.* EXECUTE_DEPLOYMENT=true
   exclude:
-    - php: 7.1
+    - php: 7.2
       env: TEST_COLLECTION=collection-2x.json EZVERSION=2.*
 
 before_install:

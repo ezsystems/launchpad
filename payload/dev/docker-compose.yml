@@ -62,7 +62,7 @@ services:
             - nginx
 
     solr:
-        image: solr:6.6
+        image: solr:6.6.0
         volumes:
             - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/solr/entrypoint.bash:/entrypoint.bash:ro"
         volumes_from:
