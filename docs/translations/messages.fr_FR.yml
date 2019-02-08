@@ -120,6 +120,7 @@ content:
         title: "Commandes"
         blurb: "eZ Launchpad est fait pour vous aider avec Docker."
         list: "Pour le faire, vouci les commandes disponibles:"
+        extra: "Lorsque vous voulez passer des arguments à une commande Symfony, vous devez tout mettre entre guillemets (commande + arguments):"
 
     configuration:
         title: "Configurations globales"

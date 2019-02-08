@@ -420,6 +420,10 @@ Available commands:
   platformsh:setup   [psh:setup] Set up the Platformsh integration.</code></pre>
         </div>
 
+        <div>
+            <p>When you want to provide extra arguments to a Symfony command, you have to wrap everything (command + arguments) inside quotes:</p>
+            <pre>$ ~/ez sfrun "cache:clear --env=prod"</pre>
+        </div>
 
     </div>
     <h2 id="home"><i class="fa fa-home" aria-hidden="true"></i> Global configuration</h2>

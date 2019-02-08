@@ -89,6 +89,7 @@ content:
         title: "Vanlige kommandoer"
         blurb: "eZ Launchpad er laget for å hjelpe deg med din lokale Docker stack."
         list: "Her er de mest vanlige kommandoene for dette:"
+        extra: "Når du vil gi ekstra argumenter til en Symfony-kommando, må du pakke alt (kommando + argumenter) inne i sitater:"
 
     configuration:
         title: "Global konfigurasjon"
