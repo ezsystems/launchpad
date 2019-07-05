@@ -194,9 +194,9 @@ class Initialize extends Command
         $initialdata = $input->getArgument('initialdata');
 
         $version = $input->getArgument('version');
-        // Change default when on eZ Platform v1 to "clean"
+        // Change default when on eZ Platform v1 to "clean" / "ezplatform-ee-clean"
         if ('ezplatform-install' === $initialdata && 1 == (int)str_replace(['^', '~'], '', $var)) {
-            $initialdata = 'clean';
+            $initialdata = (false !== strpos($repository, 'ezplatform-ee') ? 'ezplatform-ee-clean' : 'clean');
         }
 
         $executor->eZInstall($version, $repository, $initialdata);
