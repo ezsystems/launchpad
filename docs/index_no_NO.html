@@ -327,7 +327,7 @@ export BLACKFIRE_SERVER_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="deploy-psh">
                 <h3>Setup</h3>
-                <p><a href="https://platform.sh/product">Platform.sh</a> is a PaaS (<strong>P</strong>latform <strong>a</strong>s <strong>a</strong> <strong>S</strong>ervice)<br /> With Platform.sh there is no real deployment process to run manually. Platform.sh will just create and synchronize environments based on your git repository!
+                <p><a href="https://platform.sh/product">Platform.sh</a> is a PaaS (<strong>P</strong>latform <strong>a</strong>s <strong>a</strong> <strong>S</strong>ervice).<br/> With Platform.sh there is no real deployment process to run manually. Platform.sh will just create and synchronize environments based on your git repository!
 </p>
                 <p>eZ Launchpad provides you a way to set up your eZ Project to be Platform.sh ready.
 </p>
@@ -461,14 +461,14 @@ composer:
 
     </div>
 
-    <h2 id="mac-tips"><i class="fa fa-apple" aria-hidden="true"></i> Mac OS X - Tips</h2>
+    <h2 id="mac-tips"><i class="fa fa-apple" aria-hidden="true"></i> macOS - Tips</h2>
     <div>
-        <p>When it comes to share folder from the Host(your mac) to containers <em>Docker for Mac</em> is slow. (at least for now). Then to manage this performance issue, <strong>there is a workaround</strong>. NFS! Yes, It might be odd, but yes NFS is faster than the default mount. Before the last version of Docker for Mac, we were using <a href="https://github.com/IFSight/d4m-nfs">D4M</a> but since Docker for Mac 18.03 we can directly mount the host as a volume from the container.
+        <p>When it comes to share a folder from the Host (your Mac) to containers, <em>Docker for Mac</em> is slow (at least for now). To manage this performance issue, <strong>there is a workaround</strong>: NFS! Yes, it might be odd, but NFS is faster than the default mount. Before the last version of Docker for Mac, we were using <a href="https://github.com/IFSight/d4m-nfs">D4M</a>, but since Docker for Mac 18.03 we can directly mount the host as a volume from the container.
 </p>
 
         <h3>Update from D4M-NFS</h3>
 
-        <p>First you need to add an option to your <strong>/ect/exports</strong>, spot the <strong>-alldirs</strong>
+        <p>First you need to add an option to your <strong>/etc/exports</strong>, spot the <strong>-alldirs</strong>:
 </p>
         <div class="highlight">
             <button class="to-clipboard">
@@ -477,7 +477,7 @@ composer:
             <pre>$ cat /etc/exports<code>
 /Users/plopix -mapall=plopix:staff -alldirs localhost</code></pre>
         </div>
-        <p>Second you need to update the version of <em>docker-compose</em> in your <strong>provisioning/dev/docker-compose.yml</strong> file to <strong>2.1</strong>. And you need to create a new file named: <strong>provisioning/dev/docker-compose-osx.yml</strong>. With this content:
+        <p>Second you need to update the version of <em>docker-compose</em> in your <strong>provisioning/dev/docker-compose.yml</strong> file to <strong>2.1</strong>. And you need to create a new file named <strong>provisioning/dev/docker-compose-osx.yml</strong> with this content:
 </p>
         <div class="highlight">
             <button class="to-clipboard">
@@ -498,7 +498,7 @@ volumes:
       device: ":${PROJECTCOMPOSEPATH}/"
 </code></pre>
         </div>
-        <p>Once the setup is up-to-date, you can <strong>dumpdata</strong> (to backup), clean, and re-create the project again:
+        <p>Once the setup is up-to-date, you can <strong>dumpdata</strong> (to backup), <strong>clean</strong>, and re-<strong>create</strong> the project again:
 </p>
         <div class="highlight">
             <button class="to-clipboard">
@@ -521,7 +521,7 @@ volumes:
 </p>
 
         <h3>Store cache in the container</h3>
-        <p>Even with D4M and the NFS mount, performances can be optimized. The following is clearly a trick. But a trick that works pretty well!<br /> Here is the magic, in your env you have this line
+        <p>Even with D4M and the NFS mount, performances can be optimized. The following is clearly a trick. But a trick that works pretty well!<br /> Here is the magic, in your env you have this line:
 </p>
 
         <div class="highlight">
