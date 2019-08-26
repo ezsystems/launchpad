@@ -46,7 +46,7 @@ services:
             - "SOLR_DSN=http://solr:8983/solr"
             - "SYMFONY_TMP_DIR=/tmp/ezplatformcache/"
     db:
-        image: mariadb:10.1
+        image: mariadb:10.2
         environment:
             - "MYSQL_ROOT_PASSWORD=ezplatform"
         ports:
