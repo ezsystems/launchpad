@@ -22,12 +22,12 @@ footer:
     company.products: "Products"
     ez.doc: "Documentation"
     followus: "Follow us on social media"
-    copyright: "Copyright © 1999-2017 eZ Systems AS. All rights reserved."
+    copyright: "Copyright © 1999-2019 eZ Systems AS. All rights reserved."
     poweredby: "Powered by"
 
 content:
     intro:
-        blurb: "An tool that will help you build an %ez% project on top of %docker% in less than 5 minutes."
+        blurb: "A tool that will help you build an %ez% project on top of %docker% in less than 5 minutes."
         well: >
             You will end up with a full <strong>Docker stack</strong> where the source-code
             is on your host for you <strong>to start coding</strong> right away!
@@ -47,11 +47,11 @@ content:
     usage:
         title: "Usage"
         blurb: "When you have installed eZ Launchpad (<em>~/ez</em>) you can start enjoying the feature."
-        2mainfeatures: "eZ Launchpad provides 2 mains features:"
+        2mainfeatures: "eZ Launchpad provides 2 main features:"
         init: "<strong>Initialization</strong> of a brand new eZ Platform Stack (on top of Docker)"
         create: "<strong>Create</strong> the Docker Stack related to the current directory."
         fromscratch: "Start from scratch"
-        bootstrap: "Boostrap an existing project"
+        bootstrap: "Bootstrap an existing project"
         init.title: "Init<small>ialization</small>"
         init.blurb: >
                 That is the from scratch installation.
@@ -59,17 +59,17 @@ content:
         init.willaskquestion: "From here eZ Launchpad will ask you a bunch of question to configure your project."
         init.macosxwarning: "Mac OS X users will have a wizard to set up <a href='#mac-tips' class='alert-link'>NFS</a>."
         init.end.steps: "At the end of the procedure those steps will be done for you:"
-        init.end.steps.1: "Configuration your project locally."
-        init.end.steps.2: "Download(pull) the correct image on your Docker Daemon."
-        init.end.steps.3: "Set up a eZ compliant <em>docker-compose.yml</em>."
-        init.end.steps.4: "Create and start the containers required.(depending of the choices you made)"
-        init.end.steps.5: "Install Composer in the Engine container.(where PHP is executed in your Stack)"
+        init.end.steps.1: "Configuration of your project locally."
+        init.end.steps.2: "Download (pull) the correct image on your Docker Daemon."
+        init.end.steps.3: "Set up an eZ compliant <em>docker-compose.yml</em>."
+        init.end.steps.4: "Create and start the containers required (depending of the choices you made)."
+        init.end.steps.5: "Install Composer in the Engine container (where PHP is executed in your stack)."
         init.end.steps.6: "Install eZ Platform through Composer inside the stack."
 
         init.end.finished.ps: "Once the Initialization is finished, the project is up, you can check doing:"
-        init.end.finished.dump: "You are now ready dump the database and storage, git commit and push to share the project to your teams."
-        init.end.finished.entreprise: >
-                Whether you want to use an entreprise version or a non-stable, you have the choice! Look at the help.
+        init.end.finished.dump: "You are now ready to dump the database and storage, git commit and push to share the project to your teams."
+        init.end.finished.enterprise: >
+                Whether you want to use an enterprise version or a non-stable, you have the choice! Look at the help.
                 There is an example:
         init.end.finished.httpbasics: >
                 When eZ Launchpad will ask you about HTTP-BASIC, then you have to provide the
@@ -95,7 +95,7 @@ content:
             we wanted to provide simplifications.
         platformsh: "Platform.sh"
         platformsh.blurb: >
-            <a href="https://platform.sh/product">Platform.sh</a> is a PaaS (<strong>P</strong>latform <strong>a</strong>s <strong>a</strong> <strong>S</strong>ervice)<br />
+            <a href="https://platform.sh/product">Platform.sh</a> is a PaaS (<strong>P</strong>latform <strong>a</strong>s <strong>a</strong> <strong>S</strong>ervice).<br/>
             With Platform.sh there is no real deployment process to run manually. Platform.sh will just create and synchronize environments based on your git repository!
         platformsh.blurb2: >
             eZ Launchpad provides you a way to set up your eZ Project to be Platform.sh ready.
@@ -113,48 +113,49 @@ content:
 
     stack:
         title: "Stack"
-        blurb: "At anytime you can get information on your stack by running"
-        moreorlessservice: "Depending on the initialization, you might have more or less services, but here are the most common stack."
+        blurb: "At any time you can get information on your stack by running"
+        moreorlessservice: "Depending on the initialization, you might have more or less services, but here is the most common stack."
 
     commands:
         title: "Common Commands"
-        blurb: "eZ Launchpad is done to help you with a local Docker stack."
-        list: "To do so, here is the command available to you:"
+        blurb: "eZ Launchpad was made to help you with a local Docker stack."
+        list: "To do so, here are the commands available to you:"
         extra: "When you want to provide extra arguments to a Symfony command, you have to wrap everything (command + arguments) inside quotes:"
 
     configuration:
         title: "Global configuration"
         blurb: >
-            Because every project can share stuff and because you might want the same configuration everywhere.
-            eZ Launchpad read a configuration file in your HOME directory.
+            Because every project can share stuff and because you might want the same configuration everywhere,
+            eZ Launchpad reads a configuration file in your HOME directory.
         fileexample: >
             This configuration file is <em>~/ezlaunchpad/ez.yml</em>. Here is a full example:
         fileexample.description: >
-            Note that this configuration is global and won't be including in the project (i.e in the CVS repository).
+            Note that this configuration is global and won't be included in the project (i.e. in the CVS repository).
             But it will be including in your local stack.
         fileexample.description.dockersectionisnext: "<em>docker</em> section is described in the next section."
 
     mac-tips:
-        title: Mac OS X - Tips
+        title: macOS - Tips
         nfs_explanation.blurb: >
-            When it comes to share folder from the Host(your mac) to containers
-            <em>Docker for Mac</em> is slow. (at least for now).
-            Then to manage this performance issue, <strong>there is a workaround</strong>.
-            NFS! Yes, It might be odd, but yes NFS is faster than the default mount.
-            Before the last version of Docker for Mac, we were using <a href="https://github.com/IFSight/d4m-nfs">D4M</a>
+            When it comes to share a folder from the Host (your Mac) to containers,
+            <em>Docker for Mac</em> is slow (at least for now).
+            To manage this performance issue, <strong>there is a workaround</strong>:
+            NFS! Yes, it might be odd, but NFS is faster than the default mount.
+            Before the last version of Docker for Mac, we were using <a href="https://github.com/IFSight/d4m-nfs">D4M</a>,
             but since Docker for Mac 18.03 we can directly mount the host as a volume from the container.
 
         nfs_explanation.update.title: "Update from D4M-NFS"
         nfs_explanation.update.1: >
-            First you need to add an option to your <strong>/ect/exports</strong>, spot the <strong>-alldirs</strong>
+            First you need to add an option to your <strong>/etc/exports</strong>, spot the <strong>-alldirs</strong>:
 
         nfs_explanation.update.2: >
             Second you need to update the version of <em>docker-compose</em> in your
             <strong>provisioning/dev/docker-compose.yml</strong> file to <strong>2.1</strong>. And you need to create a
-            new file named: <strong>provisioning/dev/docker-compose-osx.yml</strong>. With this content:
+            new file named <strong>provisioning/dev/docker-compose-osx.yml</strong> with this content:
 
         nfs_explanation.update.3: >
-            Once the setup is up-to-date, you can <strong>dumpdata</strong> (to backup), clean, and re-create the project again:
+            Once the setup is up-to-date, you can <strong>dumpdata</strong> (to backup), <strong>clean</strong>, and
+            re-<strong>create</strong> the project again:
 
         nfs_explanation.update.4: >
             If you were using a special mapping, fix it:
@@ -165,7 +166,7 @@ content:
         containercache.title: "Store cache in the container"
         containercache.blurb: >
             Even with D4M and the NFS mount, performances can be optimized. The following is clearly a trick. But a
-            trick that works pretty well!<br /> Here is the magic, in your env you have this line
+            trick that works pretty well!<br /> Here is the magic, in your env you have this line:
 
         containercache.explanation: >
             If you want the cache to be generated on your host for PHPStorm for instance, just remove that line:

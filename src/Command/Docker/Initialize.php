@@ -61,7 +61,7 @@ class Initialize extends Command
             'initialdata',
             InputArgument::OPTIONAL,
             'Installer: If avaiable uses "composer run-script <initialdata>", if not uses ezplatform:install command',
-            'clean'
+            'ezplatform-install'
         );
     }
 
@@ -193,13 +193,13 @@ class Initialize extends Command
         $repository  = $input->getArgument('repository');
         $initialdata = $input->getArgument('initialdata');
 
-        if ('clean' === $initialdata && false !== strpos($repository, 'ezplatform-ee')) {
-            $initialdata = 'ezplatform-ee-clean';
-        } elseif ('clean' === $initialdata && false !== strpos($repository, 'ezcommerce')) {
-            $initialdata = 'ezcommerce-install';
+        $version = $input->getArgument('version');
+        // Change default when on eZ Platform v1 to "clean" / "ezplatform-ee-clean"
+        if ('ezplatform-install' === $initialdata && 1 === (int) str_replace(['^', '~'], '', $version)) {
+            $initialdata = (false !== strpos($repository, 'ezplatform-ee') ? 'ezplatform-ee-clean' : 'clean');
         }
 
-        $executor->eZInstall($input->getArgument('version'), $repository, $initialdata);
+        $executor->eZInstall($version, $repository, $initialdata);
         if ($compose->hasService('solr')) {
             $executor->eZInstallSolr();
         }
