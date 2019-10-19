@@ -258,9 +258,9 @@ class Docker
             [
                 'PROJECTNETWORKNAME'      => $this->getNetworkName(),
                 'PROJECTPORTPREFIX'       => $this->getNetworkPrefixPort(),
-                'PROJECTCOMPOSEPATH'      => $projectComposePath,
+                'PROJECTCOMPOSEPATH'      => MacOSPatherize($projectComposePath),
                 'PROVISIONINGFOLDERNAME'  => $this->getProvisioningFolderName(),
-                'HOST_COMPOSER_CACHE_DIR' => $composerCacheDir,
+                'HOST_COMPOSER_CACHE_DIR' => MacOSPatherize($composerCacheDir),
                 'DEV_UID'                 => getmyuid(),
                 'DEV_GID'                 => getmygid(),
                 // In container composer cache directory - (will be mapped to host:composer-cache-dir)

@@ -7,6 +7,7 @@
 namespace eZ\Launchpad\Tests\Behat\Commands;
 
 use Behat\Behat\Context\Context as BaseContext;
+use Exception;
 use eZ\Launchpad\Console\ApplicationFactory;
 use Symfony\Component\Console\Tester\ApplicationTester;
 use Behat\Gherkin\Node\TableNode;
@@ -51,13 +52,13 @@ class Context implements BaseContext
         if (preg_match('/(.*) OR (.*)/us', $value)) {
             preg_match_all('/(.*) OR (.*)/us', $value, $matches);
             if ((strpos($output, $matches[1][0]) === false) && (strpos($output, $matches[2][0]) === false)) {
-                throw new \Exception(
+                throw new Exception(
                     sprintf('Did not see either "%s" OR "%s" in output "%s"', $matches[1][0], $matches[2][0], $output)
                 );
             }
         } else {
             if (strpos($output, $value) === false) {
-                throw new \Exception(sprintf('Did not see "%s" in output "%s"', $value, $output));
+                throw new Exception(sprintf('Did not see "%s" in output "%s"', $value, $output));
             }
         }
     }

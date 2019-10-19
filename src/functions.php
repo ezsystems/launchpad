@@ -36,3 +36,25 @@ function getDefaultTimeZone()
 
     return $timezone;
 }
+
+function MacOSPatherize($path)
+{
+    static $isCatalina = null;
+
+    if (null === $isCatalina) {
+        if (exec('defaults read loginwindow SystemVersionStampAsString', $output, $returnCode)) {
+            $parts      = explode('.', $output[0]);
+            $major      = (int) $parts[0];
+            $minor      = (int) $parts[1];
+            $isCatalina = ($major >= 10) && ($minor >= 15);
+        } else {
+            $isCatalina = false;
+        }
+    }
+
+    if (!$isCatalina) {
+        return $path;
+    }
+
+    return str_replace('/Users', '/System/Volumes/Data/Users', $path);
+}

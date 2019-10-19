@@ -58,7 +58,8 @@ trait NFSTrait
         return NovaCollection(file(NFSAwareInterface::EXPORTS))->exists(
             function ($line) use ($export) {
                 $export = addcslashes($export, '/.');
-                $line   = trim($line);
+
+                $line = trim($line);
 
                 return 1 === preg_match("#^{$export}#", $line);
             }
@@ -95,8 +96,10 @@ trait NFSTrait
     public function setupNFS(SymfonyStyle $io, $exportOptions)
     {
         list($export, $mountPoint) = $this->getHostMapping();
-        $isResvReady               = $this->isResvReady();
-        $isExportReady             = $this->isExportReady($export);
+        $export                    = MacOSPatherize($export);
+
+        $isResvReady   = $this->isResvReady();
+        $isExportReady = $this->isExportReady($export);
 
         if (!$isResvReady) {
             exec(

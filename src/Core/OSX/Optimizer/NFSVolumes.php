@@ -22,6 +22,7 @@ class NFSVolumes extends Optimizer implements OptimizerInterface, NFSAwareInterf
     public function isEnabled()
     {
         list($export, $mountPoint) = $this->getHostMapping();
+        $export                    = MacOSPatherize($export);
 
         return $this->isResvReady() && $this->isExportReady($export);
     }
@@ -32,6 +33,7 @@ class NFSVolumes extends Optimizer implements OptimizerInterface, NFSAwareInterf
     public function hasPermission(SymfonyStyle $io)
     {
         list($export, $mountPoint) = $this->getHostMapping();
+        $export                    = MacOSPatherize($export);
         $exportLine                = "{$export} {$this->getExportOptions()}";
         $this->standardNFSConfigurationMessage($io, $exportLine);
 

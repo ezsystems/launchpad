@@ -12,12 +12,10 @@ cache:
 
 php:
   - 5.6
-  - 7.0
-  - 7.1
   - 7.2
+  - 7.3
 
 env:
-  - TEST_COLLECTION=collection-1x.json EZVERSION=1.13.*
   - TEST_COLLECTION=collection-2x.json EZVERSION=2.*
 
 matrix:

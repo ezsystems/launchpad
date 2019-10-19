@@ -7,6 +7,7 @@
 namespace eZ\Launchpad\Core;
 
 use eZ\Launchpad\Core\Client\Docker;
+use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -65,7 +66,7 @@ abstract class DockerCommand extends Command
         );
 
         if (!$fs->exists($dockerComposeFileFolder."/{$dockerComposeFileName}")) {
-            throw new \RuntimeException("There is no {$dockerComposeFileName} in {$dockerComposeFileFolder}");
+            throw new RuntimeException("There is no {$dockerComposeFileName} in {$dockerComposeFileFolder}");
         }
         $options = [
             'compose-file'             => $dockerComposeFileFolder."/{$dockerComposeFileName}",
