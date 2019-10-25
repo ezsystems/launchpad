@@ -7,6 +7,7 @@
 
 namespace eZ\Launchpad\Tests\Unit;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -33,7 +34,7 @@ class BehatTest extends TestCase
             $bApplication->setAutoExit(false);
             $result = $bApplication->run($input, $output);
             $this->assertEquals(0, $result);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->fail($exception->getMessage());
         }
 

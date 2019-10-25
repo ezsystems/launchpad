@@ -25,6 +25,7 @@ class D4M extends Optimizer implements OptimizerInterface, NFSAwareInterface
     public function isEnabled()
     {
         list($export, $mountPoint) = $this->getHostMapping();
+        MacOSPatherize($export);
 
         return $this->isResvReady() && $this->isExportReady($export) && self::isD4MScreenExist();
     }
@@ -35,7 +36,10 @@ class D4M extends Optimizer implements OptimizerInterface, NFSAwareInterface
     public function hasPermission(SymfonyStyle $io)
     {
         list($export, $mountPoint) = $this->getHostMapping();
-        $exportLine                = "{$export} {$this->getExportOptions()}";
+        MacOSPatherize($export);
+
+        $exportLine = "{$export} {$this->getExportOptions()}";
+
         $this->standardNFSConfigurationMessage($io, $exportLine);
         $io->comment(
             "
@@ -63,7 +67,7 @@ class D4M extends Optimizer implements OptimizerInterface, NFSAwareInterface
         $isD4MScreenExist = self::isD4MScreenExist();
         $this->setupNFS($io, $this->getExportOptions());
         list($export, $mountPoint) = $this->getHostMapping();
-
+        MacOSPatherize($export);
         if (!$isD4MScreenExist) {
             $screenInit   = 'screen -AmdS '.static::SCREEN_NAME;
             $screen       = 'screen -S '.static::SCREEN_NAME.' -p 0 -X stuff';

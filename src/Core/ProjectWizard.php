@@ -7,6 +7,7 @@
 namespace eZ\Launchpad\Core;
 
 use eZ\Launchpad\Configuration\Project as ProjectConfiguration;
+use RuntimeException;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -260,8 +261,8 @@ END;
 
     /**
      * @param string        $message
-     * @param null|string   $default
-     * @param null|callable $validator
+     * @param string|null   $default
+     * @param callable|null $validator
      * @param string        $exceptionMessage
      *
      * @return Question
@@ -273,7 +274,7 @@ END;
             $question->setValidator(
                 function ($value) use ($validator, $exceptionMessage) {
                     if (!$validator($value)) {
-                        throw new \RuntimeException($exceptionMessage);
+                        throw new RuntimeException($exceptionMessage);
                     }
 
                     return $value;

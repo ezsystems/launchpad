@@ -9,6 +9,7 @@ namespace eZ\Launchpad\Core;
 use eZ\Launchpad\Configuration\Project as ProjectConfiguration;
 use eZ\Launchpad\Core\Client\Docker as DockerClient;
 use Novactive\Collection\Collection;
+use RuntimeException;
 use Symfony\Component\Process\Process;
 
 /**
@@ -47,7 +48,7 @@ class TaskExecutor
     protected function checkRecipeAvailability($recipe)
     {
         if (!$this->recipes->contains($recipe)) {
-            throw new \RuntimeException("Recipe {$recipe} is not available.");
+            throw new RuntimeException("Recipe {$recipe} is not available.");
         }
     }
 

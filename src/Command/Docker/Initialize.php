@@ -108,6 +108,20 @@ class Initialize extends Command
 
         unset($selectedServices);
 
+        // if we are on eZ 1.x then we don't want PHP 7.3
+        if (1 === (int) str_replace(['^', '~'], '', $input->getArgument('version'))) {
+            $enginDockerFilePath     = "{$provisioningFolder}/dev/engine/Dockerfile";
+            $engineDockerFileContent = file_get_contents($enginDockerFilePath);
+            file_put_contents(
+                $enginDockerFilePath,
+                str_replace(
+                    'docker-php-ez-engine:7.3',
+                    'docker-php-ez-engine:7.2',
+                    $engineDockerFileContent
+                )
+            );
+        }
+
         // Clean the Compose File
         $compose->removeUselessEnvironmentsVariables();
 
