@@ -22,10 +22,6 @@ git status
 curl -LSs https://box-project.github.io/box2/installer.php | php
 chmod 755 box.phar
 
-# Generate the DOCs
-php bin/gendocs
-git add docs/index*
-
 composer install --no-dev
 
 # Build the box
