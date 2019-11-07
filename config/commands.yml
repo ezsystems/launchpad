@@ -29,7 +29,7 @@ services:
     # Self
     eZ\Launchpad\Command\SelfUpdate:
         calls:
-            - [setParameters, [ {env: "%app_env%", url: "%ez_phar%", version: "%ez_phar_version%"}] ]
+            - [setParameters, [ {release_url: "%github_release_url%"} ] ]
 
     # Docker
     eZ\Launchpad\Command\Docker\Update:

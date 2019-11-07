@@ -9,10 +9,8 @@ declare(strict_types=1);
 
 /**
  * Get the TimeZone of the system if possible.
- *
- * @return string
  */
-function getDefaultTimeZone()
+function getDefaultTimeZone(): string
 {
     $timezone = 'UTC';
 
@@ -40,7 +38,7 @@ function getDefaultTimeZone()
     return $timezone;
 }
 
-function MacOSPatherize($path)
+function MacOSPatherize(string $path): string
 {
     static $isCatalina = null;
 
@@ -60,4 +58,38 @@ function MacOSPatherize($path)
     }
 
     return str_replace('/Users', '/System/Volumes/Data/Users', $path);
+}
+
+function githubFetch(string $url, bool $toJson = true)
+{
+    $context = stream_context_create(
+        [
+            'http' => [
+                'method' => 'GET',
+                'header' => [
+                    'User-Agent: eZ Launchpad Installer',
+                ],
+            ],
+        ]
+    );
+
+    $content = file_get_contents($url, false, $context);
+
+    if (false === $toJson) {
+        return $content;
+    }
+
+    return json_decode($content, false);
+}
+
+function normalizeVersion(string $versionName): int
+{
+    if ('v' !== $versionName[0]) {
+        return 0;
+    }
+    $version = substr($versionName, 1);
+    $result = preg_replace('/([^ ]*) ([^ ]*) ([0-9.]*)-?([a-zA-z]*)/ui', '$3', $version);
+    list($major, $minor, $patch) = explode('.', $result);
+
+    return (int) $major * 10000 + (int) $minor * 100 + (int) $patch;
 }

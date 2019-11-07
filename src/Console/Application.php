@@ -168,7 +168,9 @@ class Application extends BaseApplication
         $this->container->compile();
         $eventDispatcher = $this->container->get('event_dispatcher');
         if ($eventDispatcher instanceof EventDispatcherInterface) {
-            $this->setDispatcher($eventDispatcher);
+            $this->setDispatcher(
+                $eventDispatcher
+            );
         }
     }
 

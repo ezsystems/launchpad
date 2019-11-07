@@ -13,7 +13,6 @@
         "symfony/filesystem": "~4.3",
         "novactive/collection": "^1.0",
         "symfony/options-resolver": "~4.3",
-        "padraic/phar-updater": "^1.0.6",
         "symfony/event-dispatcher": "~4.3",
         "nesbot/carbon": "^2"
     },

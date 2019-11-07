@@ -1,5 +1,7 @@
 /composer.phar
 /box.phar
+/ez.phar
+/ez.phar.*
 /vendor/
 .php~
 .idea
@@ -21,9 +23,9 @@ tests/coverage
 /.ezlaunchpad.yml
 
 # Travis stuff
-/.travis/build-key.pem
-/.travis/ezlaunchpad-private.pem
-/.travis/secrets.tar
+/build-key.pem
+/ezlaunchpad-private.pem
+/secrets.tar
 /plantuml.jar
 
 # others
@@ -35,3 +37,4 @@ tests/coverage
 /ez_install.bash
 /composer_install.bash
 /ez_install_solr.bash
+

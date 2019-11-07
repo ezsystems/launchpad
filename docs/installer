@@ -1,0 +1,55 @@
+#!/usr/bin/env php
+<?php
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license   For full copyright and license information view LICENSE file distributed with this source code.
+ */
+
+$repo = $_SERVER['argv'][1] ?? 'ezsystems/launchpad';
+
+$context = stream_context_create(
+    [
+        'http' => [
+            'method' => 'GET',
+            'header' => [
+                'User-Agent: eZ Launchpad Installer'
+            ]
+        ]
+    ]
+);
+$release = json_decode(
+               file_get_contents(
+                   "https://api.github.com/repos/{$repo}/releases?draft=false&prerelease=false",
+                   false,
+                   $context
+               ),
+               false
+           )[0];
+
+unset($content);
+$assetUrl = $release->assets[0]->browser_download_url;
+
+file_put_contents(
+    "ez.phar",
+    file_get_contents(
+        $assetUrl,
+        false,
+        $context
+    )
+);
+
+file_put_contents(
+    "ez.phar.pubkey",
+    file_get_contents(
+        "https://ezsystems.github.io/launchpad/ez.phar.pubkey",
+        false,
+        $context
+    )
+);
+
+
+
+
+
+
+

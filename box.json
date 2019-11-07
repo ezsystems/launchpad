@@ -28,9 +28,9 @@
             "in": "vendor"
         }
     ],
-    "git-commit": "package_version",
+    "git-tag": "package_version",
     "main": "bin/ez-prod",
-    "key": ".travis/ezlaunchpad-private.pem",
+    "key": "ezlaunchpad-private.pem",
     "output": "ez.phar",
     "stub": true
 }

@@ -28,7 +28,6 @@ class RequiredFilesTest extends TestCase
         }
 
         $data[] = [$box->main, static::FILE];
-        $data[] = [".travis/secrets.tar.enc", static::FILE];
 
         return $data;
     }

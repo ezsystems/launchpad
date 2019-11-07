@@ -11,9 +11,7 @@ namespace eZ\Launchpad\Listener;
 
 use Carbon\Carbon;
 use eZ\Launchpad\Configuration\Project as ProjectConfiguration;
-use eZ\Launchpad\Core\Command;
-use Humbug\SelfUpdate\Strategy\ShaStrategy;
-use Humbug\SelfUpdate\Updater;
+use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
@@ -38,13 +36,9 @@ final class ApplicationUpdate
 
     public function onCommandAction(ConsoleCommandEvent $event): void
     {
-        $env = $this->parameters['env'];
-        $dir = $this->parameters['dir'];
-        $url = $this->parameters['url'];
-        $version = $this->parameters['version'];
-
         $command = $event->getCommand();
-        if (!$command instanceof Command) {
+
+        if (!$command instanceof BaseCommand) {
             return;
         }
 
@@ -80,26 +74,30 @@ final class ApplicationUpdate
             }
         }
 
+        // do not check anything  on Github Actions
+        if (false !== getenv('GITHUB_ACTIONS')) {
+            return;
+        }
+
         // check last time check
         if (null != $this->projectConfiguration->get('last_update_check')) {
             $lastUpdate = Carbon::createFromTimestamp($this->projectConfiguration->get('last_update_check'));
+            /** @var Carbon $lastUpdate */
             $now = Carbon::now();
             if ($now > $lastUpdate->subDays(3)) {
                 return;
             }
         }
 
-        $localPharFile = 'prod' === $env ? null : $dir.'/docs/ez.phar';
-        $updater = new Updater($localPharFile);
-        $strategy = $updater->getStrategy();
-        if ($strategy instanceof ShaStrategy) {
-            $strategy->setPharUrl($url);
-            $strategy->setVersionUrl($version);
-            if ($updater->hasUpdate()) {
-                $io = new SymfonyStyle($event->getInput(), $event->getOutput());
-                $io->note('A new version of eZ Launchpad is available, please run self-update.');
-                sleep(2);
-            }
+        $releaseUrl = $this->parameters['release_url'];
+        $release = githubFetch($releaseUrl)[0];
+        $currentVersion = normalizeVersion($command->getApplication()->getVersion());
+        $lastVersion = normalizeVersion($release->tag_name);
+
+        if ($lastVersion > $currentVersion) {
+            $io = new SymfonyStyle($event->getInput(), $event->getOutput());
+            $io->note('A new version of eZ Launchpad is available, please run self-update.');
+            sleep(2);
         }
 
         if (!\in_array($command->getName(), ['list', 'help'])) {

@@ -236,7 +236,7 @@ END;
      */
     protected function getQuestion(
         string $message,
-        ?string $default = null,
+        ?int $default = null,
         $validator = null,
         string $exceptionMessage = 'Entry not valid'
     ): Question {
