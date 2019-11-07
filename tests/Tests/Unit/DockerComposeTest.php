@@ -1,8 +1,11 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace eZ\Launchpad\Tests\Unit;
 
@@ -10,7 +13,6 @@ use eZ\Launchpad\Core\DockerCompose;
 
 class DockerComposeTest extends TestCase
 {
-
     /**
      * @var DockerCompose
      */
@@ -25,13 +27,13 @@ class DockerComposeTest extends TestCase
         $this->compose = new DockerCompose(__DIR__."/../../../payload/dev/docker-compose.yml");
     }
 
-    public function testFiltering()
+    public function testFiltering(): void
     {
         $this->compose->filterServices(['engine', 'db']);
         $this->assertCount(2, $this->compose->getServices());
     }
 
-    public function testCleanupVolumesInitialize()
+    public function testCleanupVolumesInitialize(): void
     {
         $this->compose->cleanForInitialize();
         foreach ($this->compose->getServices() as $service) {
@@ -48,7 +50,7 @@ class DockerComposeTest extends TestCase
         }
     }
 
-    public function testCleanupEnvsInitialize()
+    public function testCleanupEnvsInitialize(): void
     {
         $this->compose->cleanForInitialize();
         foreach ($this->compose->getServices() as $name => $service) {
@@ -64,7 +66,7 @@ class DockerComposeTest extends TestCase
         }
     }
 
-    public function getCleanEnvVarsData()
+    public function getCleanEnvVarsData(): array
     {
         return [
             [
@@ -85,14 +87,14 @@ class DockerComposeTest extends TestCase
     /**
      * @dataProvider getCleanEnvVarsData
      */
-    public function testCleanEnvVars($services, $toCheckVars)
+    public function testCleanEnvVars($services, $toCheckVars): void
     {
         $this->compose->filterServices($services);
         $this->compose->removeUselessEnvironmentsVariables();
 
         $environments = $this->compose->getServices()['engine']['environment'];
-        $vars         = [];
-        
+        $vars = [];
+
         foreach ($environments as $env) {
             if (!strpos($env, '=')) {
                 continue;

@@ -7,11 +7,11 @@ services:
 
     _defaults:
         autowire: true
+        public:  true
 
     eZ\Launchpad\Listener\ApplicationUpdate:
         arguments:
             - {env: "%app_env%", dir: "%app_dir%", url: "%ez_phar%", version: "%ez_phar_version%"}
-            - "@project_configuration"
         tags:
             - { name: kernel.event_listener, event: console.command, method: onCommandAction }
 

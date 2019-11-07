@@ -7,6 +7,7 @@ PROJECTDIR="${BASEDIR}/../"
 cd ${PROJECTDIR}
 
 echoTitle "******** Build it! ********"
+ulimit -Sn 4096
 
 if [ ! -f composer.phar ]; then
     echoInfo "Install composer.phar before..."

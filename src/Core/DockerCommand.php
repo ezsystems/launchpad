@@ -1,8 +1,11 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace eZ\Launchpad\Core;
 
@@ -13,9 +16,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-/**
- * Class DockerCommand.
- */
 abstract class DockerCommand extends Command
 {
     /**
@@ -33,34 +33,25 @@ abstract class DockerCommand extends Command
      */
     protected $taskExecutor;
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure()
+    protected function configure(): void
     {
         $this->addOption('env', 'env', InputOption::VALUE_REQUIRED, 'Docker Env', 'dev');
     }
 
-    /**
-     * @return Docker
-     */
-    public function getDockerClient()
+    public function getDockerClient(): Docker
     {
         return $this->dockerClient;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function initialize(InputInterface $input, OutputInterface $output)
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         parent::initialize($input, $output);
         $this->environment = $input->getOption('env');
         $this->projectConfiguration->setEnvironment($this->environment);
-        $fs                      = new Filesystem();
-        $currentPwd              = $this->projectPath;
-        $provisioningFolder      = $this->projectConfiguration->get('provisioning.folder_name');
-        $dockerComposeFileName   = $this->projectConfiguration->get('docker.compose_filename');
+        $fs = new Filesystem();
+        $currentPwd = $this->projectPath;
+        $provisioningFolder = $this->projectConfiguration->get('provisioning.folder_name');
+        $dockerComposeFileName = $this->projectConfiguration->get('docker.compose_filename');
         $dockerComposeFileFolder = NovaCollection([$currentPwd, $provisioningFolder, $this->environment])->implode(
             '/'
         );
@@ -69,13 +60,13 @@ abstract class DockerCommand extends Command
             throw new RuntimeException("There is no {$dockerComposeFileName} in {$dockerComposeFileFolder}");
         }
         $options = [
-            'compose-file'             => $dockerComposeFileFolder."/{$dockerComposeFileName}",
-            'network-name'             => $this->projectConfiguration->get('docker.network_name'),
-            'network-prefix-port'      => $this->projectConfiguration->get('docker.network_prefix_port'),
-            'host-machine-mapping'     => $this->projectConfiguration->get('docker.host_machine_mapping'),
-            'project-path'             => $this->projectPath,
+            'compose-file' => $dockerComposeFileFolder."/{$dockerComposeFileName}",
+            'network-name' => $this->projectConfiguration->get('docker.network_name'),
+            'network-prefix-port' => $this->projectConfiguration->get('docker.network_prefix_port'),
+            'host-machine-mapping' => $this->projectConfiguration->get('docker.host_machine_mapping'),
+            'project-path' => $this->projectPath,
             'provisioning-folder-name' => $provisioningFolder,
-            'composer-cache-dir'       => $this->projectConfiguration->get('docker.host_composer_cache_dir'),
+            'composer-cache-dir' => $this->projectConfiguration->get('docker.host_composer_cache_dir'),
         ];
 
         $this->dockerClient = new Docker($options, new ProcessRunner(), $this->optimizer);

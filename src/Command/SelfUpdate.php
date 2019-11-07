@@ -1,8 +1,11 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace eZ\Launchpad\Command;
 
@@ -13,9 +16,6 @@ use Humbug\SelfUpdate\Updater;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Class SelfUpdate.
- */
 class SelfUpdate extends Command
 {
     /**
@@ -23,26 +23,17 @@ class SelfUpdate extends Command
      */
     protected $parameters;
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('self-update')->setDescription('Self Update');
     }
 
-    /**
-     * @param array $parameters
-     */
-    public function setParameters($parameters = [])
+    public function setParameters(array $parameters = []): void
     {
         $this->parameters = $parameters;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $application = $this->getApplication();
         /* @var Application $application */
@@ -51,11 +42,11 @@ class SelfUpdate extends Command
         $app_env = $this->parameters['env'];
         $app_dir = $this->appDir;
 
-        $localPharFile = 'prod' == $app_env ? null : $app_dir.'/docs/ez.phar';
-        $updater       = new Updater($localPharFile);
-        $strategy      = $updater->getStrategy();
+        $localPharFile = 'prod' === $app_env ? null : $app_dir.'/docs/ez.phar';
+        $updater = new Updater($localPharFile);
+        $strategy = $updater->getStrategy();
         if ($strategy instanceof ShaStrategy) {
-            if ('prod' == $app_env) {
+            if ('prod' === $app_env) {
                 $strategy->setPharUrl($this->parameters['url']);
                 $strategy->setVersionUrl($this->parameters['version']);
             }

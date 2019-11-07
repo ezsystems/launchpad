@@ -1,8 +1,11 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace eZ\Launchpad\Core;
 
@@ -12,12 +15,9 @@ use Symfony\Component\Process\Process;
 class ProcessRunner
 {
     /**
-     * @param string $command
-     * @param array  $envVars
-     *
-     * @return Process
+     * @return Process|array
      */
-    public function run($command, $envVars)
+    public function run(string $command, array $envVars)
     {
         $process = new Process(escapeshellcmd($command), null, $envVars);
         $process->setTimeout(2 * 3600);
@@ -34,7 +34,7 @@ class ProcessRunner
                 130, // Interrupt
             ];
 
-            if (!in_array($e->getProcess()->getExitCode(), $authorizedExitCodes)) {
+            if (!\in_array($e->getProcess()->getExitCode(), $authorizedExitCodes)) {
                 throw $e;
             }
         }
@@ -42,10 +42,7 @@ class ProcessRunner
         return null;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasTty()
+    public function hasTty(): bool
     {
         // Extracted from \Symfony\Component\Process\Process::setTty
         if ('\\' === \DIRECTORY_SEPARATOR) {
@@ -53,11 +50,15 @@ class ProcessRunner
             $isTtySupported = false;
         } else {
             // TTY mode requires /dev/tty to be read/writable.
-            $isTtySupported = (bool) @proc_open('echo 1 >/dev/null', [
-                ['file', '/dev/tty', 'r'],
-                ['file', '/dev/tty', 'w'],
-                ['file', '/dev/tty', 'w'],
-            ], $pipes);
+            $isTtySupported = (bool) @proc_open(
+                'echo 1 >/dev/null',
+                [
+                    ['file', '/dev/tty', 'r'],
+                    ['file', '/dev/tty', 'w'],
+                    ['file', '/dev/tty', 'w'],
+                ],
+                $pipes
+            );
         }
 
         return $isTtySupported;

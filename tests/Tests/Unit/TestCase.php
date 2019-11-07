@@ -1,8 +1,11 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace eZ\Launchpad\Tests\Unit;
 
@@ -16,9 +19,6 @@ use eZ\Launchpad\Configuration\Project as ProjectConfiguration;
 use eZ\Launchpad\Core\Client\Docker;
 use eZ\Launchpad\Core\ProcessRunner;
 
-/**
- * Class TestCase
- */
 abstract class TestCase extends BaseTestCase
 {
     /**
@@ -31,9 +31,9 @@ abstract class TestCase extends BaseTestCase
      */
     public function setup()
     {
-        $this->root          = vfsStream::setup('ezlaunchpad');
+        $this->root = vfsStream::setup('ezlaunchpad');
         $globalConfiguration = vfsStream::url("ezlaunchpad/ez.yml");
-        $localConfiguration  = vfsStream::url("ezlaunchpad/.ezlaunchpad.yml");
+        $localConfiguration = vfsStream::url("ezlaunchpad/.ezlaunchpad.yml");
 
         file_put_contents(
             $globalConfiguration,
@@ -72,14 +72,9 @@ docker:
         );
     }
 
-    /**
-     * @param $configs
-     *
-     * @return array
-     */
-    protected function process($configs)
+    protected function process($configs): array
     {
-        $processor     = new Processor();
+        $processor = new Processor();
         $configuration = new Configuration();
 
         return $processor->processConfiguration(
@@ -88,13 +83,10 @@ docker:
         );
     }
 
-    /**
-     * @return ProjectConfiguration
-     */
-    protected function getConfiguration()
+    protected function getConfiguration(): ProjectConfiguration
     {
         $globalFile = $this->root->getChild('ez.yml')->url();
-        $localFile  = $this->root->getChild('.ezlaunchpad.yml')->url();
+        $localFile = $this->root->getChild('.ezlaunchpad.yml')->url();
 
         $pConfiguration = new ProjectConfiguration(
             $globalFile,
@@ -111,25 +103,18 @@ docker:
         return $pConfiguration;
     }
 
-    /**
-     * @return string
-     */
-    public function getDockerComposeFilePath()
+    public function getDockerComposeFilePath(): string
     {
         return __DIR__."/../../../payload/dev/docker-compose.yml";
     }
 
-    /**
-     * @param bool $hasTty
-     * @return Docker
-     */
-    public function getDockerClient($hasTty = true)
+    public function getDockerClient(bool $hasTty = true): Docker
     {
         $options = [
-            'compose-file'             => $this->getDockerComposeFilePath(),
-            'network-name'             => "test",
-            'network-prefix-port'      => 42,
-            'project-path'             => getcwd(),
+            'compose-file' => $this->getDockerComposeFilePath(),
+            'network-name' => "test",
+            'network-prefix-port' => 42,
+            'project-path' => getcwd(),
             'provisioning-folder-name' => 'provisioning',
         ];
 
@@ -140,7 +125,7 @@ docker:
             ->will(
                 $this->returnCallback(
                     function () {
-                        return func_get_args();
+                        return \func_get_args();
                     }
                 )
             );
@@ -152,29 +137,26 @@ docker:
         return new Docker($options, $processRunnerMock);
     }
 
-    /**
-     * @return array
-     */
-    public function getDockerClientEnvironmentVariables()
+    public function getDockerClientEnvironmentVariables(): array
     {
         return [
-            'PROJECTNETWORKNAME'      => 'test',
-            "PROJECTPORTPREFIX"       => 42,
-            "PROJECTCOMPOSEPATH"      => "../../",
-            "PROVISIONINGFOLDERNAME"  => "provisioning",
-            "HOST_COMPOSER_CACHE_DIR" => getenv('HOME')."/.composer/cache",
-            "DEV_UID"                 => getmyuid(),
-            "DEV_GID"                 => getmygid(),
-            'COMPOSER_CACHE_DIR'      => "/var/www/composer_cache",
-            'PROJECTMAPPINGFOLDER'    => "/var/www/html/project",
-            'BLACKFIRE_CLIENT_ID'     => getenv('BLACKFIRE_CLIENT_ID'),
-            'BLACKFIRE_CLIENT_TOKEN'  => getenv('BLACKFIRE_CLIENT_TOKEN'),
-            'BLACKFIRE_SERVER_ID'     => getenv('BLACKFIRE_SERVER_ID'),
-            'BLACKFIRE_SERVER_TOKEN'  => getenv('BLACKFIRE_SERVER_TOKEN'),
-            'DOCKER_HOST'             => getenv('DOCKER_HOST'),
-            'DOCKER_CERT_PATH'        => getenv('DOCKER_CERT_PATH'),
-            'DOCKER_TLS_VERIFY'       => getenv('DOCKER_TLS_VERIFY'),
-            'PATH'                    => getenv('PATH'),
+            'PROJECTNETWORKNAME' => 'test',
+            "PROJECTPORTPREFIX" => 42,
+            "PROJECTCOMPOSEPATH" => "../../",
+            "PROVISIONINGFOLDERNAME" => "provisioning",
+            "HOST_COMPOSER_CACHE_DIR" => MacOSPatherize(getenv('HOME')."/.composer/cache"),
+            "DEV_UID" => getmyuid(),
+            "DEV_GID" => getmygid(),
+            'COMPOSER_CACHE_DIR' => "/var/www/composer_cache",
+            'PROJECTMAPPINGFOLDER' => "/var/www/html/project",
+            'BLACKFIRE_CLIENT_ID' => getenv('BLACKFIRE_CLIENT_ID'),
+            'BLACKFIRE_CLIENT_TOKEN' => getenv('BLACKFIRE_CLIENT_TOKEN'),
+            'BLACKFIRE_SERVER_ID' => getenv('BLACKFIRE_SERVER_ID'),
+            'BLACKFIRE_SERVER_TOKEN' => getenv('BLACKFIRE_SERVER_TOKEN'),
+            'DOCKER_HOST' => getenv('DOCKER_HOST'),
+            'DOCKER_CERT_PATH' => getenv('DOCKER_CERT_PATH'),
+            'DOCKER_TLS_VERIFY' => getenv('DOCKER_TLS_VERIFY'),
+            'PATH' => getenv('PATH'),
         ];
     }
 }

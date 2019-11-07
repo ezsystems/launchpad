@@ -1,8 +1,11 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace eZ\Launchpad\Core;
 
@@ -14,9 +17,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * Class Command.
- */
 abstract class Command extends BaseCommand
 {
     /**
@@ -49,65 +49,44 @@ abstract class Command extends BaseCommand
      */
     protected $optimizer;
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function initialize(InputInterface $input, OutputInterface $output)
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $this->io = new SymfonyStyle($input, $output);
     }
 
-    public function setProjectConfiguration(ProjectConfiguration $configuration)
+    public function setProjectConfiguration(ProjectConfiguration $configuration): self
     {
         $this->projectConfiguration = $configuration;
 
         return $this;
     }
 
-    /**
-     * @param string $appDir
-     */
-    public function setAppDir($appDir)
+    public function setAppDir(string $appDir): void
     {
         $this->appDir = $appDir;
     }
 
-    /**
-     * @return string
-     */
-    public function getPayloadDir()
+    public function getPayloadDir(): string
     {
         return "{$this->appDir}payload";
     }
 
-    /**
-     * @param string $projectPath
-     */
-    public function setProjectPath($projectPath)
+    public function setProjectPath(string $projectPath): void
     {
         $this->projectPath = $projectPath;
     }
 
-    /**
-     * @return string
-     */
-    public function getProjectPath()
+    public function getProjectPath(): string
     {
         return $this->projectPath;
     }
 
-    /**
-     * @param array $requiredRecipes
-     */
-    public function setRequiredRecipes($requiredRecipes)
+    public function setRequiredRecipes(array $requiredRecipes): void
     {
         $this->requiredRecipes = NovaCollection($requiredRecipes);
     }
 
-    /**
-     * @return Collection
-     */
-    public function getRequiredRecipes()
+    public function getRequiredRecipes(): Collection
     {
         if (null === $this->requiredRecipes) {
             $this->requiredRecipes = NovaCollection([]);
@@ -116,10 +95,7 @@ abstract class Command extends BaseCommand
         return $this->requiredRecipes;
     }
 
-    /**
-     * @param OptimizerInterface $optimizer
-     */
-    public function setOptimizer($optimizer)
+    public function setOptimizer(OptimizerInterface $optimizer): void
     {
         $this->optimizer = $optimizer;
     }

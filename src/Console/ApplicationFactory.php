@@ -1,8 +1,11 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace eZ\Launchpad\Console;
 
@@ -13,24 +16,15 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
 
-/**
- * Class ApplicationFactory.
- */
 class ApplicationFactory
 {
-    /**
-     * Create the Application.
-     *
-     * @param bool   $autoExit        Default: true
-     * @param string $env             Default: prod
-     * @param string $operatingSystem Default: PHP_OS
-     *
-     * @return Application
-     */
-    public static function create($autoExit = true, $env = 'prod', $operatingSystem = PHP_OS)
-    {
-        define('EZ_HOME', getenv('HOME').'/.ezlaunchpad');
-        define('EZ_ON_OSX', 'Darwin' === $operatingSystem);
+    public static function create(
+        bool $autoExit = true,
+        string $env = 'prod',
+        string $operatingSystem = PHP_OS
+    ): Application {
+        \define('EZ_HOME', getenv('HOME').'/.ezlaunchpad');
+        \define('EZ_ON_OSX', 'Darwin' === $operatingSystem);
         $container = new ContainerBuilder();
         $container->addCompilerPass(new CommandPass($env));
         $container->addCompilerPass(new RegisterListenersPass());

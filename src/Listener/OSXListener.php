@@ -1,8 +1,11 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace eZ\Launchpad\Listener;
 
@@ -19,26 +22,23 @@ class OSXListener
      */
     protected $optimizers;
 
-    /**
-     * OSXListener constructor.
-     *
-     * @param iterable $optimizers
-     */
-    public function __construct($optimizers)
+    public function __construct(iterable $optimizers)
     {
         $this->optimizers = $optimizers;
     }
 
-    public function onCommandAction(ConsoleCommandEvent $event)
+    public function onCommandAction(ConsoleCommandEvent $event): void
     {
         if (!EZ_ON_OSX) {
             return;
         }
-        /** @var Command $command */
         $command = $event->getCommand();
+        if (!$command instanceof Command) {
+            return;
+        }
 
         // don't bother for those command
-        if (in_array($command->getName(), ['self-update', 'rollback', 'list', 'help', 'test'])) {
+        if (\in_array($command->getName(), ['self-update', 'rollback', 'list', 'help', 'test'])) {
             return;
         }
 
@@ -48,9 +48,11 @@ class OSXListener
             $version = $this->getDockerVersion();
             foreach ($this->optimizers as $optimizer) {
                 /** @var OptimizerInterface $optimizer */
-                if ($optimizer->supports($version) &&
+                if (
+                    $optimizer->supports($version) &&
                     !$optimizer->isEnabled() &&
-                    $optimizer->hasPermission($io)) {
+                    $optimizer->hasPermission($io)
+                ) {
                     $optimizer->optimize($io, $command);
                     // only one allowed
                     break;
@@ -70,14 +72,9 @@ class OSXListener
 
             return;
         }
-
-        return;
     }
 
-    /**
-     * @return int
-     */
-    protected function getDockerVersion()
+    protected function getDockerVersion(): int
     {
         exec('docker -v 2>/dev/null', $output, $return);
         if (0 !== $return) {
@@ -85,7 +82,7 @@ class OSXListener
         }
         list($version, $build) = explode(',', $output[0]);
         unset($build);
-        $result                      = preg_replace('/([^ ]*) ([^ ]*) ([0-9\\.]*)-?([a-zA-z]*)/ui', '$3', $version);
+        $result = preg_replace('/([^ ]*) ([^ ]*) ([0-9\\.]*)-?([a-zA-z]*)/ui', '$3', $version);
         list($major, $minor, $patch) = explode('.', $result);
         unset($patch);
         $normalizedVersion = (int) $major * 100 + $minor;

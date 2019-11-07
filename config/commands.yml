@@ -3,6 +3,7 @@ services:
 
     _defaults:
         autowire: true
+        public: true
 
     _instanceof:
         eZ\Launchpad\Core\Command:

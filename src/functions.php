@@ -1,8 +1,11 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
+
+declare(strict_types=1);
 
 /**
  * Get the TimeZone of the system if possible.
@@ -43,9 +46,9 @@ function MacOSPatherize($path)
 
     if (null === $isCatalina) {
         if (exec('defaults read loginwindow SystemVersionStampAsString', $output, $returnCode)) {
-            $parts      = explode('.', $output[0]);
-            $major      = (int) $parts[0];
-            $minor      = (int) $parts[1];
+            $parts = explode('.', $output[0]);
+            $major = (int) $parts[0];
+            $minor = (int) $parts[1];
             $isCatalina = ($major >= 10) && ($minor >= 15);
         } else {
             $isCatalina = false;
