@@ -1,5 +1,7 @@
 /composer.phar
 /box.phar
+/ez.phar
+/ez.phar.*
 /vendor/
 .php~
 .idea
@@ -20,10 +22,10 @@ tests/coverage
 /ezplatform
 /.ezlaunchpad.yml
 
-# Travis stuff
-/.travis/build-key.pem
-/.travis/ezlaunchpad-private.pem
-/.travis/secrets.tar
+# CI stuff
+/build-key.pem
+/ezlaunchpad-private.pem
+/secrets.tar
 /plantuml.jar
 
 # others
@@ -31,7 +33,8 @@ tests/coverage
 /provisioning2
 /data
 
-# we don't want that at the root (usually generated when developing eZ Launchpad)
+# we do not want that at the root (usually generated when developing eZ Launchpad)
 /ez_install.bash
 /composer_install.bash
 /ez_install_solr.bash
+

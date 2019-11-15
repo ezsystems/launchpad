@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
@@ -16,49 +17,33 @@ class DockerCompose
      */
     protected $compose;
 
-    /**
-     * DockerCompose constructor.
-     *
-     * @param $filePath
-     */
-    public function __construct($filePath)
+    public function __construct(string $filePath)
     {
         $this->compose = Yaml::parse(file_get_contents($filePath));
     }
 
-    public function getServices()
+    public function getServices(): array
     {
         return $this->compose['services'];
     }
 
-    /**
-     * @param $name
-     *
-     * @return bool
-     */
-    public function hasService($name)
+    public function hasService(string $name): bool
     {
         return isset($this->compose['services'][$name]);
     }
 
-    /**
-     * @param $destination
-     */
-    public function dump($destination)
+    public function dump(string $destination): void
     {
         $yaml = Yaml::dump($this->compose, 4);
-        $fs   = new Filesystem();
+        $fs = new Filesystem();
         $fs->dumpFile($destination, $yaml);
     }
 
-    /**
-     * @param array $selectedServices
-     */
-    public function filterServices($selectedServices)
+    public function filterServices(array $selectedServices): void
     {
         $services = [];
         foreach ($this->getServices() as $name => $service) {
-            if (!in_array($name, $selectedServices)) {
+            if (!\in_array($name, $selectedServices)) {
                 continue;
             }
             $services[$name] = $service;
@@ -66,20 +51,20 @@ class DockerCompose
         $this->compose['services'] = $services;
     }
 
-    public function cleanForInitializeSkeleton()
+    public function cleanForInitializeSkeleton(): void
     {
         $services = [];
         foreach ($this->getServices() as $name => $service) {
             // Solr is not managed here
-            if (in_array($name, ['solr'])) {
+            if ('solr' === $name) {
                 continue;
             }
 
             if (isset($service['volumes'])) {
-                $volumes            = NovaCollection($service['volumes']);
+                $volumes = NovaCollection($service['volumes']);
                 $service['volumes'] = $volumes->prune(
                     function ($value) {
-                        return !preg_match('/ezplatform/', $value);
+                        return false === strpos($value, 'ezplatform');
                     }
                 )->toArray();
             }
@@ -88,25 +73,25 @@ class DockerCompose
         $this->compose['services'] = $services;
     }
 
-    public function cleanForInitialize()
+    public function cleanForInitialize(): void
     {
         $services = [];
         foreach ($this->getServices() as $name => $service) {
             // we don't need anything else for the init
-            if (!in_array($name, ['engine', 'db'])) {
+            if (!\in_array($name, ['engine', 'db'])) {
                 continue;
             }
 
             if (isset($service['volumes'])) {
-                $volumes            = NovaCollection($service['volumes']);
+                $volumes = NovaCollection($service['volumes']);
                 $service['volumes'] = $volumes->prune(
                     function ($value) {
-                        return !preg_match('/ezplatform/', $value);
+                        return false === strpos($value, 'ezplatform');
                     }
                 )->toArray();
             }
             if (isset($service['environment'])) {
-                $environnementVars      = NovaCollection($service['environment']);
+                $environnementVars = NovaCollection($service['environment']);
                 $service['environment'] = $environnementVars->prune(
                     function ($value) {
                         $vars = [
@@ -133,35 +118,31 @@ class DockerCompose
         $this->compose['services'] = $services;
     }
 
-    public function removeUselessEnvironmentsVariables()
+    public function removeUselessEnvironmentsVariables(): void
     {
         $services = [];
         foreach ($this->getServices() as $name => $service) {
             if (isset($service['environment'])) {
-                $environnementVars      = NovaCollection($service['environment']);
+                $environnementVars = NovaCollection($service['environment']);
                 $service['environment'] = $environnementVars->prune(
                     function ($value) {
                         if (!$this->hasService('solr')) {
-                            if (preg_match(
-                                '/(SEARCH_ENGINE|SOLR_DSN)/',
-                                $value
-                            )) {
+                            if (preg_match('/(SEARCH_ENGINE|SOLR_DSN)/', $value)) {
                                 return false;
                             }
                         }
                         if (!$this->hasService('redis')) {
-                            if (preg_match(
-                                '/(CUSTOM_CACHE_POOL|CACHE_HOST|CACHE_POOL|CACHE_DSN|CACHE_REDIS_PORT)/',
-                                $value
-                            )) {
+                            if (
+                                preg_match(
+                                    '/(CUSTOM_CACHE_POOL|CACHE_HOST|CACHE_POOL|CACHE_DSN|CACHE_REDIS_PORT)/',
+                                    $value
+                                )
+                            ) {
                                 return false;
                             }
                         }
                         if (!$this->hasService('varnish')) {
-                            if (preg_match(
-                                '/(HTTPCACHE_PURGE_SERVER)/',
-                                $value
-                            )) {
+                            if (preg_match('/(HTTPCACHE_PURGE_SERVER)/', $value)) {
                                 return false;
                             }
                         }

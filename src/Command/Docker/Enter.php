@@ -1,8 +1,11 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace eZ\Launchpad\Command\Docker;
 
@@ -12,15 +15,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Class Enter.
- */
-class Enter extends DockerCommand
+final class Enter extends DockerCommand
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
         $this->setName('docker:enter')->setDescription('Enter in a container.');
@@ -30,10 +27,7 @@ class Enter extends DockerCommand
         $this->setAliases(['enter', 'docker:exec', 'exec']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $this->dockerClient->exec(
             $input->getArgument('shell'),

@@ -1,17 +1,16 @@
 ---
 parameters:
-    ez_phar: 'https://ezsystems.github.io/launchpad/ez.phar'
-    ez_phar_version: 'https://ezsystems.github.io/launchpad/ez.phar.version'
+    github_release_url: "https://api.github.com/repos/ezsystems/launchpad/releases?draft=false&prerelease=false"
 
 services:
 
     _defaults:
         autowire: true
+        public:  true
 
     eZ\Launchpad\Listener\ApplicationUpdate:
         arguments:
-            - {env: "%app_env%", dir: "%app_dir%", url: "%ez_phar%", version: "%ez_phar_version%"}
-            - "@project_configuration"
+            - {release_url: "%github_release_url%"}
         tags:
             - { name: kernel.event_listener, event: console.command, method: onCommandAction }
 

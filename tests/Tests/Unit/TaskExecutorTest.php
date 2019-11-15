@@ -1,8 +1,11 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace eZ\Launchpad\Tests\Unit;
 
@@ -24,7 +27,7 @@ class TaskExecutorTest extends TestCase
     {
         parent::setUp();
         $finder = new Finder();
-        $files  = $finder->files()->in(__DIR__."/../../../payload/recipes")->name("*.bash");
+        $files = $finder->files()->in(__DIR__."/../../../payload/recipes")->name("*.bash");
 
         $recipes = NovaCollection([]);
         foreach ($files as $file) {
@@ -37,7 +40,7 @@ class TaskExecutorTest extends TestCase
     /**
      *
      */
-    public function testComposerInstall()
+    public function testComposerInstall(): void
     {
         $command = "docker-compose -p test -f ".$this->getDockerComposeFilePath();
         $results = $this->executor->composerInstall();
@@ -49,7 +52,7 @@ class TaskExecutorTest extends TestCase
         }
 
         $startWith = "exec --user www-data engine";
-        $path      = $this->getDockerClient()->getProjectPathContainer();
+        $path = $this->getDockerClient()->getProjectPathContainer();
 
         $this->assertEquals("{$startWith} {$path}/composer_install.bash", $suffixes[0]);
         $this->assertEquals(

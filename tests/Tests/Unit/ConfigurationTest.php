@@ -1,8 +1,11 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace eZ\Launchpad\Tests\Unit;
 
@@ -11,29 +14,26 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Yaml\Yaml;
 
-/**
- * Class Configuration
- */
 class ConfigurationTest extends TestCase
 {
 
     protected static $defaultConfiguration = [
-        'docker'            => [
-            "compose_filename"        => "docker-compose.yml",
-            "network_prefix_port"     => "42",
-            "host_machine_mapping"    => null,
-            "network_name"            => "default-ezlaunchpad",
+        'docker' => [
+            "compose_filename" => "docker-compose.yml",
+            "network_prefix_port" => "42",
+            "host_machine_mapping" => null,
+            "network_name" => "default-ezlaunchpad",
             "host_composer_cache_dir" => null
         ],
-        "provisioning"      => [
+        "provisioning" => [
             "folder_name" => "provisioning"
         ],
         "last_update_check" => null
     ];
 
-    protected function process($configs)
+    protected function process($configs): array
     {
-        $processor     = new Processor();
+        $processor = new Processor();
         $configuration = new Configuration();
 
         return $processor->processConfiguration(
@@ -42,13 +42,13 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    public function testDefaultLoad()
+    public function testDefaultLoad(): void
     {
         $config = $this->process([]);
         $this->assertEquals(static::$defaultConfiguration, $config);
     }
 
-    public function getYamlExamples()
+    public function getYamlExamples(): array
     {
         return [
             ['', 'ok'],
@@ -89,23 +89,20 @@ provisioni2ng:
 
     /**
      * @dataProvider getYamlExamples
-     *
-     * @param $yaml
-     * @param $expected
      */
-    public function testYamlLoading($yaml, $expected)
+    public function testYamlLoading($yaml, $expected): void
     {
-        if ($expected == 'exception') {
+        if ($expected === 'exception') {
             return;
         }
 
         $configuration = Yaml::parse($yaml);
-        $config        = $this->process([$configuration]);
+        $config = $this->process([$configuration]);
 
-        if ($expected == 'ok') {
+        if ($expected === 'ok') {
             $this->assertInternalType('array', $config);
         }
-        if ($expected == 'default') {
+        if ($expected === 'default') {
             $this->assertInternalType('array', $config);
             $this->assertEquals(static::$defaultConfiguration, $config);
         }
@@ -114,15 +111,12 @@ provisioni2ng:
     /**
      * @dataProvider getYamlExamples
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     *
-     * @param $yaml
-     * @param $expected
      */
     public function testYamlException($yaml, $expected)
     {
         $configuration = Yaml::parse($yaml);
         $this->process([$configuration]);
-        if ($expected != 'exception') {
+        if ($expected !== 'exception') {
             throw new InvalidConfigurationException('mock');
         }
     }

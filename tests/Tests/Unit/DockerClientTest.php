@@ -1,14 +1,16 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace eZ\Launchpad\Tests\Unit;
 
 class DockerClientTest extends TestCase
 {
-
     /**
      * @var array
      */
@@ -23,12 +25,12 @@ class DockerClientTest extends TestCase
         $this->environmentVariables = $this->getDockerClientEnvironmentVariables();
     }
 
-    public function testEnvVariables()
+    public function testEnvVariables(): void
     {
         $this->assertEquals($this->environmentVariables, $this->getDockerClient()->getComposeEnvVariables());
     }
 
-    public function testGetCommand()
+    public function testGetCommand(): void
     {
         $vars = NovaCollection($this->environmentVariables);
 
@@ -42,7 +44,7 @@ class DockerClientTest extends TestCase
         $this->assertEquals($expected, $this->getDockerClient()->getComposeCommand());
     }
 
-    public function getTestedActions()
+    public function getTestedActions(): array
     {
         return [
             ['ps', [[]], 'ps'],
@@ -70,22 +72,17 @@ class DockerClientTest extends TestCase
 
     /**
      * @dataProvider getTestedActions
-     *
-     * @param string $method
-     * @param array $args
-     * @param string $expectedCommandSuffix
-     * @param bool $hasTty
      */
-    public function testRun($method, $args, $expectedCommandSuffix, $hasTty = true)
+    public function testRun(string $method, array $args, string $expectedCommandSuffix, bool $hasTty = true): void
     {
-        $client        = $this->getDockerClient($hasTty);
-        $mockedResults = call_user_func_array([$client, $method], $args);
+        $client = $this->getDockerClient($hasTty);
+        $mockedResults = \call_user_func_array([$client, $method], $args);
 
         $this->assertCount(2, $mockedResults);
         $this->assertEquals($mockedResults[1], $this->environmentVariables);
 
-        $command = "docker-compose -p test -f " . $this->getDockerComposeFilePath();
-        $suffix  = trim(str_replace($command, '', $mockedResults[0]));
+        $command = "docker-compose -p test -f ".$this->getDockerComposeFilePath();
+        $suffix = trim(str_replace($command, '', $mockedResults[0]));
 
         $this->assertEquals($expectedCommandSuffix, $suffix);
     }

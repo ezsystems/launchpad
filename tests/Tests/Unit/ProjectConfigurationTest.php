@@ -1,20 +1,20 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace eZ\Launchpad\Tests\Unit;
 
 use eZ\Launchpad\Core\DockerCompose;
 
-/**
- * Class ProjectConfigurationTest
- */
 class ProjectConfigurationTest extends TestCase
 {
 
-    public function getKeyValuesToTest()
+    public function getKeyValuesToTest(): array
     {
         return [
             ['last_update_check', '1491955697'],
@@ -38,11 +38,8 @@ class ProjectConfigurationTest extends TestCase
 
     /**
      * @dataProvider getKeyValuesToTest
-     *
-     * @param $key
-     * @param $expectedValue
      */
-    public function testKeyValue($key, $expectedValue)
+    public function testKeyValue($key, $expectedValue): void
     {
         $projectConfiguration = $this->getConfiguration();
         $this->assertEquals($projectConfiguration->get($key), $expectedValue);
@@ -50,8 +47,8 @@ class ProjectConfigurationTest extends TestCase
 
     public function testSet($where = 'local')
     {
-        $method                    = "set".ucfirst($where);
-        $var                       = 'docker.compose_filename';
+        $method = "set".ucfirst($where);
+        $var = 'docker.compose_filename';
         $firstProjectConfiguration = $this->getConfiguration();
         $this->assertEquals($firstProjectConfiguration->get($var), 'docker-compose-test.yml');
         $firstProjectConfiguration->$method($var, 'docker-compose-test.yml_CHANGED');
@@ -61,7 +58,7 @@ class ProjectConfigurationTest extends TestCase
         $this->assertEquals($firstProjectConfiguration, $secondProjectConfiguration);
     }
 
-    public function testSetGlobal()
+    public function testSetGlobal(): void
     {
         $this->testSet('global');
 
@@ -75,7 +72,7 @@ class ProjectConfigurationTest extends TestCase
         $this->assertEquals($secondProjectConfiguration->get('provisioning.folder_name'), 'provisioning_test');
     }
 
-    public function testDockerComposerGet()
+    public function testDockerComposerGet(): void
     {
         $configuration = $this->getConfiguration();
         $dockerCompose = $configuration->getDockerCompose();

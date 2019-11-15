@@ -1,67 +1,52 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace eZ\Launchpad\Core\OSX\Optimizer;
 
 use eZ\Launchpad\Core\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * Class D4MListener.
- */
 class NFSVolumes extends Optimizer implements OptimizerInterface, NFSAwareInterface
 {
     use NFSTrait;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         list($export, $mountPoint) = $this->getHostMapping();
-        $export                    = MacOSPatherize($export);
+        $export = MacOSPatherize($export);
 
         return $this->isResvReady() && $this->isExportReady($export);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function hasPermission(SymfonyStyle $io)
+    public function hasPermission(SymfonyStyle $io): bool
     {
         list($export, $mountPoint) = $this->getHostMapping();
-        $export                    = MacOSPatherize($export);
-        $exportLine                = "{$export} {$this->getExportOptions()}";
+        $export = MacOSPatherize($export);
+        $exportLine = "{$export} {$this->getExportOptions()}";
         $this->standardNFSConfigurationMessage($io, $exportLine);
 
         return $io->confirm('Do you want to setup your Mac as an NFS server?');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getExportOptions()
+    public function getExportOptions(): string
     {
         return '-mapall='.getenv('USER').':staff -alldirs localhost';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function optimize(SymfonyStyle $io, Command $command)
+    public function optimize(SymfonyStyle $io, Command $command): bool
     {
         $this->setupNFS($io, $this->getExportOptions());
 
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function supports($version)
+    public function supports($version): bool
     {
         return $version >= 1803;
     }

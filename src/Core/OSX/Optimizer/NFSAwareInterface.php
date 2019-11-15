@@ -1,57 +1,39 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace eZ\Launchpad\Core\OSX\Optimizer;
 
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * Interface NFSAwareInterface.
- */
 interface NFSAwareInterface
 {
     /**
      * File to set the NFS exports.
      */
-    const EXPORTS = '/etc/exports';
+    public const EXPORTS = '/etc/exports';
 
     /**
      * File to set the nfs.server.mount.require_resv_port = 0.
      */
-    const RESV = '/etc/nfs.conf';
+    public const RESV = '/etc/nfs.conf';
 
-    /**
-     * @return bool
-     */
-    public function restartNFSD(SymfonyStyle $io);
+    public function restartNFSD(SymfonyStyle $io): bool;
 
-    /**
-     * @return array
-     */
-    public function getHostMapping();
+    public function getHostMapping(): array;
 
-    /**
-     * @return bool
-     */
-    public function isExportReady($export);
+    public function isExportReady($export): bool;
 
-    /**
-     * @return bool
-     */
-    public function isResvReady();
+    public function isResvReady(): bool;
 
-    public function setupNFS(SymfonyStyle $io, $exportOptions);
+    public function setupNFS(SymfonyStyle $io, $exportOptions): bool;
 
-    /**
-     * @param string $exportLine
-     */
-    public function standardNFSConfigurationMessage(SymfonyStyle $io, $exportLine);
+    public function standardNFSConfigurationMessage(SymfonyStyle $io, string $exportLine): void;
 
-    /**
-     * @return string
-     */
-    public function getExportOptions();
+    public function getExportOptions(): string;
 }

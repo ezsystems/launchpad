@@ -1,8 +1,11 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace eZ\Launchpad\Configuration;
 
@@ -10,9 +13,6 @@ use eZ\Launchpad\Core\DockerCompose;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
 
-/**
- * Class Project.
- */
 class Project
 {
     /**
@@ -35,26 +35,17 @@ class Project
      */
     protected $environment;
 
-    /**
-     * Project constructor.
-     *
-     * @param string $globalFilePath
-     * @param string $localFilePath
-     * @param array  $configurations
-     */
-    public function __construct($globalFilePath, $localFilePath, $configurations)
+    public function __construct(string $globalFilePath, string $localFilePath, array $configurations)
     {
         $this->globalFilePath = $globalFilePath;
-        $this->localFilePath  = $localFilePath;
+        $this->localFilePath = $localFilePath;
         $this->configurations = $configurations;
     }
 
     /**
-     * @param string $name
-     *
      * @return array|mixed|null
      */
-    public function get($name)
+    public function get(string $name)
     {
         if (strpos($name, '.')) {
             $parts = explode('.', $name);
@@ -69,84 +60,62 @@ class Project
             return $array;
         }
 
-        if (isset($this->configurations[$name])) {
-            return $this->configurations[$name];
-        }
-
-        return null;
+        return $this->configurations[$name] ?? null;
     }
 
-    /**
-     * @param string $name
-     */
-    public function setLocal($name, $value)
+    public function setLocal(string $name, $value): void
     {
         $this->set([$name => $value], 'local');
     }
 
-    /**
-     * @param string $name
-     */
-    public function setGlobal($name, $value)
+    public function setGlobal(string $name, $value): void
     {
         $this->set([$name => $value], 'global');
     }
 
-    /**
-     * @param $keyValues
-     */
-    public function setMultiLocal($keyValues)
+    public function setMultiLocal(array $keyValues): void
     {
         $this->set($keyValues, 'local');
     }
 
-    /**
-     * @param $keyValues
-     */
-    public function setMultiGlobal($keyValues)
+    public function setMultiGlobal(array $keyValues): void
     {
         $this->set($keyValues, 'global');
     }
 
-    /**
-     * @param string $environment
-     */
-    public function setEnvironment($environment)
+    public function setEnvironment(string $environment): void
     {
         $this->environment = $environment;
     }
 
     /**
      * Store inMemory and in the good file.
-     *
-     * @param array  $keyValues
-     * @param string $where
      */
-    protected function set($keyValues, $where = 'global')
+    protected function set(array $keyValues, string $where = 'global'): void
     {
         $filePath = 'global' === $where ? $this->globalFilePath : $this->localFilePath;
 
-        $fs     = new Filesystem();
+        $fs = new Filesystem();
         $config = $fs->exists($filePath) ? Yaml::parse(file_get_contents($filePath)) : [];
 
         foreach ($keyValues as $name => $value) {
             if (strpos($name, '.')) {
-                $parts  = explode('.', $name);
+                $parts = explode('.', $name);
                 $onFile = &$config;
                 foreach ($parts as $part) {
-                    $onFile =&$onFile[$part];
+                    $onFile = &$onFile[$part];
                 }
                 $onFile = $value;
 
                 $inMemory = &$this->configurations;
 
                 foreach ($parts as $part) {
-                    $inMemory =&$inMemory[$part];
+                    $inMemory = &$inMemory[$part];
                 }
                 $inMemory = $value;
             } else {
                 $this->configurations[$name] = $value;
-                $config[$name]               = $value;
+                $config[$name] = $value;
             }
         }
 
@@ -154,12 +123,9 @@ class Project
         $fs->dumpFile($filePath, $yaml);
     }
 
-    /**
-     * @return DockerCompose
-     */
-    public function getDockerCompose()
+    public function getDockerCompose(): DockerCompose
     {
-        $projectPath = dirname($this->localFilePath);
+        $projectPath = \dirname($this->localFilePath);
 
         return new DockerCompose(
             "{$projectPath}/"."{$this->get('provisioning.folder_name')}/".

@@ -1,8 +1,11 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace eZ\Launchpad\Command\Docker;
 
@@ -12,15 +15,9 @@ use eZ\Launchpad\Core\TaskExecutor;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-/**
- * Class InitializeSkeleton.
- */
-class InitializeSkeleton extends Initialize
+final class InitializeSkeleton extends Initialize
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
         $this->setName('docker:initialize:skeleton')->setDescription(
@@ -35,7 +32,7 @@ class InitializeSkeleton extends Initialize
         DockerCompose $compose,
         $composeFilePath,
         InputInterface $input
-    ) {
+    ): void {
         $compose->cleanForInitializeSkeleton();
         $compose->dump($composeFilePath);
 

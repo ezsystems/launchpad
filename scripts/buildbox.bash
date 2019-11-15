@@ -7,6 +7,7 @@ PROJECTDIR="${BASEDIR}/../"
 cd ${PROJECTDIR}
 
 echoTitle "******** Build it! ********"
+ulimit -Sn 4096
 
 if [ ! -f composer.phar ]; then
     echoInfo "Install composer.phar before..."
@@ -22,9 +23,6 @@ fi
 $PHP composer.phar install --no-dev > /dev/null 2>&1
 $PHP -d "phar.readonly=false" box.phar build -vvv
 $PHP composer.phar install > /dev/null 2>&1
-shasum ez.phar > ez.phar.version
-
-mv ez.phar ez.phar.version ez.phar.pubkey ~/.ezlaunchpad/
 
 echoSuccess "Done."
 exit 0;

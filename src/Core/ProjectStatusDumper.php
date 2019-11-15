@@ -1,8 +1,11 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace eZ\Launchpad\Core;
 
@@ -11,9 +14,6 @@ use eZ\Launchpad\Core\Client\Docker;
 use Novactive\Collection\Collection;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * Class ProjectStatusDumper.
- */
 class ProjectStatusDumper
 {
     /**
@@ -31,26 +31,17 @@ class ProjectStatusDumper
      */
     protected $io;
 
-    /**
-     * ProjectStatusDumper constructor.
-     */
     public function __construct(ProjectConfiguration $projectConfiguration)
     {
         $this->projectConfiguration = $projectConfiguration;
     }
 
-    /**
-     * @param Docker $dockerClient
-     */
-    public function setDockerClient($dockerClient)
+    public function setDockerClient(Docker $dockerClient): void
     {
         $this->dockerClient = $dockerClient;
     }
 
-    /**
-     * @param SymfonyStyle $io
-     */
-    public function setIo($io)
+    public function setIo(SymfonyStyle $io): void
     {
         $this->io = $io;
     }
@@ -58,12 +49,12 @@ class ProjectStatusDumper
     /**
      * @param Collection|string|array $options
      */
-    public function dump($options)
+    public function dump($options): void
     {
-        if (is_string($options)) {
+        if (\is_string($options)) {
             $options = str_split($options);
         }
-        if (is_array($options)) {
+        if (\is_array($options)) {
             $options = NovaCollection($options);
         }
         if ($options->contains('n')) {
@@ -81,19 +72,13 @@ class ProjectStatusDumper
         }
     }
 
-    /**
-     * Dump Network.
-     */
-    protected function dumpNetwork()
+    protected function dumpNetwork(): void
     {
         $this->io->title('Docker Network');
         $this->dockerClient->ps();
     }
 
-    /**
-     * Dump Compose command.
-     */
-    protected function dumpComposeCommand()
+    protected function dumpComposeCommand(): void
     {
         $composeCommand = $this->dockerClient->getComposeCommand();
         $this->io->title("\nDocker Compose command");
@@ -103,10 +88,10 @@ class ProjectStatusDumper
     /**
      * Dump Human service acccess.
      */
-    protected function dumpServiceAccess()
+    protected function dumpServiceAccess(): void
     {
         $portPrefix = $this->projectConfiguration->get('docker.network_prefix_port');
-        $dump       = function ($title, $port, $suffix = '', $proto = 'http') use ($portPrefix) {
+        $dump = function ($title, $port, $suffix = '', $proto = 'http') use ($portPrefix) {
             $this->io->writeln(
                 "<fg=white;options=bold>{$title}: </>".
                 str_pad('', 1, "\t").
@@ -161,7 +146,7 @@ class ProjectStatusDumper
     /**
      * Dump first time stuff.
      */
-    protected function dumpFirstTime()
+    protected function dumpFirstTime(): void
     {
         $this->io->title("\033[2J\033[0;0HWelcome in eZ Launchpad!");
         $this->io->writeln(

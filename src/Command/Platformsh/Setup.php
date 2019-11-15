@@ -1,8 +1,11 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace eZ\Launchpad\Command\Platformsh;
 
@@ -11,45 +14,30 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-/**
- * Class Setup.
- */
 class Setup extends DockerCommand
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
         $this->setName('platformsh:setup')->setDescription('Set up the Platformsh integration.');
         $this->setAliases(['psh:setup']);
     }
 
-    /**
-     *  Post Actions.
-     */
-    protected function postAction()
+    protected function postAction(): void
     {
         $this->io->writeln(
             'You can also look at <comment>~/ez platformsh:deploy</comment>.'
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $fs = new Filesystem();
         $this->io->title($this->getDescription());
 
         // add a test to see if folder exists or not
         if ($fs->exists("{$this->projectPath}/.platform")) {
-            if (!$this->io->confirm(
-                'You already have a <comment>.platform</comment> folder, do you want to continue?'
-            )
-            ) {
+            if (!$this->io->confirm('You already have a <comment>.platform</comment> folder, continue?')) {
                 $this->postAction();
 
                 return;
@@ -67,7 +55,7 @@ class Setup extends DockerCommand
             "{$this->projectPath}/.platform.app.yaml"
         );
 
-        $provisioningName   = $this->projectConfiguration->get('provisioning.folder_name');
+        $provisioningName = $this->projectConfiguration->get('provisioning.folder_name');
         $provisioningFolder = "{$this->projectPath}/{$provisioningName}";
         $fs->copy(
             "{$this->getPayloadDir()}/platformsh/getmysqlcredentials.php",

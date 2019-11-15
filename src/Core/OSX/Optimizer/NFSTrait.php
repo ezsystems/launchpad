@@ -1,8 +1,11 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace eZ\Launchpad\Core\OSX\Optimizer;
 
@@ -10,15 +13,9 @@ use RuntimeException;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 
-/**
- * Trait NFSTrait.
- */
 trait NFSTrait
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function restartNFSD(SymfonyStyle $io)
+    public function restartNFSD(SymfonyStyle $io): bool
     {
         exec('sudo nfsd restart', $output, $returnCode);
         if (0 != $returnCode) {
@@ -29,10 +26,7 @@ trait NFSTrait
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getHostMapping()
+    public function getHostMapping(): array
     {
         $default = [getenv('HOME'), getenv('HOME')];
 
@@ -45,10 +39,7 @@ trait NFSTrait
         return $default;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isExportReady($export)
+    public function isExportReady($export): bool
     {
         $fs = new Filesystem();
         if (!$fs->exists(NFSAwareInterface::EXPORTS)) {
@@ -66,10 +57,7 @@ trait NFSTrait
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isResvReady()
+    public function isResvReady(): bool
     {
         $fs = new Filesystem();
         if (!$fs->exists(NFSAwareInterface::RESV)) {
@@ -90,15 +78,12 @@ trait NFSTrait
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setupNFS(SymfonyStyle $io, $exportOptions)
+    public function setupNFS(SymfonyStyle $io, $exportOptions): bool
     {
         list($export, $mountPoint) = $this->getHostMapping();
-        $export                    = MacOSPatherize($export);
+        $export = MacOSPatherize($export);
 
-        $isResvReady   = $this->isResvReady();
+        $isResvReady = $this->isResvReady();
         $isExportReady = $this->isExportReady($export);
 
         if (!$isResvReady) {
@@ -123,14 +108,15 @@ trait NFSTrait
                 throw new RuntimeException('Writing in '.NFSAwareInterface::EXPORTS.' failed.');
             }
             $io->success(NFSAwareInterface::EXPORTS.' updated.');
-            $this->restartNFSD($io);
+            if (!$this->restartNFSD($io)) {
+                return false;
+            }
         }
+
+        return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function standardNFSConfigurationMessage(SymfonyStyle $io, $exportLine)
+    public function standardNFSConfigurationMessage(SymfonyStyle $io, $exportLine): void
     {
         $io->caution('You are on Mac OS X, for optimal performance we recommend to mount the host through NFS.');
         $io->comment(

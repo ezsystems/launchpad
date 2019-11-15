@@ -1,8 +1,11 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace eZ\Launchpad\Core;
 
@@ -12,9 +15,6 @@ use Novactive\Collection\Collection;
 use RuntimeException;
 use Symfony\Component\Process\Process;
 
-/**
- * Class TaskExecutor.
- */
 class TaskExecutor
 {
     /**
@@ -32,20 +32,14 @@ class TaskExecutor
      */
     protected $recipes;
 
-    /**
-     * Executor constructor.
-     */
     public function __construct(DockerClient $dockerClient, ProjectConfiguration $configuration, Collection $recipes)
     {
-        $this->dockerClient         = $dockerClient;
+        $this->dockerClient = $dockerClient;
         $this->projectConfiguration = $configuration;
-        $this->recipes              = $recipes;
+        $this->recipes = $recipes;
     }
 
-    /**
-     * @param string $recipe
-     */
-    protected function checkRecipeAvailability($recipe)
+    protected function checkRecipeAvailability(string $recipe): void
     {
         if (!$this->recipes->contains($recipe)) {
             throw new RuntimeException("Recipe {$recipe} is not available.");
@@ -55,7 +49,7 @@ class TaskExecutor
     /**
      * @return Process[]
      */
-    public function composerInstall()
+    public function composerInstall(): array
     {
         $recipe = 'composer_install';
         $this->checkRecipeAvailability($recipe);
@@ -66,7 +60,7 @@ class TaskExecutor
 
         // Composer Configuration
         $httpBasics = $this->projectConfiguration->get('composer.http_basic');
-        if (is_array($httpBasics)) {
+        if (\is_array($httpBasics)) {
             foreach ($httpBasics as $auth) {
                 if (!isset($auth['host'], $auth['login'], $auth['password'])) {
                     continue;
@@ -79,7 +73,7 @@ class TaskExecutor
         }
 
         $tokens = $this->projectConfiguration->get('composer.token');
-        if (is_array($tokens)) {
+        if (\is_array($tokens)) {
             foreach ($tokens as $auth) {
                 if (!isset($auth['host'], $auth['value'])) {
                     continue;
@@ -93,14 +87,7 @@ class TaskExecutor
         return $processes;
     }
 
-    /**
-     * @param $version
-     * @param $repository
-     * @param $initialData
-     *
-     * @return Process
-     */
-    public function eZInstall($version, $repository, $initialData)
+    public function eZInstall(string $version, string $repository, string $initialData): Process
     {
         $recipe = 'ez_install';
         $this->checkRecipeAvailability($recipe);
@@ -108,10 +95,7 @@ class TaskExecutor
         return $this->execute("{$recipe}.bash {$repository} {$version} {$initialData}");
     }
 
-    /**
-     * @return Process
-     */
-    public function eZInstallSolr()
+    public function eZInstallSolr(): Process
     {
         $recipe = 'ez_install_solr';
         $this->checkRecipeAvailability($recipe);
@@ -121,10 +105,7 @@ class TaskExecutor
         );
     }
 
-    /**
-     * @return Process
-     */
-    public function indexSolr()
+    public function indexSolr(): Process
     {
         $recipe = 'ez_install_solr';
         $this->checkRecipeAvailability($recipe);
@@ -134,10 +115,7 @@ class TaskExecutor
         );
     }
 
-    /**
-     * @return Process
-     */
-    public function createCore()
+    public function createCore(): Process
     {
         $recipe = 'ez_install_solr';
         $this->checkRecipeAvailability($recipe);
@@ -151,10 +129,7 @@ class TaskExecutor
         );
     }
 
-    /**
-     * @return Process
-     */
-    public function eZCreate()
+    public function eZCreate(): Process
     {
         $recipe = 'ez_create';
         $this->checkRecipeAvailability($recipe);
@@ -162,10 +137,7 @@ class TaskExecutor
         return $this->execute("{$recipe}.bash");
     }
 
-    /**
-     * @return Process
-     */
-    public function dumpData()
+    public function dumpData(): Process
     {
         $recipe = 'create_dump';
         $this->checkRecipeAvailability($recipe);
@@ -173,10 +145,7 @@ class TaskExecutor
         return $this->execute("{$recipe}.bash");
     }
 
-    /**
-     * @return Process
-     */
-    public function importData()
+    public function importData(): Process
     {
         $recipe = 'import_dump';
         $this->checkRecipeAvailability($recipe);
@@ -184,24 +153,14 @@ class TaskExecutor
         return $this->execute("{$recipe}.bash");
     }
 
-    /**
-     * @param $arguments
-     *
-     * @return Process
-     */
-    public function runSymfomyCommand($arguments)
+    public function runSymfomyCommand(string $arguments): Process
     {
         $consolePath = $this->dockerClient->isEzPlatform2x() ? 'bin/console' : 'app/console';
 
         return $this->execute("ezplatform/{$consolePath} {$arguments}");
     }
 
-    /**
-     * @param $arguments
-     *
-     * @return Process
-     */
-    public function runComposerCommand($arguments)
+    public function runComposerCommand(string $arguments): Process
     {
         return $this->globalExecute(
             '/usr/local/bin/composer --working-dir='.$this->dockerClient->getProjectPathContainer().'/ezplatform '.
@@ -209,28 +168,14 @@ class TaskExecutor
         );
     }
 
-    /**
-     * @param string $command
-     * @param string $user
-     * @param string $service
-     *
-     * @return \Symfony\Component\Process\Process
-     */
-    protected function execute($command, $user = 'www-data', $service = 'engine')
+    protected function execute(string $command, string $user = 'www-data', string $service = 'engine')
     {
         $command = $this->dockerClient->getProjectPathContainer().'/'.$command;
 
         return $this->globalExecute($command, $user, $service);
     }
 
-    /**
-     * @param string $command
-     * @param string $user
-     * @param string $service
-     *
-     * @return \Symfony\Component\Process\Process
-     */
-    protected function globalExecute($command, $user = 'www-data', $service = 'engine')
+    protected function globalExecute(string $command, string $user = 'www-data', string $service = 'engine')
     {
         return $this->dockerClient->exec($command, ['--user', $user], $service);
     }

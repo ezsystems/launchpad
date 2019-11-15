@@ -1,21 +1,20 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace eZ\Launchpad\Command;
 
 use eZ\Launchpad\Console\Application;
 use eZ\Launchpad\Core\Command;
-use Humbug\SelfUpdate\Strategy\ShaStrategy;
-use Humbug\SelfUpdate\Updater;
+use Phar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Class SelfUpdate.
- */
 class SelfUpdate extends Command
 {
     /**
@@ -23,53 +22,53 @@ class SelfUpdate extends Command
      */
     protected $parameters;
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('self-update')->setDescription('Self Update');
     }
 
-    /**
-     * @param array $parameters
-     */
-    public function setParameters($parameters = [])
+    public function setParameters(array $parameters = []): void
     {
         $this->parameters = $parameters;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        $application = $this->getApplication();
         /* @var Application $application */
+        $application = $this->getApplication();
         $output->writeln($application->getLogo());
 
-        $app_env = $this->parameters['env'];
-        $app_dir = $this->appDir;
+        $releaseUrl = $this->parameters['release_url'];
+        $release = githubFetch($releaseUrl)[0];
+        $currentVersion = normalizeVersion($application->getVersion());
+        $lastVersion = normalizeVersion($release->tag_name);
+        if ($lastVersion <= $currentVersion) {
+            $this->io->comment('No update is required! You have the last version!');
 
-        $localPharFile = 'prod' == $app_env ? null : $app_dir.'/docs/ez.phar';
-        $updater       = new Updater($localPharFile);
-        $strategy      = $updater->getStrategy();
-        if ($strategy instanceof ShaStrategy) {
-            if ('prod' == $app_env) {
-                $strategy->setPharUrl($this->parameters['url']);
-                $strategy->setVersionUrl($this->parameters['version']);
-            }
-            $result = $updater->update();
-            $this->io->section('eZ Launchpad Auto Update');
-            if (!$result) {
-                $this->io->comment('No update is required! You have the last version!');
-            } else {
-                $new = $updater->getNewVersion();
-                $old = $updater->getOldVersion();
-                $this->io->writeln("Updated from <info>{$old}</info> to <info>{$new}</info>.");
-            }
-        } else {
-            $this->io->error('Strategy not implemented.');
+            return;
         }
+
+        $localPharFile = realpath($_SERVER['argv'][0]) ?: $_SERVER['argv'][0];
+        $localPharDir = \dirname($localPharFile);
+        $backPharFile = $localPharDir.'/ez.phar.backup';
+        copy($localPharFile, $backPharFile);
+        $assetUrl = $release->assets[0]->browser_download_url;
+        $tempPharFile = $localPharDir.'/ez.phar.temp';
+        file_put_contents($tempPharFile, githubFetch($assetUrl, false));
+        copy($localPharFile.'.pubkey', $tempPharFile.'.pubkey');
+
+        $phar = new Phar($tempPharFile);
+        $signature = $phar->getSignature();
+        if ('openssl' !== strtolower($signature['hash_type'])) {
+            $this->io->error('Invalid Signature.');
+
+            return;
+        }
+        rename($tempPharFile, $localPharFile);
+        chmod($localPharFile, fileperms($backPharFile));
+        unlink($tempPharFile.'.pubkey');
+        $this->io->writeln(
+            "Updated from <info>{$application->getVersion()}</info> to <info>{$release->tag_name}</info>."
+        );
     }
 }

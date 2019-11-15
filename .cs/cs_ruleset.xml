@@ -3,7 +3,7 @@
     <description>eZ Launchpad coding standard.</description>
     <arg name="tab-width" value="4"/>
 
-    <rule ref="PSR2"/>
+    <rule ref="PSR12"/>
     <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
     <rule ref="Generic.Formatting.MultipleStatementAlignment"/>
     <rule ref="Generic.CodeAnalysis.EmptyStatement"/>
@@ -14,4 +14,10 @@
     <rule ref="Generic.Files.OneInterfacePerFile"/>
     <rule ref="Generic.Formatting.SpaceAfterCast"/>
     <rule ref="Generic.PHP.ForbiddenFunctions"/>
+    <rule ref="Generic.Formatting.MultipleStatementAlignment">
+        <exclude name="Generic.Formatting.MultipleStatementAlignment"/>
+    </rule>
+    <rule ref="PSR12.Operators.OperatorSpacing">
+        <exclude name="PSR12.Operators.OperatorSpacing"/>
+    </rule>
 </ruleset>
