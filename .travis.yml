@@ -19,10 +19,10 @@ env:
 
 matrix:
     include:
-        - php: 7.2
+        - php: 7.3
           env: TEST_COLLECTION=collection-2x.json EZVERSION=2.* EXECUTE_DEPLOYMENT=true
     exclude:
-        - php: 7.2
+        - php: 7.3
           env: TEST_COLLECTION=collection-2x.json EZVERSION=2.*
 
 before_install:
@@ -48,8 +48,8 @@ script:
 after_success:
     - if [[ $EXECUTE_DEPLOYMENT == 'true' && $TRAVIS_TAG != '' ]]; then curl -LSs https://box-project.github.io/box2/installer.php | php ; fi
     - if [[ $EXECUTE_DEPLOYMENT == 'true' && $TRAVIS_TAG != '' ]]; then chmod 755 box.phar ; fi
-    - if [[ $EXECUTE_DEPLOYMENT == 'true' && $TRAVIS_TAG != '' ]]; then ulimit -Sn 4096 ; fi
-    - if [[ $EXECUTE_DEPLOYMENT == 'true' && $TRAVIS_TAG != '' ]]; then php -d "phar.readonly=false" ./box.phar build -vv ; fi
+    - if [[ $EXECUTE_DEPLOYMENT == 'true' && $TRAVIS_TAG != '' ]]; then travis_retry composer install --no-interaction --no-dev ; fi
+    - if [[ $EXECUTE_DEPLOYMENT == 'true' && $TRAVIS_TAG != '' ]]; then ulimit -Sn 8192 && php -d "phar.readonly=false" ./box.phar build -vv ; fi
 
 deploy:
     provider: releases
@@ -59,7 +59,7 @@ deploy:
     skip_cleanup: true
     on:
         tags: true
-        php:  '7.2'
+        php:  '7.3'
         repo: ezsystems/launchpad
 
 notifications:
