@@ -11,6 +11,6 @@ use eZ\Launchpad\Console\ApplicationFactory;
 
 require __DIR__.'/../src/bootstrap.php';
 
-error_reporting(0);
+error_reporting(getenv("DISPLAY_ERRORS") !== false ? E_ALL : 0);
 
 ApplicationFactory::create()->run();

@@ -75,6 +75,10 @@ function githubFetch(string $url, bool $toJson = true)
 
     $content = file_get_contents($url, false, $context);
 
+    if (false === $content) {
+        return null;
+    }
+
     if (false === $toJson) {
         return $content;
     }

@@ -46,6 +46,8 @@ final class ApplicationUpdate
             return;
         }
 
+        $io = new SymfonyStyle($event->getInput(), $event->getOutput());
+
         $authorized = [
             'list', 'help', 'test', 'docker:initialize:skeleton', 'docker:initialize', 'docker:create',
             'self-update', 'rollback',
@@ -65,7 +67,6 @@ final class ApplicationUpdate
             );
 
             if (!$fs->exists($dockerComposeFileFolder."/{$dockerComposeFileName}")) {
-                $io = new SymfonyStyle($event->getInput(), $event->getOutput());
                 $io->error('Your are not in a folder managed by eZ Launchpad.');
                 $event->disableCommand();
                 $event->stopPropagation();
@@ -90,12 +91,17 @@ final class ApplicationUpdate
         }
 
         $releaseUrl = $this->parameters['release_url'];
-        $release = githubFetch($releaseUrl)[0];
+        $releases = githubFetch($releaseUrl);
+        if (null === $releases) {
+            $io->comment('Cannot find new releases, please try later.');
+
+            return;
+        }
+        $release = $releases[0];
         $currentVersion = normalizeVersion($command->getApplication()->getVersion());
         $lastVersion = normalizeVersion($release->tag_name);
 
         if ($lastVersion > $currentVersion) {
-            $io = new SymfonyStyle($event->getInput(), $event->getOutput());
             $io->note('A new version of eZ Launchpad is available, please run self-update.');
             sleep(2);
         }

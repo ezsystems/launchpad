@@ -39,7 +39,13 @@ class SelfUpdate extends Command
         $output->writeln($application->getLogo());
 
         $releaseUrl = $this->parameters['release_url'];
-        $release = githubFetch($releaseUrl)[0];
+        $releases = githubFetch($releaseUrl);
+        if (null === $releases) {
+            $this->io->comment('Cannot find new releases, please try later.');
+
+            return;
+        }
+        $release = $releases[0];
         $currentVersion = normalizeVersion($application->getVersion());
         $lastVersion = normalizeVersion($release->tag_name);
         if ($lastVersion <= $currentVersion) {
