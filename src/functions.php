@@ -40,6 +40,10 @@ function getDefaultTimeZone(): string
 
 function MacOSPatherize(string $path): string
 {
+    if ('Darwin' !== PHP_OS) {
+        return $path;
+    }
+
     static $isCatalina = null;
 
     if (null === $isCatalina) {
