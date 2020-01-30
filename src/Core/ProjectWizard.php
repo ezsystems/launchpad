@@ -207,7 +207,7 @@ END;
     {
         $default = 42;
         $validator = function ($value) {
-            if (($value > 0) && ($value <= 65)) {
+            if (($value > 0) && ($value <= 64)) {
                 $socket = @fsockopen('127.0.0.1', (int) "{$value}080", $errno, $errstr, 5);
                 if ($socket) {
                     fclose($socket);
@@ -226,7 +226,7 @@ END;
         }
 
         $message = 'What is the <fg=yellow;options=bold>TCP Port Prefix</> you want?';
-        $errorMessage = 'The TCP Port Prefix is not correct (already used or not between 1 and 65.';
+        $errorMessage = 'The TCP Port Prefix is not correct (already used or not between 1 and 64.';
 
         return (int) $this->io->askQuestion($this->getQuestion($message, $default, $validator, $errorMessage));
     }
