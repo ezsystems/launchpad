@@ -11,12 +11,10 @@
     "directories": [
         "src",
         "config",
-        "payload",
-        "payload/platformsh/.platform"
+        "payload"
     ],
     "files": [
-        "LICENSE",
-        "payload/platformsh/.platform.app.yaml"
+        "LICENSE"
     ],
     "finder": [
         {
