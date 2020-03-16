@@ -47,21 +47,8 @@ class Setup extends DockerCommand
         // Dump the project
         $this->taskExecutor->dumpData();
 
-        // put the files in places
-        $fs->mirror("{$this->getPayloadDir()}/platformsh/.platform", "{$this->projectPath}/.platform");
-
-        $fs->copy(
-            "{$this->getPayloadDir()}/platformsh/.platform.app.yaml",
-            "{$this->projectPath}/.platform.app.yaml"
-        );
-
-        $provisioningName = $this->projectConfiguration->get('provisioning.folder_name');
-        $provisioningFolder = "{$this->projectPath}/{$provisioningName}";
-        $fs->copy(
-            "{$this->getPayloadDir()}/platformsh/getmysqlcredentials.php",
-            "{$provisioningFolder}/platformsh/getmysqlcredentials.php",
-            true
-        );
+        // move it to the top folder as required my Platform.sh
+        $fs->rename("{$this->projectPath}/ezplatform/.platform", "{$this->projectPath}/.platform");
 
         $this->io->writeln(
             "Your project is now set up with Platform.sh.\n".
