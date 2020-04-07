@@ -101,6 +101,18 @@ class Initialize extends Command
                     $engineDockerFileContent
                 )
             );
+            // v2 and v1 share the same vhost
+            rename("{$provisioningFolder}/dev/nginx/nginx_v2.conf", "{$provisioningFolder}/dev/nginx/nginx.conf");
+        }
+
+        // in version 2.x we have another DOCUMENT_ROOT, and v3 can provide more
+        if (2 === (int) str_replace(['^', '~'], '', $input->getArgument('version'))) {
+            rename("{$provisioningFolder}/dev/nginx/nginx_v2.conf", "{$provisioningFolder}/dev/nginx/nginx.conf");
+        }
+
+        // no need for v2 nginx on v3
+        if (3 === (int) str_replace(['^', '~'], '', $input->getArgument('version'))) {
+            unlink("{$provisioningFolder}/dev/nginx/nginx_v2.conf");
         }
 
         // Clean the Compose File
