@@ -52,12 +52,14 @@ jobs:
         strategy:
             matrix:
                 php: [7.2, 7.3]
-                ezversion: [1.13.*, 2.*]
+                ezversion: [1.13.*, 2.*, 3.*]
                 collection: [collection-1x.json, collection-2x.json]
                 exclude:
                     - ezversion: 1.13.*
                       collection: collection-2x.json
                     - ezversion: 2.*
+                      collection: collection-1x.json
+                    - ezversion: 3.*
                       collection: collection-1x.json
         steps:
             - uses: actions/checkout@v1
