@@ -47,7 +47,7 @@ class Initialize extends Command
         $this->setName('docker:initialize')->setDescription('Initialize the project and all the services.');
         $this->setAliases(['docker:init', 'initialize', 'init']);
         $this->addArgument('repository', InputArgument::OPTIONAL, 'eZ Platform Repository', 'ezsystems/ezplatform');
-        $this->addArgument('version', InputArgument::OPTIONAL, 'eZ Platform Version', '2.*');
+        $this->addArgument('version', InputArgument::OPTIONAL, 'eZ Platform Version', '3.*');
         $this->addArgument(
             'initialdata',
             InputArgument::OPTIONAL,
@@ -88,9 +88,10 @@ class Initialize extends Command
         );
 
         unset($selectedServices);
+        $normalizedVersion = trim($input->getArgument('version'), 'v');
 
         // if we are on eZ 1.x then we don't want PHP 7.3
-        if (1 === (int) str_replace(['^', '~'], '', $input->getArgument('version'))) {
+        if (1 === (int) str_replace(['^', '~'], '', $normalizedVersion)) {
             $enginDockerFilePath = "{$provisioningFolder}/dev/engine/Dockerfile";
             $engineDockerFileContent = file_get_contents($enginDockerFilePath);
             file_put_contents(
@@ -106,12 +107,12 @@ class Initialize extends Command
         }
 
         // in version 2.x we have another DOCUMENT_ROOT, and v3 can provide more
-        if (2 === (int) str_replace(['^', '~'], '', $input->getArgument('version'))) {
+        if (2 === (int) str_replace(['^', '~'], '', $normalizedVersion)) {
             rename("{$provisioningFolder}/dev/nginx/nginx_v2.conf", "{$provisioningFolder}/dev/nginx/nginx.conf");
         }
 
         // no need for v2 nginx on v3
-        if (3 === (int) str_replace(['^', '~'], '', $input->getArgument('version'))) {
+        if (3 === (int) str_replace(['^', '~'], '', $normalizedVersion)) {
             unlink("{$provisioningFolder}/dev/nginx/nginx_v2.conf");
         }
 
@@ -197,13 +198,13 @@ class Initialize extends Command
         $repository = $input->getArgument('repository');
         $initialdata = $input->getArgument('initialdata');
 
-        $version = $input->getArgument('version');
+        $normalizedVersion = trim($input->getArgument('version'), 'v');
         // Change default when on eZ Platform v1 to "clean" / "ezplatform-ee-clean"
-        if ('ezplatform-install' === $initialdata && 1 === (int) str_replace(['^', '~'], '', $version)) {
+        if ('ezplatform-install' === $initialdata && 1 === (int) str_replace(['^', '~'], '', $normalizedVersion)) {
             $initialdata = (false !== strpos($repository, 'ezplatform-ee') ? 'ezplatform-ee-clean' : 'clean');
         }
 
-        $executor->eZInstall($version, $repository, $initialdata);
+        $executor->eZInstall($normalizedVersion, $repository, $initialdata);
         if ($compose->hasService('solr')) {
             $executor->eZInstallSolr();
         }

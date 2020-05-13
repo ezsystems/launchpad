@@ -26,7 +26,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                php: [7.2, 7.3]
+                php: [7.2, 7.3, 7.4]
         steps:
             - uses: actions/checkout@v1
             - name: Setup PHP
@@ -51,7 +51,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                php: [7.2, 7.3]
+                php: [7.2, 7.3, 7.4]
                 ezversion: [1.13.*, 2.*, 3.*]
                 collection: [collection-1x.json, collection-2x.json]
                 exclude:
