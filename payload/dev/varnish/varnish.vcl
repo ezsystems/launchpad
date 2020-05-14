@@ -1,26 +1,27 @@
 // Varnish VCL for:
-// - Varnish 4.1 or higher with xkey vmod (via varnish-modules package, or via Varnish Plus)
-// - eZ Platform 1.8 or higher with ezplatform-http-cache bundle
+// - Varnish 6.0 or higher (6.0LTS recommended, and is what we mainly test against)
+//   - Varnish xkey vmod (via varnish-modules package 0.10.2 or higher, or via Varnish Plus)
+// - eZ Platform 3.x or higher with ezplatform-http-cache (this) bundle
 //
-// Complete VCL example, further reading on:
-// - https://symfony.com/doc/current/http_cache/varnish.html
-// - https://foshttpcache.readthedocs.io/en/stable/varnish-configuration.html
-// - https://github.com/varnish/varnish-modules/blob/master/docs/vmod_xkey.rst
-// - https://www.varnish-cache.org/docs/trunk/users-guide/vcl.html
-//
+// Make sure to at least adjust default parameters.vcl, defaults there reflect our testing needs with docker.
 
-vcl 4.0;
+vcl 4.1;
 import std;
 import xkey;
 
-// Our Backend - Assuming that web server is listening on port 80
-// Replace the host to fit your setup
 backend ezplatform {
     .host = "nginx";
     .port = "82";
 }
 
 // ACL for invalidators IP
+//
+// Alternative using HTTPCACHE_VARNISH_INVALIDATE_TOKEN : VCL code also allows for token based invalidation, to use it define a
+//      shared secret using env variable HTTPCACHE_VARNISH_INVALIDATE_TOKEN and eZ Platform will also use that for configuring this
+//      bundle. This is prefered for setups such as platform.sh/eZ Platform Cloud, where circular service dependency is
+//      unwanted. If you use this, use a strong cryptological secure hash & make sure to keep the token secret.
+// Use ez_purge_acl for invalidation by token.
+
 acl invalidators {
     "127.0.0.1";
     "192.168.0.0"/16;
@@ -40,12 +41,15 @@ sub vcl_recv {
     // Set the backend
     set req.backend_hint = ezplatform;
 
-    // Advertise Symfony for ESI support
+    // Add a Surrogate-Capability header to announce ESI support.
     set req.http.Surrogate-Capability = "abc=ESI/1.0";
 
-    // Varnish, in its default configuration, sends the X-Forwarded-For header but does not filter out Forwarded header
-    // To be removed in Symfony 3.3
-    unset req.http.Forwarded;
+    // Ensure that the Symfony Router generates URLs correctly with Varnish
+    if (req.http.X-Forwarded-Proto == "https" ) {
+        set req.http.X-Forwarded-Port = "443";
+    } else {
+        set req.http.X-Forwarded-Port = "80";
+    }
 
     // Trigger cache purge if needed
     call ez_purge;
@@ -137,44 +141,66 @@ sub vcl_backend_response {
 
     // Make Varnish keep all objects for up to 1 hour beyond their TTL, see vcl_hit for Request logic on this
     set beresp.grace = 1h;
+
+    // Compressing the content
+    if (beresp.http.Content-Type ~ "application/javascript"
+        || beresp.http.Content-Type ~ "application/json"
+        || beresp.http.Content-Type ~ "application/vnd.ms-fontobject"
+        || beresp.http.Content-Type ~ "application/vnd.ez.api"
+        || beresp.http.Content-Type ~ "application/x-font-ttf"
+        || beresp.http.Content-Type ~ "image/svg+xml"
+        || beresp.http.Content-Type ~ "text/css"
+        || beresp.http.Content-Type ~ "text/plain"
+    ) {
+        set beresp.do_gzip = true;
+    }
 }
 
 // Handle purge
 // You may add FOSHttpCacheBundle tagging rules
 // See http://foshttpcache.readthedocs.org/en/latest/varnish-configuration.html#id4
 sub ez_purge {
+    // Retrieve purge token, needs to be here due to restart, match for PURGE method done within
+    call ez_invalidate_token;
 
-    # Support how purging was done in earlier versions, this is deprecated and here just for BC for code still using it
-    if (req.method == "BAN") {
-        if (!client.ip ~ invalidators) {
-            return (synth(405, "Method not allowed"));
+    # Adapted with acl from vendor/friendsofsymfony/http-cache/resources/config/varnish/fos_tags_xkey.vcl
+    if (req.method == "PURGEKEYS") {
+        call ez_purge_acl;
+
+        # If neither of the headers are provided we return 400 to simplify detecting wrong configuration
+        if (!req.http.xkey-purge && !req.http.xkey-softpurge) {
+            return (synth(400, "Neither header XKey-Purge or XKey-SoftPurge set"));
         }
 
-        if (req.http.X-Location-Id) {
-            ban("obj.http.X-Location-Id ~ " + req.http.X-Location-Id);
-            if (client.ip ~ debuggers) {
-                set req.http.X-Debug = "Ban done for content connected to LocationId " + req.http.X-Location-Id;
-            }
-            return (synth(200, "Banned"));
+        # Based on provided header invalidate (purge) and/or expire (softpurge) the tagged content
+        set req.http.n-gone = 0;
+        set req.http.n-softgone = 0;
+        if (req.http.xkey-purge) {
+            set req.http.n-gone = xkey.purge(req.http.xkey-purge);
         }
+
+        if (req.http.xkey-softpurge) {
+            set req.http.n-softgone = xkey.softpurge(req.http.xkey-softpurge);
+        }
+
+        return (synth(200, "Purged "+req.http.n-gone+" objects, expired "+req.http.n-softgone+" objects"));
     }
 
+    # Adapted with acl from vendor/friendsofsymfony/http-cache/resources/config/varnish/fos_purge.vcl
     if (req.method == "PURGE") {
-        if (!client.ip ~ invalidators) {
+        call ez_purge_acl;
+
+        return (purge);
+    }
+}
+
+sub ez_purge_acl {
+    if (req.http.x-invalidate-token) {
+        if (req.http.x-invalidate-token != req.http.x-backend-invalidate-token) {
             return (synth(405, "Method not allowed"));
         }
-
-        # If http header "key" is set, we assume purge is on key and you have Varnish xkey installed
-        if (req.http.key) {
-            # By default we recommend using soft purge to respect grace time, if you need to hard purge use:
-            # set req.http.n-gone = xkey.purge(req.http.key);
-            set req.http.n-gone = xkey.softpurge(req.http.key);
-
-            return (synth(200, "Invalidated "+req.http.n-gone+" objects"));
-        }
-
-        # if not, then this is a normal purge by url
-        return (purge);
+    } else if  (!client.ip ~ invalidators) {
+        return (synth(405, "Method not allowed"));
     }
 }
 
@@ -184,7 +210,7 @@ sub ez_user_context_hash {
     // Prevent tampering attacks on the hash mechanism
     if (req.restarts == 0
         && (req.http.accept ~ "application/vnd.fos.user-context-hash"
-            || req.http.x-user-hash
+            || req.http.x-user-context-hash
         )
     ) {
         return (synth(400));
@@ -227,13 +253,59 @@ sub ez_user_context_hash {
     }
 }
 
+// Sub-routine to get invalidate token.
+sub ez_invalidate_token {
+    // Prevent tampering attacks on the token mechanisms
+    if (req.restarts == 0
+        && (req.http.accept ~ "application/vnd.ezplatform.invalidate-token"
+            || req.http.x-backend-invalidate-token
+        )
+    ) {
+        return (synth(400));
+    }
+
+    if (req.restarts == 0 && (req.method == "PURGE" || req.method == "PURGEKEYS") && req.http.x-invalidate-token) {
+        set req.http.accept = "application/vnd.ezplatform.invalidate-token";
+
+        // Backup original http properties
+        set req.http.x-fos-token-url = req.url;
+        set req.http.x-fos-token-method = req.method;
+
+        set req.url = "/_ez_http_invalidatetoken";
+
+        // Force the lookup
+        return (hash);
+    }
+
+    // Rebuild the original request which now has the invalidate token.
+    if (req.restarts > 0
+        && req.http.accept == "application/vnd.ezplatform.invalidate-token"
+    ) {
+        set req.url = req.http.x-fos-token-url;
+        set req.method = req.http.x-fos-token-method;
+        unset req.http.x-fos-token-url;
+        unset req.http.x-fos-token-method;
+        unset req.http.accept;
+    }
+}
+
 sub vcl_deliver {
+    // On receiving the invalidate token response, copy the invalidate token to the original
+    // request and restart.
+    if (req.restarts == 0
+        && resp.http.content-type ~ "application/vnd.ezplatform.invalidate-token"
+    ) {
+        set req.http.x-backend-invalidate-token = resp.http.x-invalidate-token;
+
+        return (restart);
+    }
+
     // On receiving the hash response, copy the hash header to the original
     // request and restart.
     if (req.restarts == 0
         && resp.http.content-type ~ "application/vnd.fos.user-context-hash"
     ) {
-        set req.http.x-user-hash = resp.http.x-user-hash;
+        set req.http.x-user-context-hash = resp.http.x-user-context-hash;
 
         return (restart);
     }
@@ -242,8 +314,8 @@ sub vcl_deliver {
 
     // Remove the vary on user context hash, this is nothing public. Keep all
     // other vary headers.
-    if (resp.http.Vary ~ "X-User-Hash") {
-        set resp.http.Vary = regsub(resp.http.Vary, "(?i),? *X-User-Hash *", "");
+    if (resp.http.Vary ~ "X-User-Context-Hash") {
+        set resp.http.Vary = regsub(resp.http.Vary, "(?i),? *X-User-Context-Hash *", "");
         set resp.http.Vary = regsub(resp.http.Vary, "^, *", "");
         if (resp.http.Vary == "") {
             unset resp.http.Vary;
@@ -263,10 +335,8 @@ sub vcl_deliver {
     }
 
     if (client.ip ~ debuggers) {
-        # In Varnish 4 the obj.hits counter behaviour has changed, so we use a
-        # different method: if X-Varnish contains only 1 id, we have a miss, if it
-        # contains more (and therefore a space), we have a hit.
-        if (resp.http.x-varnish ~ " ") {
+        // Add X-Cache header if debugging is enabled
+        if (obj.hits > 0) {
             set resp.http.X-Cache = "HIT";
             set resp.http.X-Cache-Hits = obj.hits;
             set resp.http.X-Cache-TTL = obj.ttl;
@@ -277,6 +347,6 @@ sub vcl_deliver {
         // Remove tag headers when delivering to non debug client
         unset resp.http.xkey;
         // Sanity check to prevent ever exposing the hash to a non debug client.
-        unset resp.http.x-user-hash;
+        unset resp.http.x-user-context-hash;
     }
 }

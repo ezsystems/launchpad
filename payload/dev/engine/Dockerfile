@@ -1,4 +1,4 @@
-FROM plopix/docker-php-ez-engine:7.3
+FROM plopix/docker-php-ez-engine:7.4
 MAINTAINER Plopix
 
 COPY entrypoint.bash /entrypoint.bash

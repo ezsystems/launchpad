@@ -36,6 +36,7 @@ services:
             - "DATABASE_NAME=ezplatform"
             - "DATABASE_PASSWORD=ezplatform"
             - "SYMFONY_SECRET=eZlaunchpad20Secret09Dev83ModeZ"
+            - "APP_SECRET=eZlaunchpad20Secret09Dev83ModeZ"
             - "DATABASE_HOST=db"
             - "CUSTOM_CACHE_POOL=singleredis"
             - "CACHE_HOST=redis"
@@ -45,15 +46,16 @@ services:
             - "SEARCH_ENGINE=solr"
             - "SOLR_DSN=http://solr:8983/solr"
             - "SYMFONY_TMP_DIR=/tmp/ezplatformcache/"
+            - "HTTPCACHE_VARNISH_INVALIDATE_TOKEN=eZlaunchpad20Secret09Varnish"
     db:
-        image: mariadb:10.2
+        image: mariadb:10.3
         environment:
             - "MYSQL_ROOT_PASSWORD=ezplatform"
         ports:
             - "${PROJECTPORTPREFIX}306:3306"
 
     varnish:
-        image: plopix/docker-varnish5
+        image: plopix/docker-varnish6
         volumes:
             - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/varnish/varnish.vcl:/etc/varnish/default.vcl:ro"
         ports:
@@ -62,7 +64,7 @@ services:
             - nginx
 
     solr:
-        image: solr:6.6.2
+        image: solr:7.7
         volumes:
             - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/solr/entrypoint.bash:/entrypoint.bash:ro"
         volumes_from:

@@ -90,14 +90,15 @@ class Initialize extends Command
         unset($selectedServices);
         $normalizedVersion = trim($input->getArgument('version'), 'v');
 
-        // if we are on eZ 1.x then we don't want PHP 7.3
+        // eZ Platform 1.x specific versions
         if (1 === (int) str_replace(['^', '~'], '', $normalizedVersion)) {
+            // PHP 7.2
             $enginDockerFilePath = "{$provisioningFolder}/dev/engine/Dockerfile";
             $engineDockerFileContent = file_get_contents($enginDockerFilePath);
             file_put_contents(
                 $enginDockerFilePath,
                 str_replace(
-                    'docker-php-ez-engine:7.3',
+                    'docker-php-ez-engine:7.4',
                     'docker-php-ez-engine:7.2',
                     $engineDockerFileContent
                 )
@@ -106,8 +107,20 @@ class Initialize extends Command
             rename("{$provisioningFolder}/dev/nginx/nginx_v2.conf", "{$provisioningFolder}/dev/nginx/nginx.conf");
         }
 
-        // in version 2.x we have another DOCUMENT_ROOT, and v3 can provide more
+        // eZ Platform 1.x specific versions
         if (2 === (int) str_replace(['^', '~'], '', $normalizedVersion)) {
+            // PHP 7.3
+            $enginDockerFilePath = "{$provisioningFolder}/dev/engine/Dockerfile";
+            $engineDockerFileContent = file_get_contents($enginDockerFilePath);
+            file_put_contents(
+                $enginDockerFilePath,
+                str_replace(
+                    'docker-php-ez-engine:7.4',
+                    'docker-php-ez-engine:7.3',
+                    $engineDockerFileContent
+                )
+            );
+            // v2 and v1 share the same vhost
             rename("{$provisioningFolder}/dev/nginx/nginx_v2.conf", "{$provisioningFolder}/dev/nginx/nginx.conf");
         }
 
