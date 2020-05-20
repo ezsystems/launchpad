@@ -125,8 +125,11 @@ class Initialize extends Command
         }
 
         // eZ Platform <3 only support solr 6. Replace unsupported solr 7.7 by 6.6.2
-        if ( ( (1 === (int) str_replace(['^', '~'], '', $normalizedVersion)) || (2 === (int) str_replace(['^', '~'], '', $normalizedVersion)) )
-                && $compose->hasService('solr') ) {
+        if (
+                ( (1 === (int) str_replace(['^', '~'], '', $normalizedVersion)) ||
+                  (2 === (int) str_replace(['^', '~'], '', $normalizedVersion)) ) &&
+                $compose->hasService('solr')
+        ) {
             $composeFilePath = "{$provisioningFolder}/dev/{$composeFileName}";
             $compose->dump($composeFilePath);
             $composeFileContent = file_get_contents($composeFilePath);
@@ -138,7 +141,7 @@ class Initialize extends Command
                     $composeFileContent
                 )
             );
-            $compose = new DockerCompose( $composeFilePath );
+            $compose = new DockerCompose($composeFilePath);
         }
 
         // no need for v2 nginx on v3
