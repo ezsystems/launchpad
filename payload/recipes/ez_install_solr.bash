@@ -40,13 +40,21 @@ if [ $ACTION == "CREATE_CORE" ]; then
         echo -n "."
         sleep 2
     done
+    # wait until create cores from solr entry point is done
+    until [ ! -f ${DESTINATION_EZ}/solr.creating.cores ]; do
+        echo -n "c"
+        sleep 2
+    done
+
     echo "Solr is running"
 
     SOLR_CORES=${SOLR_CORES:-collection1}
     for core in $SOLR_CORES
     do
-        /opt/solr/bin/solr create_core -c ${core} -d $DESTINATION_TEMPLATE
-        echo "Core ${core} created."
+        if [ ! -d ${DESTINATION_EZ}/${core} ]; then
+            /opt/solr/bin/solr create_core -c ${core} -d $DESTINATION_TEMPLATE
+            echo "Core ${core} created."
+        fi
     done
 
 fi
