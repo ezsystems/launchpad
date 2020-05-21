@@ -30,6 +30,7 @@ do
 done
 
 if [ "$CREATE_CORES" = true ]; then
+    touch ${DESTINATION_EZ}/solr.creating.cores
     echo "Start solr on background to create missing cores"
     /opt/solr/bin/solr -s ${DESTINATION_EZ}
 
@@ -42,6 +43,7 @@ if [ "$CREATE_CORES" = true ]; then
     done
     echo "Stop background solr"
     /opt/solr/bin/solr stop
+    rm ${DESTINATION_EZ}/solr.creating.cores
 fi
 
 /opt/solr/bin/solr -s ${DESTINATION_EZ} -f
