@@ -9,10 +9,16 @@ if [ ! -d ${DESTINATION_TEMPLATE} ]; then
     cp -R vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/* ${DESTINATION_TEMPLATE}
 fi
 
+# Check for solr config folder (changes btw 6 and 7)
+SOURCE_SOLR="/opt/solr/server/solr/configsets/_default/"
+if [ ! -d ${SOURCE_SOLR} ]; then
+    SOURCE_SOLR="/opt/solr/server/solr/configsets/basic_configs/"
+fi
+
 mkdir -p ${DESTINATION_EZ}
 if [ ! -f ${DESTINATION_EZ}/solr.xml ]; then
     cp /opt/solr/server/solr/solr.xml ${DESTINATION_EZ}
-    cp /opt/solr/server/solr/configsets/_default/conf/{currency.xml,solrconfig.xml,stopwords.txt,synonyms.txt,elevate.xml} ${DESTINATION_TEMPLATE}
+    cp ${SOURCE_SOLR}/conf/{currency.xml,solrconfig.xml,stopwords.txt,synonyms.txt,elevate.xml} ${DESTINATION_TEMPLATE}
     sed -i.bak '/<updateRequestProcessorChain name="add-unknown-fields-to-the-schema".*/,/<\/updateRequestProcessorChain>/d' ${DESTINATION_TEMPLATE}/solrconfig.xml
     sed -i -e 's/<maxTime>${solr.autoSoftCommit.maxTime:-1}<\/maxTime>/<maxTime>${solr.autoSoftCommit.maxTime:20}<\/maxTime>/g' ${DESTINATION_TEMPLATE}/solrconfig.xml
     sed -i -e 's/<dataDir>${solr.data.dir:}<\/dataDir>/<dataDir>\/opt\/solr\/data\/${solr.core.name}<\/dataDir>/g' ${DESTINATION_TEMPLATE}/solrconfig.xml

@@ -107,7 +107,7 @@ class Initialize extends Command
             rename("{$provisioningFolder}/dev/nginx/nginx_v2.conf", "{$provisioningFolder}/dev/nginx/nginx.conf");
         }
 
-        // eZ Platform 1.x specific versions
+        // eZ Platform 2.x specific versions
         if (2 === (int) str_replace(['^', '~'], '', $normalizedVersion)) {
             // PHP 7.3
             $enginDockerFilePath = "{$provisioningFolder}/dev/engine/Dockerfile";
@@ -122,6 +122,26 @@ class Initialize extends Command
             );
             // v2 and v1 share the same vhost
             rename("{$provisioningFolder}/dev/nginx/nginx_v2.conf", "{$provisioningFolder}/dev/nginx/nginx.conf");
+        }
+
+        // eZ Platform <3 only support solr 6. Replace unsupported solr 7.7 by 6.6.2
+        if (
+                ( (1 === (int) str_replace(['^', '~'], '', $normalizedVersion)) ||
+                  (2 === (int) str_replace(['^', '~'], '', $normalizedVersion)) ) &&
+                $compose->hasService('solr')
+        ) {
+            $composeFilePath = "{$provisioningFolder}/dev/{$composeFileName}";
+            $compose->dump($composeFilePath);
+            $composeFileContent = file_get_contents($composeFilePath);
+            file_put_contents(
+                $composeFilePath,
+                str_replace(
+                    'solr:7.7',
+                    'solr:6.6.2',
+                    $composeFileContent
+                )
+            );
+            $compose = new DockerCompose($composeFilePath);
         }
 
         // no need for v2 nginx on v3
