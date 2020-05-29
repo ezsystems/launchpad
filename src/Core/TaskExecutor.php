@@ -32,11 +32,17 @@ class TaskExecutor
      */
     protected $recipes;
 
-    public function __construct(DockerClient $dockerClient, ProjectConfiguration $configuration, Collection $recipes)
+    /**
+     * @var array Docker environment variables
+     */
+    protected $dockerEnvVars;
+
+    public function __construct(DockerClient $dockerClient, ProjectConfiguration $configuration, Collection $recipes, array $dockerEnvVars = [])
     {
         $this->dockerClient = $dockerClient;
         $this->projectConfiguration = $configuration;
         $this->recipes = $recipes;
+        $this->dockerEnvVars = $dockerEnvVars;
     }
 
     protected function checkRecipeAvailability(string $recipe): void
@@ -160,26 +166,30 @@ class TaskExecutor
         return $this->execute("ezplatform/{$consolePath} {$arguments}");
     }
 
-    public function runComposerCommand(string $arguments, string $symfonyEnv = 'dev'): Process
+    public function runComposerCommand(string $arguments): Process
     {
         return $this->globalExecute(
-            "/usr/local/bin/composer --working-dir={$this->dockerClient->getProjectPathContainer()}/ezplatform ".
-            $arguments, $symfonyEnv
+            '/usr/local/bin/composer --working-dir='.$this->dockerClient->getProjectPathContainer().'/ezplatform '.
+            $arguments
         );
     }
 
-    protected function execute(string $command, string $symfonyEnv = 'dev', string $user = 'www-data', string $service = 'engine')
+    protected function execute(string $command, string $user = 'www-data', string $service = 'engine')
     {
         $command = $this->dockerClient->getProjectPathContainer().'/'.$command;
 
-        return $this->globalExecute($command, $symfonyEnv, $user, $service);
+        return $this->globalExecute($command, $user, $service);
     }
 
-    protected function globalExecute(string $command, string $symfonyEnv = 'dev', string $user = 'www-data', string $service = 'engine')
+    protected function globalExecute(string $command, string $user = 'www-data', string $service = 'engine')
     {
-        return $this->dockerClient->exec($command, [
-            '--user', $user,
-            '--env', "SYMFONY_ENV={$symfonyEnv}"
-        ], $service);
+        $args = ['--user', $user];
+
+        foreach ($this->dockerEnvVars as $envVar) {
+            $args = array_merge($args, ['--env', $envVar]);
+        }
+
+        return $this->dockerClient->exec($command, $args, $service);
     }
+
 }
