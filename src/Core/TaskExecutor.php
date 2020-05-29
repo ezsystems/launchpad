@@ -160,23 +160,26 @@ class TaskExecutor
         return $this->execute("ezplatform/{$consolePath} {$arguments}");
     }
 
-    public function runComposerCommand(string $arguments): Process
+    public function runComposerCommand(string $arguments, string $symfonyEnv = 'dev'): Process
     {
         return $this->globalExecute(
-            '/usr/local/bin/composer --working-dir='.$this->dockerClient->getProjectPathContainer().'/ezplatform '.
-            $arguments
+            "/usr/local/bin/composer --working-dir={$this->dockerClient->getProjectPathContainer()}/ezplatform ".
+            $arguments, $symfonyEnv
         );
     }
 
-    protected function execute(string $command, string $user = 'www-data', string $service = 'engine')
+    protected function execute(string $command, string $symfonyEnv = 'dev', string $user = 'www-data', string $service = 'engine')
     {
         $command = $this->dockerClient->getProjectPathContainer().'/'.$command;
 
-        return $this->globalExecute($command, $user, $service);
+        return $this->globalExecute($command, $symfonyEnv, $user, $service);
     }
 
-    protected function globalExecute(string $command, string $user = 'www-data', string $service = 'engine')
+    protected function globalExecute(string $command, string $symfonyEnv = 'dev', string $user = 'www-data', string $service = 'engine')
     {
-        return $this->dockerClient->exec($command, ['--user', $user], $service);
+        return $this->dockerClient->exec($command, [
+            '--user', $user,
+            '--env', "SYMFONY_ENV={$symfonyEnv}"
+        ], $service);
     }
 }
