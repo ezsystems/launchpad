@@ -126,8 +126,8 @@ class Initialize extends Command
 
         // eZ Platform <3 only support solr 6. Replace unsupported solr 7.7 by 6.6.2
         if (
-                ( (1 === (int) str_replace(['^', '~'], '', $normalizedVersion)) ||
-                  (2 === (int) str_replace(['^', '~'], '', $normalizedVersion)) ) &&
+                ((1 === (int) str_replace(['^', '~'], '', $normalizedVersion)) ||
+                  (2 === (int) str_replace(['^', '~'], '', $normalizedVersion))) &&
                 $compose->hasService('solr')
         ) {
             $composeFilePath = "{$provisioningFolder}/dev/{$composeFileName}";
