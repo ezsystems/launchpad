@@ -35,7 +35,14 @@ abstract class DockerCommand extends Command
 
     protected function configure(): void
     {
-        $this->addOption('env', 'env', InputOption::VALUE_REQUIRED, 'Docker Env', 'dev');
+        $this->addOption('env', 'e', InputOption::VALUE_REQUIRED, 'The Environment name.', 'dev');
+        $this->addOption(
+            'docker-env',
+            'd',
+            InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+            'Docker environment variables',
+            []
+        );
     }
 
     public function getDockerClient(): Docker
@@ -73,7 +80,8 @@ abstract class DockerCommand extends Command
         $this->taskExecutor = new TaskExecutor(
             $this->dockerClient,
             $this->projectConfiguration,
-            $this->requiredRecipes
+            $this->requiredRecipes,
+            $input->getOption('docker-env')
         );
     }
 }

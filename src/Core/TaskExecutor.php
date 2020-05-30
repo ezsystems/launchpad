@@ -32,11 +32,21 @@ class TaskExecutor
      */
     protected $recipes;
 
-    public function __construct(DockerClient $dockerClient, ProjectConfiguration $configuration, Collection $recipes)
-    {
+    /**
+     * @var array Docker environment variables
+     */
+    protected $dockerEnvVars;
+
+    public function __construct(
+        DockerClient $dockerClient,
+        ProjectConfiguration $configuration,
+        Collection $recipes,
+        array $dockerEnvVars = []
+    ) {
         $this->dockerClient = $dockerClient;
         $this->projectConfiguration = $configuration;
         $this->recipes = $recipes;
+        $this->dockerEnvVars = $dockerEnvVars;
     }
 
     protected function checkRecipeAvailability(string $recipe): void
@@ -177,6 +187,12 @@ class TaskExecutor
 
     protected function globalExecute(string $command, string $user = 'www-data', string $service = 'engine')
     {
-        return $this->dockerClient->exec($command, ['--user', $user], $service);
+        $args = ['--user', $user];
+
+        foreach ($this->dockerEnvVars as $envVar) {
+            $args = array_merge($args, ['--env', $envVar]);
+        }
+
+        return $this->dockerClient->exec($command, $args, $service);
     }
 }
