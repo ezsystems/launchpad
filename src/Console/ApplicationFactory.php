@@ -38,19 +38,6 @@ class ApplicationFactory
         $application->setVersion('@package_version@'.(('prod' !== $env) ? '-dev' : ''));
         $application->setAutoExit($autoExit);
 
-        self::createDockerEnvParams();
-
         return $application;
-    }
-
-    private static function createDockerEnvParams()
-    {
-        foreach ($_SERVER['argv'] as $index => $value) {
-            $_SERVER['argv'][$index] = preg_replace(
-                '/^--env=/',
-                '--docker-env=',
-                $_SERVER['argv'][$index]
-            );
-        }
     }
 }

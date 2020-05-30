@@ -35,12 +35,12 @@ abstract class DockerCommand extends Command
 
     protected function configure(): void
     {
-        $this->addOption('env', 'env', InputOption::VALUE_REQUIRED, 'Docker Env', 'dev');
+        $this->addOption('env', 'e', InputOption::VALUE_REQUIRED, 'The Environment name.', 'dev');
         $this->addOption(
             '--docker-env',
-            null,
+            'd',
             InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
-            'Environment variables used by docker-composer:exec',
+            'Docker environment variables',
             []
         );
     }
