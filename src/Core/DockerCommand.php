@@ -37,7 +37,7 @@ abstract class DockerCommand extends Command
     {
         $this->addOption('env', 'e', InputOption::VALUE_REQUIRED, 'The Environment name.', 'dev');
         $this->addOption(
-            '--docker-env',
+            'docker-env',
             'd',
             InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
             'Docker environment variables',
