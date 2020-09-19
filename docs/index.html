@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700|Open+Sans:400,600">
 
-    <link rel="stylesheet" type="text/css" href="https://www.ezplatform.com/css/9c79026.css">
     <link rel="stylesheet" type="text/css" href="css/ezlaunchpad.css">
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -35,10 +34,6 @@
         ga('send', 'pageview');
 
     </script>
-
-    <link rel="alternate" hreflang="en_US" href="index.html"/>
-    <link rel="alternate" hreflang="no_NO" href="index_no_NO.html"/>
-    <link rel="alternate" hreflang="fr_FR" href="index_fr_FR.html"/>
 </head>
 <body>
 <main class="white-background">
@@ -54,7 +49,7 @@
                     </button>
 
                     <a class="navbar-brand" href="https://ezsystems.github.io/launchpad">
-                        <img src="https://ezplatform.com/assets/themes/ezplatform/images/ez-logo.svg">
+                        <img src="https://www.ezplatform.com/assets/images/ibexa/ezplatform_intermediate_wordmark_ezplatform_gradient.svg" width="200" />
                     </a>
                 </div>
 
@@ -150,7 +145,7 @@
             </ul>
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="installioncurl">
-                    <br/>
+                    <br />
                     <p>If you have <strong>curl</strong> installed:</p>
                     <div class="highlight">
                         <button class="to-clipboard">
@@ -161,7 +156,7 @@
 
                 </div>
                 <div role="tabpanel" class="tab-pane" id="installionwget">
-                    <br/>
+                    <br />
                     <p>If you have <strong>wget</strong> installed:</p>
                     <div class="highlight">
                         <button class="to-clipboard">
@@ -330,7 +325,7 @@ export BLACKFIRE_SERVER_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
                     <h3>Setup</h3>
                     <p><a href="https://platform.sh/product">Platform.sh</a> is a PaaS (<strong>P</strong>latform
                         <strong>a</strong>s <strong>a</strong>
-                        <strong>S</strong>ervice).<br/> With Platform.sh there is no real deployment process to run manually. Platform.sh will just create and synchronize environments based on your git repository!
+                        <strong>S</strong>ervice).<br /> With Platform.sh there is no real deployment process to run manually. Platform.sh will just create and synchronize environments based on your git repository!
                     </p>
                     <p>eZ Launchpad provides you a way to set up your eZ Project to be Platform.sh ready.
                     </p>
@@ -383,7 +378,7 @@ ezplatform/app/config/env/platformsh.php</code></pre>
             <p>Depending on the initialization, you might have more or less services, but here is the most common stack.</p>
 
             <h3>LEMP: Linux Nginx Mysql/MariaDB PHP-FPM</h3>
-            <img src="images/puml/LEMP_architecture.png" class="img-responsive"/>
+            <img src="images/puml/LEMP_architecture.png" class="img-responsive" />
 
         </div>
 
@@ -487,10 +482,10 @@ composer:
             </div>
 
 
-
             <h3>Update to Catalina</h3>
             <p>Catalina brings a new weird comlexity with Mac OS that has been handled in eZ Launchpad but when you migrate you might want to know more.</p>
-            <p>Actually, that pretty simple, <strong>/Users/$USER</strong> is not really <strong>/Users/$USER</strong> it is  <strong>/System/Volumes/Data/Users/$USER</strong></p>
+            <p>Actually, that pretty simple, <strong>/Users/$USER</strong> is not really
+                <strong>/Users/$USER</strong> it is <strong>/System/Volumes/Data/Users/$USER</strong></p>
 
             <p>eZ Launchpad will detect automatically if your NFS export file has been updated, but depending on the situation and specificities of your project you might also need to set a Shared Folder in the daemon configuration.</p>
 
@@ -507,7 +502,8 @@ composer:
 
             <div class="alert alert-info clickable" role="alert" data-toggle="collapse">
                 <p>
-                    <i class="fa fa-book" aria-hidden="true"></i> Note that <strong>$USER</strong> must be replaced with your Username.
+                    <i class="fa fa-book" aria-hidden="true"></i> Note that
+                    <strong>$USER</strong> must be replaced with your Username.
                 </p>
             </div>
 
@@ -571,7 +567,7 @@ volumes:
             </p>
 
             <h3>Store cache in the container</h3>
-            <p>Even with D4M and the NFS mount, performances can be optimized. The following is clearly a trick. But a trick that works pretty well!<br/> Here is the magic, in your env you have this line:
+            <p>Even with D4M and the NFS mount, performances can be optimized. The following is clearly a trick. But a trick that works pretty well!<br /> Here is the magic, in your env you have this line:
             </p>
 
             <div class="highlight">
@@ -603,17 +599,15 @@ engine:
             <div class="container">
                 <div class="row">
                     <div class="col-md-3">
-                        <img src="https://ezplatform.com/assets/themes/ezplatform/images/ez-logo-white.svg" alt="eZ Systems" class="logo">
+                        <img class="logotype" width="200" height="100" src="https://ezplatform.com/assets/themes/ezplatform/images/ibexa_logo.svg" alt="ibexa">
                     </div>
 
                     <div class="col-md-3">
                         <div class="ezrichtext-field">
                             <ul>
-                                <li><a href="http://ez.no">eZ.no</a></li>
-                                <li>
-                                    <a href="http://ez.no/About-eZ/Company-Overview" target="_blank">Company Overview</a>
-                                </li>
-                                <li><a href="http://ez.no/Products">Products</a></li>
+                                <li><a href="https://portal.productboard.com/ezproduct" target="_blank">Roadmap</a></li>
+                                <li><a href="https://www.ibexa.co/about-ibexa" target="_blank">About Ibexa</a></li>
+                                <li><a href="https://www.ibexa.co/product">Products</a></li>
                             </ul>
                         </div>
 
@@ -622,12 +616,8 @@ engine:
                     <div class="col-md-3">
                         <div class="ezrichtext-field">
                             <ul>
-                                <li>
-                                    <a href="http://doc.ez.no/display/DEVELOPER/Documentation">Documentation</a>
-                                </li>
-                                <li>
-                                    <a href="https://doc.ez.no/display/DEVELOPER/eZ+Platform+Public+PHP+API" target="_blank">API</a>
-                                </li>
+                                <li><a href="https://ezplatform.com/documentation-center">Documentation</a></li>
+                                <li><a href="/security-advisories">Security Advisories</a></li>
                                 <li><a href="http://share.ez.no" target="_blank">eZ Publish</a></li>
                             </ul>
                         </div>
@@ -637,19 +627,16 @@ engine:
                     <div class="col-md-3 footer-social text-center">
                         <h4>Follow us on social media</h4>
 
-                        <a href="//www.youtube.com/user/ezpublish/" target="_blank">
+                        <a href="https://www.youtube.com/c/ibexa/" target="_blank">
                             <i class="fa fa-youtube fa"></i>
                         </a>
-                        <a href="//google.com/+ezsystems" target="_blank">
-                            <i class="fa fa-google-plus fa"></i>
-                        </a>
-                        <a href="//www.linkedin.com/company/16738" target="_blank">
+                        <a href="https://www.linkedin.com/company/ibexa/" target="_blank">
                             <i class="fa fa-linkedin fa"></i>
                         </a>
-                        <a href="//www.facebook.com/eZPublishEnterprise" target="_blank">
+                        <a href="https://facebook.com/ibexa.co" target="_blank">
                             <i class="fa fa-facebook fa"></i>
                         </a>
-                        <a href="//twitter.com/#!/ezsystems" target="_blank">
+                        <a href="https://twitter.com/ibexa_co" target="_blank">
                             <i class="fa fa-twitter fa"></i>
                         </a>
                     </div>
@@ -661,15 +648,14 @@ engine:
             <div class="container">
                 <div class="row">
                     <div class="col-md-12 text-center">
-                        <p>Copyright © 1999-2019 eZ Systems AS. All rights reserved.</p>
-                        <p>Powered by <a href="//ezplatform.com" title="eZ Platform">eZ Platform</a></p>
+                        <p>Copyright © 1999-2020 Ibexa All rights reserved.</p>
+                        <p>Powered by <a href="https://www.ibexa.co/product" title="eZ Platform">eZ Platform</a></p>
                     </div>
                 </div>
             </div>
         </div>
     </footer>
 </main>
-<script type="text/javascript" src="https://www.ezplatform.com/js/80021c6.js"></script>
 <script src="js/clipboard.min.js"></script>
 <script src="js/ezlaunchpad.js"></script>
 </body>
