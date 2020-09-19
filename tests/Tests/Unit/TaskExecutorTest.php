@@ -23,7 +23,7 @@ class TaskExecutorTest extends TestCase
     /**
      * set up test environmemt
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $finder = new Finder();

@@ -21,7 +21,7 @@ class DockerComposeTest extends TestCase
     /**
      * set up test environmemt
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->compose = new DockerCompose(__DIR__."/../../../payload/dev/docker-compose.yml");

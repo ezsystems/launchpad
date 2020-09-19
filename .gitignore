@@ -13,6 +13,7 @@
 .php_cs.cache
 
 tests/coverage
+tests/.phpunit.result.cache
 
 # Auto-update
 /docs/ez-old.phar
