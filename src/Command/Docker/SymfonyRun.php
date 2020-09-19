@@ -24,10 +24,12 @@ final class SymfonyRun extends DockerCommand
         $this->addArgument('sfcommand', InputArgument::IS_ARRAY, 'Symfony Command to run in. Use "" to pass options.');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $allArguments = $input->getArgument('sfcommand');
         $options = '';
         $this->taskExecutor->runSymfomyCommand(implode(' ', $allArguments)." {$options}");
+
+        return DockerCommand::SUCCESS;
     }
 }

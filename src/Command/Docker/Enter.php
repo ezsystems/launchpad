@@ -27,7 +27,7 @@ final class Enter extends DockerCommand
         $this->setAliases(['enter', 'docker:exec', 'exec']);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->dockerClient->exec(
             $input->getArgument('shell'),
@@ -36,5 +36,7 @@ final class Enter extends DockerCommand
             ],
             $input->getArgument('service')
         );
+
+        return DockerCommand::SUCCESS;
     }
 }

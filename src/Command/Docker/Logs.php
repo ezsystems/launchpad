@@ -24,8 +24,10 @@ final class Logs extends DockerCommand
         $this->setAliases(['logs', 'log']);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->dockerClient->logs(['-f', '--tail=100'], $input->getArgument('service'));
+
+        return DockerCommand::SUCCESS;
     }
 }

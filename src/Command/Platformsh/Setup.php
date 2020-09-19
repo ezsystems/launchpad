@@ -30,7 +30,7 @@ class Setup extends DockerCommand
         );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $fs = new Filesystem();
         $this->io->title($this->getDescription());
@@ -40,7 +40,7 @@ class Setup extends DockerCommand
             if (!$this->io->confirm('You already have a <comment>.platform</comment> folder, continue?')) {
                 $this->postAction();
 
-                return;
+                return DockerCommand::FAILURE;
             }
         }
 
@@ -60,5 +60,7 @@ class Setup extends DockerCommand
         );
 
         $this->postAction();
+
+        return DockerCommand::SUCCESS;
     }
 }

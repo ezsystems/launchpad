@@ -41,7 +41,7 @@ final class Create extends DockerCommand
         $this->projectStatusDumper->setIo($this->io);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->dockerClient->build(['--no-cache']);
         $this->dockerClient->up(['-d']);
@@ -58,5 +58,7 @@ final class Create extends DockerCommand
         }
 
         $this->projectStatusDumper->dump('ncsi');
+
+        return DockerCommand::SUCCESS;
     }
 }

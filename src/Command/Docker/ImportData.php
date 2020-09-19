@@ -22,8 +22,10 @@ final class ImportData extends DockerCommand
         $this->setAliases(['importdata']);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->taskExecutor->importData();
+
+        return DockerCommand::SUCCESS;
     }
 }

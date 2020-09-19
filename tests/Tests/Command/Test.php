@@ -22,10 +22,12 @@ class Test extends Command
         $this->setHidden(true);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io->writeln('Test1');
         $this->io->writeln('Test2');
         $this->io->writeln('Test3');
+
+        return Command::SUCCESS;
     }
 }

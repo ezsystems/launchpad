@@ -89,6 +89,7 @@ class D4M extends Optimizer implements OptimizerInterface, NFSAwareInterface
 
     public static function isD4MScreenExist(): bool
     {
+        $output = $return = null;
         exec('screen -list | grep -q "'.static::SCREEN_NAME.'";', $output, $return);
 
         return 0 === $return;
