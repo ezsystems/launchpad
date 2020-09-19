@@ -26,10 +26,7 @@ abstract class TestCase extends BaseTestCase
      */
     private $root;
 
-    /**
-     *
-     */
-    public function setup()
+    protected function setUp(): void
     {
         $this->root = vfsStream::setup('ezlaunchpad');
         $globalConfiguration = vfsStream::url("ezlaunchpad/ez.yml");

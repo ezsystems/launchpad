@@ -24,8 +24,10 @@ final class Stop extends DockerCommand
         $this->setAliases(['stop']);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->dockerClient->stop($input->getArgument('service'));
+
+        return DockerCommand::SUCCESS;
     }
 }

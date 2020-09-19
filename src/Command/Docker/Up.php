@@ -24,8 +24,10 @@ final class Up extends DockerCommand
         $this->setAliases(['up']);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->dockerClient->up(['-d'], $input->getArgument('service'));
+
+        return DockerCommand::SUCCESS;
     }
 }

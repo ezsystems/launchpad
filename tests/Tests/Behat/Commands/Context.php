@@ -43,6 +43,7 @@ class Context implements BaseContext
      */
     public function iShouldSee($value): void
     {
+        $matches = null;
         $output = $this->tester->getDisplay();
         if (preg_match('/(.*) OR (.*)/us', $value)) {
             preg_match_all('/(.*) OR (.*)/us', $value, $matches);

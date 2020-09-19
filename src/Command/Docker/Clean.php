@@ -22,8 +22,10 @@ final class Clean extends DockerCommand
         $this->setAliases(['docker:down', 'clean', 'down']);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->dockerClient->down(['-v', '--remove-orphans']);
+
+        return DockerCommand::SUCCESS;
     }
 }

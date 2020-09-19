@@ -48,8 +48,10 @@ final class Status extends DockerCommand
         $this->projectStatusDumper->setIo($this->io);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->projectStatusDumper->dump($input->getArgument('options'));
+
+        return DockerCommand::SUCCESS;
     }
 }

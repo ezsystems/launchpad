@@ -19,7 +19,7 @@ class ProcessRunner
      */
     public function run(string $command, array $envVars)
     {
-        $process = new Process(escapeshellcmd($command), null, $envVars);
+        $process = Process::fromShellCommandline($command, null, $envVars);
         $process->setTimeout(2 * 3600);
 
         if ($this->hasTty()) {
@@ -49,6 +49,7 @@ class ProcessRunner
             // Windows platform does not have TTY
             $isTtySupported = false;
         } else {
+            $pipes = null;
             // TTY mode requires /dev/tty to be read/writable.
             $isTtySupported = (bool) @proc_open(
                 'echo 1 >/dev/null',

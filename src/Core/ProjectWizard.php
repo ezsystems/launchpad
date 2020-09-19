@@ -205,6 +205,7 @@ END;
 
     protected function getNetworkTCPPort(): int
     {
+        $errno = $errstr = null;
         $default = 42;
         $validator = function ($value) {
             if (($value > 0) && ($value <= 64)) {

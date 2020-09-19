@@ -56,7 +56,7 @@ class Initialize extends Command
         );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $fs = new Filesystem();
         $application = $this->getApplication();
@@ -204,6 +204,8 @@ class Initialize extends Command
 
         $this->projectConfiguration->setEnvironment('dev');
         $this->projectStatusDumper->dump('ncsi');
+
+        return Command::SUCCESS;
     }
 
     protected function innerInitialize(

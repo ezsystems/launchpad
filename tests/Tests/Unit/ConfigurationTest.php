@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace eZ\Launchpad\Tests\Unit;
 
+use Exception;
 use eZ\Launchpad\Configuration\Configuration;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
@@ -93,27 +94,27 @@ provisioni2ng:
     public function testYamlLoading($yaml, $expected): void
     {
         if ($expected === 'exception') {
-            return;
+            $this->expectException(Exception::class);
         }
 
         $configuration = Yaml::parse($yaml);
         $config = $this->process([$configuration]);
 
         if ($expected === 'ok') {
-            $this->assertInternalType('array', $config);
+            $this->assertIsArray($config);
         }
         if ($expected === 'default') {
-            $this->assertInternalType('array', $config);
+            $this->assertIsArray($config);
             $this->assertEquals(static::$defaultConfiguration, $config);
         }
     }
 
     /**
      * @dataProvider getYamlExamples
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      */
     public function testYamlException($yaml, $expected)
     {
+        $this->expectException(InvalidConfigurationException::class);
         $configuration = Yaml::parse($yaml);
         $this->process([$configuration]);
         if ($expected !== 'exception') {

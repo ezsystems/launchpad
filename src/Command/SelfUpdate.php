@@ -32,7 +32,7 @@ class SelfUpdate extends Command
         $this->parameters = $parameters;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /* @var Application $application */
         $application = $this->getApplication();
@@ -43,7 +43,7 @@ class SelfUpdate extends Command
         if (null === $releases) {
             $this->io->comment('Cannot find new releases, please try later.');
 
-            return;
+            return Command::FAILURE;
         }
         $release = $releases[0];
         $currentVersion = normalizeVersion($application->getVersion());
@@ -51,7 +51,7 @@ class SelfUpdate extends Command
         if ($lastVersion <= $currentVersion) {
             $this->io->comment('No update is required! You have the last version!');
 
-            return;
+            return Command::FAILURE;
         }
 
         $localPharFile = realpath($_SERVER['argv'][0]) ?: $_SERVER['argv'][0];
@@ -68,7 +68,7 @@ class SelfUpdate extends Command
         if ('openssl' !== strtolower($signature['hash_type'])) {
             $this->io->error('Invalid Signature.');
 
-            return;
+            return Command::FAILURE;
         }
         rename($tempPharFile, $localPharFile);
         chmod($localPharFile, fileperms($backPharFile));
@@ -76,5 +76,7 @@ class SelfUpdate extends Command
         $this->io->writeln(
             "Updated from <info>{$application->getVersion()}</info> to <info>{$release->tag_name}</info>."
         );
+
+        return Command::SUCCESS;
     }
 }

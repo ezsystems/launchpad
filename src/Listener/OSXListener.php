@@ -76,6 +76,7 @@ class OSXListener
 
     protected function getDockerVersion(): int
     {
+        $output = $return = null;
         exec('docker -v 2>/dev/null', $output, $return);
         if (0 !== $return) {
             throw new RuntimeException('You need to install Docker for Mac before to run that command.');

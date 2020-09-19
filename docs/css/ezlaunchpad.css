@@ -1,3 +1,9 @@
+
+a, a:hover, h1 i,h2 i,h3 i,h4 i,h5 i,h6 i {
+    color: #E61851;
+}
+
+
 .container .text-muted {
     margin: 20px 0;
 }
@@ -27,4 +33,27 @@
 
 .clickable {
     cursor:pointer;
+}
+
+.footer-content {
+    color: #f2f2f2;
+    background-color: #000;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.footer-content a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.copyright-content {
+    background-color: #666;
+    color: #BFBFBF;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.copyright-content a, .copyright-content a:hover {
+    color: #ff4713;
 }

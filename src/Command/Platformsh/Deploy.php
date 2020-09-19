@@ -23,7 +23,7 @@ class Deploy extends Command
         $this->setAliases(['psh:deploy']);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $fs = new Filesystem();
         $this->io->title($this->getDescription());
@@ -33,7 +33,7 @@ class Deploy extends Command
             $this->io->error('Your project is not Platformsh ready.');
             $this->io->comment('Run <comment>~/ez platformsh:setup</comment> to set up the integration.');
 
-            return;
+            return Command::FAILURE;
         }
 
         $this->io->writeln(
@@ -45,5 +45,7 @@ class Deploy extends Command
             "\t<fg=cyan>Github Integration</>:\t https://docs.platform.sh/administration/integrations/github.html\n".
             "\t<fg=cyan>Bitbucket Integration</>:\t https://docs.platform.sh/administration/integrations/bitbucket.html"
         );
+
+        return Command::SUCCESS;
     }
 }

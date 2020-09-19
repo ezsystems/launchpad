@@ -17,6 +17,7 @@ trait NFSTrait
 {
     public function restartNFSD(SymfonyStyle $io): bool
     {
+        $output = $returnCode = null;
         exec('sudo nfsd restart', $output, $returnCode);
         if (0 != $returnCode) {
             throw new RuntimeException('NFSD restart failed.');
@@ -102,6 +103,7 @@ trait NFSTrait
         }
 
         if (!$isExportReady) {
+            $output = $returnCode = null;
             $exportLine = "{$export} {$exportOptions}";
             exec("echo \"{$exportLine}\" | sudo tee -a ".NFSAwareInterface::EXPORTS, $output, $returnCode);
             if (0 != $returnCode) {

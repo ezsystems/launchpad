@@ -28,10 +28,12 @@ class ComposerRun extends DockerCommand
         );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $allArguments = $input->getArgument('compcommand');
         $options = '';
         $this->taskExecutor->runComposerCommand(implode(' ', $allArguments)." {$options}");
+
+        return DockerCommand::SUCCESS;
     }
 }

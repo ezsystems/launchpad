@@ -63,7 +63,7 @@
     <rule ref="rulesets/codesize.xml/ExcessiveMethodLength">
         <priority>1</priority>
         <properties>
-            <property name="minimum" value="150"/>
+            <property name="minimum" value="200"/>
         </properties>
     </rule>
     <rule ref="rulesets/codesize.xml/ExcessiveParameterList">

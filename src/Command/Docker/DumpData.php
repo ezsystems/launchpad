@@ -22,8 +22,10 @@ final class DumpData extends DockerCommand
         $this->setAliases(['dumpdata']);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->taskExecutor->dumpData();
+
+        return DockerCommand::SUCCESS;
     }
 }

@@ -23,11 +23,13 @@ final class Update extends DockerCommand
         $this->addArgument('service', InputArgument::OPTIONAL, 'Image service to update.', '');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->dockerClient->pull(['--ignore-pull-failures'], $input->getArgument('service'));
         $this->dockerClient->build([], $input->getArgument('service'));
         $this->dockerClient->up(['-d'], $input->getArgument('service'));
         $this->taskExecutor->composerInstall();
+
+        return DockerCommand::SUCCESS;
     }
 }
