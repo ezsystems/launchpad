@@ -400,7 +400,6 @@ Usage:
 Available commands:
   help               Displays help for a command
   list               Lists commands
-  rollback           Rollback an update.
   self-update        Self Update
  docker
   docker:build       [build] Build all the services (or just one).
@@ -471,6 +470,23 @@ composer:
                 <strong>there is a workaround</strong>: NFS! Yes, it might be odd, but NFS is faster than the default mount. Before the last version of Docker for Mac, we were using
                 <a href="https://github.com/IFSight/d4m-nfs">D4M</a>, but since Docker for Mac 18.03 we can directly mount the host as a volume from the container.
             </p>
+
+            <h3>Webpack and Watching your changes</h3>
+            <p>As your files are on the Host and the watch is in the container, watch will not work due to, again, the tricks we do for performances.</p>
+            <p>Therefore you can by pass that problem adding this in your webpack configuration:</p>
+            <div class="highlight">
+                <button class="to-clipboard">
+                    <i class="fa fa-clipboard" aria-hidden="true"></i> Copy
+                </button>
+                <pre><code>module.exports = {
+    //...
+    watchOptions: {
+    poll: 1000
+    }
+};</code></pre>
+            </div>
+
+
 
             <h3>Update to Catalina</h3>
             <p>Catalina brings a new weird comlexity with Mac OS that has been handled in eZ Launchpad but when you migrate you might want to know more.</p>
