@@ -26,7 +26,7 @@ final class CommandStart
 
         // Ensure that docker is running
         $nonDockerCommandCheckList = [
-            'docker:initialize:skeleton', 'docker:initialize'
+            'docker:initialize:skeleton', 'docker:initialize',
         ];
         if (($command instanceof DockerCommand) || (\in_array($command->getName(), $nonDockerCommandCheckList))) {
             $output = $return = null;
