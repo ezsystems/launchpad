@@ -56,6 +56,20 @@ class Initialize extends Command
         );
     }
 
+    private function getEzPlataformMajorVersion(InputInterface $input): int
+    {
+        $normalizedVersion = trim($input->getArgument('version'), 'v');
+        $normalizedProvider = explode('/', $input->getArgument('repository'))[0];
+        $normalizedMajorVersion = (int) str_replace(['^', '~'], '', $normalizedVersion);
+        $isNetgenMedia = 'netgen' === $normalizedProvider;
+
+        if ($isNetgenMedia) {
+            $normalizedMajorVersion++;
+        }
+
+        return $normalizedMajorVersion;
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $fs = new Filesystem();
@@ -68,7 +82,7 @@ class Initialize extends Command
         $wizard = new ProjectWizard($this->io, $this->projectConfiguration);
 
         // Ask the questions
-        list($networkName, $networkPort, $httpBasics, $selectedServices, $provisioningName, $composeFileName) = $wizard(
+        [$networkName, $networkPort, $httpBasics, $selectedServices, $provisioningName, $composeFileName] = $wizard(
             $compose
         );
 
@@ -88,10 +102,11 @@ class Initialize extends Command
         );
 
         unset($selectedServices);
-        $normalizedVersion = trim($input->getArgument('version'), 'v');
+
+        $eZMajorVersion = $this->getEzPlataformMajorVersion($input);
 
         // eZ Platform 1.x specific versions
-        if (1 === (int) str_replace(['^', '~'], '', $normalizedVersion)) {
+        if (1 === $eZMajorVersion) {
             // PHP 7.2
             $enginDockerFilePath = "{$provisioningFolder}/dev/engine/Dockerfile";
             $engineDockerFileContent = file_get_contents($enginDockerFilePath);
@@ -103,12 +118,10 @@ class Initialize extends Command
                     $engineDockerFileContent
                 )
             );
-            // v2 and v1 share the same vhost
-            rename("{$provisioningFolder}/dev/nginx/nginx_v2.conf", "{$provisioningFolder}/dev/nginx/nginx.conf");
         }
 
         // eZ Platform 2.x specific versions
-        if (2 === (int) str_replace(['^', '~'], '', $normalizedVersion)) {
+        if (2 === $eZMajorVersion) {
             // PHP 7.3
             $enginDockerFilePath = "{$provisioningFolder}/dev/engine/Dockerfile";
             $engineDockerFileContent = file_get_contents($enginDockerFilePath);
@@ -120,16 +133,15 @@ class Initialize extends Command
                     $engineDockerFileContent
                 )
             );
-            // v2 and v1 share the same vhost
+        }
+
+        // eZ Platform < 3 has another vhost
+        if ($eZMajorVersion < 3) {
             rename("{$provisioningFolder}/dev/nginx/nginx_v2.conf", "{$provisioningFolder}/dev/nginx/nginx.conf");
         }
 
-        // eZ Platform <3 only support solr 6. Replace unsupported solr 7.7 by 6.6.2
-        if (
-                ((1 === (int) str_replace(['^', '~'], '', $normalizedVersion)) ||
-                  (2 === (int) str_replace(['^', '~'], '', $normalizedVersion))) &&
-                $compose->hasService('solr')
-        ) {
+        // eZ Platform < 3 only support solr 6. Replace unsupported solr 7.7 by 6.6.2
+        if ($compose->hasService('solr') && ($eZMajorVersion < 3)) {
             $composeFilePath = "{$provisioningFolder}/dev/{$composeFileName}";
             $compose->dump($composeFilePath);
             $composeFileContent = file_get_contents($composeFilePath);
@@ -145,7 +157,7 @@ class Initialize extends Command
         }
 
         // no need for v2 nginx on v3
-        if (3 === (int) str_replace(['^', '~'], '', $normalizedVersion)) {
+        if ($eZMajorVersion >= 3) {
             unlink("{$provisioningFolder}/dev/nginx/nginx_v2.conf");
         }
 
@@ -164,7 +176,7 @@ class Initialize extends Command
         ];
 
         foreach ($httpBasics as $name => $httpBasic) {
-            list($host, $user, $pass) = $httpBasic;
+            [$host, $user, $pass] = $httpBasic;
             $localConfigurations["composer.http_basic.{$name}.host"] = $host;
             $localConfigurations["composer.http_basic.{$name}.login"] = $user;
             $localConfigurations["composer.http_basic.{$name}.password"] = $pass;
