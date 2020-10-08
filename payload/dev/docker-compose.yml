@@ -47,6 +47,8 @@ services:
             - "SOLR_DSN=http://solr:8983/solr"
             - "SYMFONY_TMP_DIR=/tmp/ezplatformcache/"
             - "HTTPCACHE_VARNISH_INVALIDATE_TOKEN=eZlaunchpad20Secret09Varnish"
+            - "SESSION_HANDLER_ID=ezplatform.core.session.handler.native_redis"
+            - "SESSION_SAVE_PATH=tcp://redis:6379"
     db:
         image: mariadb:10.3
         environment:
