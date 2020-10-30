@@ -30,6 +30,6 @@ then
     echo "WARNING: you don't have the last image of the PHP ENGINE"
     echo "TO FIX RUN: ~/ez docker:update"
 fi
-/usr/local/bin/composer self-update
+/usr/local/bin/composer self-update --1
 
 exec "$@"
