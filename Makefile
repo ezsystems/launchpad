@@ -22,6 +22,10 @@ list:
 	@grep -E '^[a-zA-Z-]+:.*?## .*$$' Makefile | sort | awk 'BEGIN {FS = ":.*?## "}; {printf " ${YELLOW}%-15s${RESTORE} > %s\n", $$1, $$2}'
 	@echo "${RED}==============================${RESTORE}"
 
+.PHONY: install
+install: ## Install the vendor
+	@composer install
+
 .PHONY: codeclean
 codeclean: ## Run the codechecker
 	bash $(SCRIPS_DIR)/codechecker.bash

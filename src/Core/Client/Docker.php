@@ -196,12 +196,12 @@ class Docker
                 'BLACKFIRE_CLIENT_TOKEN' => getenv('BLACKFIRE_CLIENT_TOKEN'),
                 'BLACKFIRE_SERVER_ID' => getenv('BLACKFIRE_SERVER_ID'),
                 'BLACKFIRE_SERVER_TOKEN' => getenv('BLACKFIRE_SERVER_TOKEN'),
-                'XDEBUG_ENABLED' => false === getenv('XDEBUG_ENABLED') ? '0' : '1',
                 // pass the DOCKER native vars for compose
                 'DOCKER_HOST' => getenv('DOCKER_HOST'),
                 'DOCKER_CERT_PATH' => getenv('DOCKER_CERT_PATH'),
                 'DOCKER_TLS_VERIFY' => getenv('DOCKER_TLS_VERIFY'),
                 'PATH' => getenv('PATH'),
+                'XDEBUG_ENABLED' => false === getenv('XDEBUG_ENABLED') ? '0' : '1',
             ];
     }
 
