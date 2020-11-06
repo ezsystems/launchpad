@@ -64,7 +64,7 @@ class Initialize extends Command
         $isNetgenMedia = 'netgen' === $normalizedProvider;
 
         if ($isNetgenMedia) {
-            $normalizedMajorVersion++;
+            ++$normalizedMajorVersion;
         }
 
         return $normalizedMajorVersion;

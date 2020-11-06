@@ -32,4 +32,8 @@ then
 fi
 /usr/local/bin/composer self-update --1
 
+if [ "1" = "${XDEBUG_ENABLED}" ]; then
+    export PHP_INI_SCAN_DIR=:/usr/local/etc/php/enable-xdebug
+fi
+
 exec "$@"
