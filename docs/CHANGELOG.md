@@ -5,6 +5,7 @@
 ### ?.?.?
 
 - Add support for calling composer ezplatform-install (script) on "initialdata" argument
+- Add support for xdebug
 
 
 ### 1.4.0

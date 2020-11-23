@@ -30,6 +30,9 @@ services:
             - PROJECTMAPPINGFOLDER
             - DEV_UID
             - DEV_GID
+            - XDEBUG_ENABLED
+            - "XDEBUG_CONFIG=remote_host=172.17.0.1"
+            - "PHP_IDE_CONFIG=serverName=ezplatform"
             - "EZP_TEST_REST_HOST=nginx"
             - "DATABASE_PREFIXES=DATABASE"
             - "DATABASE_USER=root"
