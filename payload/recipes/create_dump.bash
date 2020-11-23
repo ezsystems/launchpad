@@ -49,5 +49,12 @@ if [ -d $PROJECTMAPPINGFOLDER/ezplatform/web/var ]; then
     cd $PROJECTMAPPINGFOLDER/ezplatform/web
     tar czvf $DUMP_DIR/$STORAGE_FILE_NAME.tar.gz var/
     cd -
-    echo "Storage dumped."
+    echo "Storage dumped from web/."
+fi
+
+if [ -d $PROJECTMAPPINGFOLDER/ezplatform/public/var ]; then
+    cd $PROJECTMAPPINGFOLDER/ezplatform/public
+    tar czvf $DUMP_DIR/$STORAGE_FILE_NAME.tar.gz var/
+    cd -
+    echo "Storage dumped from public/."
 fi
