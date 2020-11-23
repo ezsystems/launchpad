@@ -49,10 +49,18 @@ if [ ! -d ezplatform ]; then
 fi
 
 if [ -f $STORAGE_FILE_PATH ]; then
-    if [ -d "ezplatform/web/var" ]; then
-        rm -rf ezplatform/web/var
+    if [ -d ezplatform/web ]; then
+        if [ -d "ezplatform/web/var" ]; then
+            rm -rf ezplatform/web/var
+        fi
+        tar xvzf $STORAGE_FILE_PATH -C ezplatform/web/
+        echo "Storage imported to web/."
     fi
-
-    tar xvzf $STORAGE_FILE_PATH -C ezplatform/web/
-    echo "Storage imported."
+    if [ -d ezplatform/public ]; then
+        if [ -d "ezplatform/public/var" ]; then
+            rm -rf ezplatform/public/var
+        fi
+        tar xvzf $STORAGE_FILE_PATH -C ezplatform/public/
+        echo "Storage imported to public/."
+    fi
 fi
