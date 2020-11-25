@@ -51,7 +51,7 @@ function MacOSPatherize(string $path): string
             $parts = explode('.', $output[0]);
             $major = (int) $parts[0];
             $minor = (int) $parts[1];
-            $isCatalina = ($major >= 10) && ($minor >= 15);
+            $isCatalina = (($major >= 10) && ($minor >= 15)) || ($major >= 11);
         } else {
             $isCatalina = false;
         }
