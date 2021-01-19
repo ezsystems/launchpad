@@ -55,6 +55,7 @@ class DockerClientTest extends TestCase
             ['down', [['-q', '-ez']], 'down -q -ez'],
             ['start', ['plop'], 'start  plop'],
             ['stop', ['plop'], 'stop  plop'],
+            ['restart', ['plop'], 'restart  plop'],
 
             ['logs', [['-q', '-ez'], 'plop'], 'logs -q -ez plop'],
             ['up', [['-q', '-ez'], 'plop'], 'up -q -ez plop'],
