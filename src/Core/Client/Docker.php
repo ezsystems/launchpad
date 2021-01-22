@@ -113,6 +113,11 @@ class Docker
         return $this->perform('start', $service);
     }
 
+    public function restart(string $service = '')
+    {
+        return $this->perform('restart', $service);
+    }
+
     public function build(array $args = [], string $service = '')
     {
         return $this->perform('build', $service, $args);
