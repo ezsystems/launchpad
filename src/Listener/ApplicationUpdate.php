@@ -38,18 +38,15 @@ final class ApplicationUpdate
     {
         $command = $event->getCommand();
 
-        if (!$command instanceof BaseCommand) {
-            return;
-        }
-
-        if (\in_array($command->getName(), ['self-update', 'rollback'])) {
+        if (!$command instanceof BaseCommand || \in_array($command->getName(), ['self-update', 'rollback'])) {
             return;
         }
 
         $io = new SymfonyStyle($event->getInput(), $event->getOutput());
 
         $authorized = [
-            'list', 'help', 'test', 'docker:initialize:skeleton', 'docker:initialize', 'docker:create',
+            'list', 'help', 'test', 'docker:initialize:skeleton',
+            'docker:initialize_ibexa', 'docker:initialize', 'docker:create',
             'self-update', 'rollback',
         ];
         if (!\in_array($command->getName(), $authorized)) {

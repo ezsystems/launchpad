@@ -35,6 +35,8 @@ services:
             - "PHP_IDE_CONFIG=serverName=ezplatform"
             - "EZP_TEST_REST_HOST=nginx"
             - "DATABASE_PREFIXES=DATABASE"
+            - "DATABASE_PLATFORM=mysql"
+            - "DATABASE_DRIVER=pdo_mysql"
             - "DATABASE_USER=root"
             - "DATABASE_NAME=ezplatform"
             - "DATABASE_PASSWORD=ezplatform"

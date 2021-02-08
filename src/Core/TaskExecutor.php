@@ -105,6 +105,23 @@ class TaskExecutor
         return $this->execute("{$recipe}.bash {$repository} {$version} {$initialData}");
     }
 
+    public function iBexaInstall(string $version, string $package): Process
+    {
+        $recipe = 'ibexa_install';
+        $provisioningFolder = $this->projectConfiguration->get('provisioning.folder_name');
+        $this->checkRecipeAvailability($recipe);
+
+        return $this->execute("{$recipe}.bash {$version} {$package} {$provisioningFolder} ");
+    }
+
+    public function iBexaDatabaseInitData(string $initialData): Process
+    {
+        $recipe = 'ibexa_db_init';
+        $this->checkRecipeAvailability($recipe);
+
+        return $this->execute("{$recipe}.bash {$initialData} ");
+    }
+
     public function eZInstallSolr(): Process
     {
         $recipe = 'ez_install_solr';
