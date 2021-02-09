@@ -49,6 +49,11 @@ abstract class Command extends BaseCommand
      */
     protected $optimizer;
 
+    /**
+     * @var ProjectWizard
+     */
+    protected $projectWizard;
+
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $this->io = new SymfonyStyle($input, $output);
@@ -98,5 +103,12 @@ abstract class Command extends BaseCommand
     public function setOptimizer(OptimizerInterface $optimizer): void
     {
         $this->optimizer = $optimizer;
+    }
+
+    public function setProjectWizard(): ProjectWizardInterface
+    {
+        $this->projectWizard = new ProjectWizard($this->io, $this->projectConfiguration);
+
+        return $this->projectWizard;
     }
 }

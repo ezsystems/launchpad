@@ -14,7 +14,7 @@ use RuntimeException;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class ProjectWizard
+class ProjectWizard implements ProjectWizardInterface
 {
     /**
      * @var SymfonyStyle
@@ -54,19 +54,29 @@ class ProjectWizard
     {
         $this->mode = $this->getInitializationMode();
 
-        $configuration = [
+        return $this->getConfigurations($compose);
+    }
+
+    public function getConfigurations(DockerCompose $compose): array
+    {
+        $defaultConfigurations = [
             $this->getNetworkName(),
             $this->getNetworkTCPPort(),
-            $this->getComposerHttpBasicCredentials(),
             $this->getSelectedServices(
                 $compose->getServices(),
                 ['varnish', 'solr', 'adminer', 'redisadmin']
-            ),
-            $this->getProvisioningFolderName(),
+            ), $this->getProvisioningFolderName(),
             $this->getComposeFileName(),
         ];
 
-        return $configuration;
+        if (false === $this->isFullIbexaPackage()) {
+            array_push(
+                $defaultConfigurations,
+                $this->getComposerHttpBasicCredentials()
+            );
+        }
+
+        return $defaultConfigurations;
     }
 
     public function getInitializationMode(): string
@@ -265,5 +275,16 @@ END;
     protected function requireComposerAuth(): bool
     {
         return self::INIT_STD !== $this->mode;
+    }
+
+    public function getMode(): string
+    {
+        return  $this->mode;
+    }
+
+    //check if the version is greater than or equal to Ibexa 3.3
+    public function isFullIbexaPackage(): bool
+    {
+        return false !== strpos($this->getMode(), 'ibexa');
     }
 }

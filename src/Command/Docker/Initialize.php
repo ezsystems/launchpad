@@ -15,7 +15,6 @@ use eZ\Launchpad\Core\Command;
 use eZ\Launchpad\Core\DockerCompose;
 use eZ\Launchpad\Core\ProcessRunner;
 use eZ\Launchpad\Core\ProjectStatusDumper;
-use eZ\Launchpad\Core\ProjectWizard;
 use eZ\Launchpad\Core\TaskExecutor;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -59,7 +58,11 @@ class Initialize extends Command
     private function getEzPlataformMajorVersion(InputInterface $input): int
     {
         $normalizedVersion = trim($input->getArgument('version'), 'v');
-        $normalizedProvider = explode('/', $input->getArgument('repository'))[0];
+        $normalizedProvider = explode(
+            '/',
+            $input->hasArgument('repository') ?
+                $input->getArgument('repository') : ''
+        )[0];
         $normalizedMajorVersion = (int) str_replace(['^', '~'], '', $normalizedVersion);
         $isNetgenMedia = 'netgen' === $normalizedProvider;
 
@@ -79,12 +82,19 @@ class Initialize extends Command
 
         // Get the Payload docker-compose.yml
         $compose = new DockerCompose("{$this->getPayloadDir()}/dev/docker-compose.yml");
-        $wizard = new ProjectWizard($this->io, $this->projectConfiguration);
+        $wizard = $this->setProjectWizard();
+        $configurations = $wizard($compose);
+        $isIbexaPackage = $wizard->isFullIbexaPackage();
 
-        // Ask the questions
-        [$networkName, $networkPort, $httpBasics, $selectedServices, $provisioningName, $composeFileName] = $wizard(
-            $compose
-        );
+        if (false !== $isIbexaPackage) {
+            // Ask the questions
+            [$networkName, $networkPort, $selectedServices, $provisioningName, $composeFileName] = $configurations;
+        } else {
+            // Ask the questions
+            [
+                $networkName, $networkPort, $selectedServices, $provisioningName, $composeFileName, $httpBasics
+            ] = $configurations;
+        }
 
         $compose->filterServices($selectedServices);
 
@@ -161,6 +171,20 @@ class Initialize extends Command
             unlink("{$provisioningFolder}/dev/nginx/nginx_v2.conf");
         }
 
+        // Ibexa >= 3.3.x , update composer to v2
+        if (false !== $isIbexaPackage) {
+            $enginEntryPointPath = "{$provisioningFolder}/dev/engine/entrypoint.bash";
+            $engineEntryPointContent = file_get_contents($enginEntryPointPath);
+            file_put_contents(
+                $enginEntryPointPath,
+                str_replace(
+                    'self-update --1',
+                    'self-update --2',
+                    $engineEntryPointContent
+                )
+            );
+        }
+
         // Clean the Compose File
         $compose->removeUselessEnvironmentsVariables();
 
@@ -175,11 +199,13 @@ class Initialize extends Command
             'docker.network_prefix_port' => $networkPort,
         ];
 
-        foreach ($httpBasics as $name => $httpBasic) {
-            [$host, $user, $pass] = $httpBasic;
-            $localConfigurations["composer.http_basic.{$name}.host"] = $host;
-            $localConfigurations["composer.http_basic.{$name}.login"] = $user;
-            $localConfigurations["composer.http_basic.{$name}.password"] = $pass;
+        if (isset($httpBasics) && is_array($httpBasics)) {
+            foreach ($httpBasics as $name => $httpBasic) {
+                [$host, $user, $pass] = $httpBasic;
+                $localConfigurations["composer.http_basic.{$name}.host"] = $host;
+                $localConfigurations["composer.http_basic.{$name}.login"] = $user;
+                $localConfigurations["composer.http_basic.{$name}.password"] = $pass;
+            }
         }
 
         $this->projectConfiguration->setMultiLocal($localConfigurations);

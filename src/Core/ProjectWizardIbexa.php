@@ -26,24 +26,6 @@ class ProjectWizardIbexa extends ProjectWizard
         self::INIT_IBEXA_EXPERIENCE,
     ];
 
-    public function __invoke(DockerCompose $compose): array
-    {
-        $this->mode = $this->getInitializationMode();
-
-        $configuration = [
-            $this->getNetworkName(),
-            $this->getNetworkTCPPort(),
-            $this->getSelectedServices(
-                $compose->getServices(),
-                ['varnish', 'solr', 'adminer', 'redisadmin']
-            ),
-            $this->getProvisioningFolderName(),
-            $this->getComposeFileName(),
-        ];
-
-        return $configuration;
-    }
-
     public function getInitializationMode(): string
     {
         $ibexaOss = self::INIT_IBEXA_OSS;
@@ -61,10 +43,5 @@ eZ Launchpad will install a new architecture for you.
 END;
 
         return $this->io->choice($question, self::$modes, self::INIT_IBEXA_OSS);
-    }
-
-    public function getPackage(): string
-    {
-        return  $this->mode;
     }
 }
