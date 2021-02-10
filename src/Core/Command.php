@@ -50,7 +50,7 @@ abstract class Command extends BaseCommand
     protected $optimizer;
 
     /**
-     * @var ProjectWizard
+     * @var ProjectWizardInterface
      */
     protected $projectWizard;
 
@@ -103,12 +103,5 @@ abstract class Command extends BaseCommand
     public function setOptimizer(OptimizerInterface $optimizer): void
     {
         $this->optimizer = $optimizer;
-    }
-
-    public function setProjectWizard(): ProjectWizardInterface
-    {
-        $this->projectWizard = new ProjectWizard($this->io, $this->projectConfiguration);
-
-        return $this->projectWizard;
     }
 }

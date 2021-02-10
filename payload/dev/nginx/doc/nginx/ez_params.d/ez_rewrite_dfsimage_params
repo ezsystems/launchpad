@@ -1,1 +1,0 @@
-rewrite "^/var/([^/]+/)?storage/images(-versioned)?/(.*)" "/index.php" break;

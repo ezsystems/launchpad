@@ -42,11 +42,7 @@ services:
 
     eZ\Launchpad\Command\Docker\Initialize:
         calls:
-            - [setRequiredRecipes, [ [ 'composer_install', 'ez_install', 'ez_install_solr' ] ] ]
-
-    eZ\Launchpad\Command\Docker\InitializeIbexa:
-        calls:
-            - [setRequiredRecipes, [ [ 'composer_install', 'ibexa_install', 'ez_install_solr'  ,'ibexa_db_init'] ] ]
+            - [setRequiredRecipes, [ [ 'composer_install', 'ez_install', 'ibexa_install', 'ez_install_solr' ] ] ]
 
     eZ\Launchpad\Command\Docker\InitializeSkeleton:
         calls:

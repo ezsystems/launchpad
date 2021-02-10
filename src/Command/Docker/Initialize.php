@@ -15,6 +15,7 @@ use eZ\Launchpad\Core\Command;
 use eZ\Launchpad\Core\DockerCompose;
 use eZ\Launchpad\Core\ProcessRunner;
 use eZ\Launchpad\Core\ProjectStatusDumper;
+use eZ\Launchpad\Core\ProjectWizard;
 use eZ\Launchpad\Core\TaskExecutor;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -55,13 +56,18 @@ class Initialize extends Command
         );
     }
 
+    private function isIbexa(InputInterface $input): bool
+    {
+        return false !== strpos($input->getArgument('repository'), 'ibexa');
+    }
+
     private function getEzPlataformMajorVersion(InputInterface $input): int
     {
         $normalizedVersion = trim($input->getArgument('version'), 'v');
         $normalizedProvider = explode(
             '/',
             $input->hasArgument('repository') ?
-                $input->getArgument('repository') : ''
+            $input->getArgument('repository') : ''
         )[0];
         $normalizedMajorVersion = (int) str_replace(['^', '~'], '', $normalizedVersion);
         $isNetgenMedia = 'netgen' === $normalizedProvider;
@@ -82,19 +88,12 @@ class Initialize extends Command
 
         // Get the Payload docker-compose.yml
         $compose = new DockerCompose("{$this->getPayloadDir()}/dev/docker-compose.yml");
-        $wizard = $this->setProjectWizard();
-        $configurations = $wizard($compose);
-        $isIbexaPackage = $wizard->isFullIbexaPackage();
+        $wizard = new ProjectWizard($this->io, $this->projectConfiguration);
 
-        if (false !== $isIbexaPackage) {
-            // Ask the questions
-            [$networkName, $networkPort, $selectedServices, $provisioningName, $composeFileName] = $configurations;
-        } else {
-            // Ask the questions
-            [
-                $networkName, $networkPort, $selectedServices, $provisioningName, $composeFileName, $httpBasics
-            ] = $configurations;
-        }
+        // Ask the questions
+        [$networkName, $networkPort, $httpBasics, $selectedServices, $provisioningName, $composeFileName] = $wizard(
+            $compose
+        );
 
         $compose->filterServices($selectedServices);
 
@@ -172,7 +171,7 @@ class Initialize extends Command
         }
 
         // Ibexa >= 3.3.x , update composer to v2
-        if (false !== $isIbexaPackage) {
+        if ($this->isIbexa($input)) {
             $enginEntryPointPath = "{$provisioningFolder}/dev/engine/entrypoint.bash";
             $engineEntryPointContent = file_get_contents($enginEntryPointPath);
             file_put_contents(
@@ -199,13 +198,11 @@ class Initialize extends Command
             'docker.network_prefix_port' => $networkPort,
         ];
 
-        if (isset($httpBasics) && is_array($httpBasics)) {
-            foreach ($httpBasics as $name => $httpBasic) {
-                [$host, $user, $pass] = $httpBasic;
-                $localConfigurations["composer.http_basic.{$name}.host"] = $host;
-                $localConfigurations["composer.http_basic.{$name}.login"] = $user;
-                $localConfigurations["composer.http_basic.{$name}.password"] = $pass;
-            }
+        foreach ($httpBasics as $name => $httpBasic) {
+            [$host, $user, $pass] = $httpBasic;
+            $localConfigurations["composer.http_basic.{$name}.host"] = $host;
+            $localConfigurations["composer.http_basic.{$name}.login"] = $user;
+            $localConfigurations["composer.http_basic.{$name}.password"] = $pass;
         }
 
         $this->projectConfiguration->setMultiLocal($localConfigurations);
@@ -277,7 +274,16 @@ class Initialize extends Command
             $initialdata = (false !== strpos($repository, 'ezplatform-ee') ? 'ezplatform-ee-clean' : 'clean');
         }
 
-        $executor->eZInstall($normalizedVersion, $repository, $initialdata);
+        if (!$this->isIbexa($input)) {
+            $executor->eZInstall($normalizedVersion, $repository, $initialdata);
+        } else {
+            // for sure it is wrong with ibexa/* so we change it by defaultc
+            if ('ezplatform-install' === $initialdata) {
+                $initialdata = $repository;
+            }
+            $executor->iBexaInstall($normalizedVersion, $repository, $initialdata);
+        }
+
         if ($compose->hasService('solr')) {
             $executor->eZInstallSolr();
         }

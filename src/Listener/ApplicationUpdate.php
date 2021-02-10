@@ -21,12 +21,12 @@ final class ApplicationUpdate
     /**
      * @var array
      */
-    protected $parameters;
+    private $parameters;
 
     /**
      * @var ProjectConfiguration
      */
-    protected $projectConfiguration;
+    private $projectConfiguration;
 
     public function __construct(array $parameters, ProjectConfiguration $configuration)
     {
