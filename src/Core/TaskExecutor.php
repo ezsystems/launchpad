@@ -113,14 +113,6 @@ class TaskExecutor
         return $this->execute("{$recipe}.bash {$repository} {$version} {$initialData}");
     }
 
-    public function iBexaDatabaseInitData(string $initialData): Process
-    {
-        $recipe = 'ibexa_db_init';
-        $this->checkRecipeAvailability($recipe);
-
-        return $this->execute("{$recipe}.bash {$initialData} ");
-    }
-
     public function eZInstallSolr(): Process
     {
         $recipe = 'ez_install_solr';
