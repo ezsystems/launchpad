@@ -37,7 +37,7 @@ cd ezplatform
 echo "Getting the NGINX config"
 wget https://github.com/ibexa/docker/archive/main.zip
 unzip main.zip
-mkdir -pf doc/nginx
+mkdir -p doc/nginx
 cp -r docker-main/templates/nginx doc/nginx
 rm -rf docker-main
 rm main.zip
@@ -48,8 +48,8 @@ echo "DATABASE_URL=\${DATABASE_PLATFORM}://\${DATABASE_USER}:\${DATABASE_PASSWOR
 
 # Test the package version
 if [ "$REPO" != "ibexa/oss" ]; then
-echo "configure auth updates.ibexa.co"
-$COMPOSER config repositories.ibexa composer https://updates.ibexa.co
+    echo "configure auth updates.ibexa.co"
+    $COMPOSER config repositories.ibexa composer https://updates.ibexa.co
 fi
 # Install package ( oss or content or commerce or experience )
 echo "Install package $REPO"
@@ -57,7 +57,19 @@ $COMPOSER require $REPO
 
 # recipes:install ( content or commerce or experience )
 echo "recipes:install $REPO"
-$COMPOSER recipes:install $REPO --force --no-interaction
+# SUPER ULTRA TRICK
+# recipes:install  needs GIT!!!
+if [ ! -d .git ]; then
+    git init
+    git add .
+    git config --global user.email "ezlaunchpad@ibexa.co"
+    git config --global user.name "eZ Launchpad"
+    git commit -m "Fake commit that will be removed"
+    $COMPOSER recipes:install $REPO --force
+    rm -rf .git
+else
+    echo "There is a .git we don't take the risk to override it."
+fi
 
 MAJOR_VERSION=`echo $VERSION | cut -c 1-2`
 

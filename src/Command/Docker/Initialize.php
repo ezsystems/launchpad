@@ -279,7 +279,7 @@ class Initialize extends Command
         } else {
             // for sure it is wrong with ibexa/* so we change it by defaultc
             if ('ezplatform-install' === $initialdata) {
-                $initialdata = $repository;
+                $initialdata = str_replace('/', '-', $repository);
             }
             $executor->iBexaInstall($normalizedVersion, $repository, $initialdata);
         }

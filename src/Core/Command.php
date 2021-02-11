@@ -49,11 +49,6 @@ abstract class Command extends BaseCommand
      */
     protected $optimizer;
 
-    /**
-     * @var ProjectWizardInterface
-     */
-    protected $projectWizard;
-
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $this->io = new SymfonyStyle($input, $output);
