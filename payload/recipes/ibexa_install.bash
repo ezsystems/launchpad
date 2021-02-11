@@ -62,8 +62,8 @@ echo "recipes:install $REPO"
 if [ ! -d .git ]; then
     git init
     git add .
-    git config --global user.email "ezlaunchpad@ibexa.co"
-    git config --global user.name "eZ Launchpad"
+    git config user.email "ezlaunchpad@ibexa.co"
+    git config user.name "eZ Launchpad"
     git commit -m "Fake commit that will be removed"
     $COMPOSER recipes:install $REPO --force
     rm -rf .git
