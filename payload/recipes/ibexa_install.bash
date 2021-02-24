@@ -37,8 +37,8 @@ cd ezplatform
 echo "Getting the NGINX config"
 wget https://github.com/ibexa/docker/archive/main.zip
 unzip main.zip
-mkdir -p doc/nginx
-cp -r docker-main/templates/nginx doc/nginx
+mkdir -p doc
+cp -r docker-main/templates/nginx doc/
 rm -rf docker-main
 rm main.zip
 
