@@ -61,7 +61,7 @@ class Initialize extends Command
         return false !== strpos($input->getArgument('repository'), 'ibexa');
     }
 
-    private function getEzPlataformMajorVersion(InputInterface $input): int
+    private function getEzPlatformMajorVersion(InputInterface $input): int
     {
         $normalizedVersion = trim($input->getArgument('version'), 'v');
         $normalizedProvider = explode(
@@ -112,7 +112,7 @@ class Initialize extends Command
 
         unset($selectedServices);
 
-        $eZMajorVersion = $this->getEzPlataformMajorVersion($input);
+        $eZMajorVersion = $this->getEzPlatformMajorVersion($input);
 
         // eZ Platform 1.x specific versions
         if (1 === $eZMajorVersion) {
@@ -172,10 +172,10 @@ class Initialize extends Command
 
         // Ibexa >= 3.3.x , update composer to v2
         if ($this->isIbexa($input)) {
-            $enginEntryPointPath = "{$provisioningFolder}/dev/engine/entrypoint.bash";
-            $engineEntryPointContent = file_get_contents($enginEntryPointPath);
+            $engineEntryPointPath = "{$provisioningFolder}/dev/engine/entrypoint.bash";
+            $engineEntryPointContent = file_get_contents($engineEntryPointPath);
             file_put_contents(
-                $enginEntryPointPath,
+                $engineEntryPointPath,
                 str_replace(
                     'self-update --1',
                     'self-update --2',
@@ -281,7 +281,7 @@ class Initialize extends Command
             if ('ezplatform-install' === $initialdata) {
                 $initialdata = str_replace('/', '-', $repository);
             }
-            $executor->iBexaInstall($normalizedVersion, $repository, $initialdata);
+            $executor->ibexaInstall($normalizedVersion, $repository, $initialdata);
         }
 
         if ($compose->hasService('solr')) {

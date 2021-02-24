@@ -105,7 +105,7 @@ class TaskExecutor
         return $this->execute("{$recipe}.bash {$repository} {$version} {$initialData}");
     }
 
-    public function iBexaInstall(string $version, string $repository, string $initialData): Process
+    public function ibexaInstall(string $version, string $repository, string $initialData): Process
     {
         $recipe = 'ibexa_install';
         $this->checkRecipeAvailability($recipe);
