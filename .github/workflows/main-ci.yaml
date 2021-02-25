@@ -12,7 +12,7 @@ jobs:
             - name: Setup PHP
               uses: shivammathur/setup-php@master
               with:
-                  php-version: 7.3
+                  php-version: 7.4
               id: php
             - name: Install dependencies
               run: composer install --prefer-dist --no-progress --no-suggest --no-interaction
@@ -26,7 +26,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                php: [7.2, 7.3, 7.4]
+                php: [7.2, 7.3, 7.4, 8.0]
         steps:
             - uses: actions/checkout@v1
             - name: Setup PHP
@@ -46,12 +46,12 @@ jobs:
               run: php vendor/behat/behat/bin/behat -c tests/behat.yml
 
 
-    usage:
-        name: Usage
+    ezplatform:
+        name: eZ Platform
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                php: [7.2, 7.3, 7.4]
+                php: [7.2, 7.3, 7.4, 8.0]
                 ezversion: [1.13.*, 2.*, 3.*]
                 collection: [collection-1x.json, collection-2x.json]
                 exclude:
@@ -72,6 +72,30 @@ jobs:
               run: composer install --prefer-dist --no-progress --no-suggest --no-interaction
             - name: Initialization
               run: php bin/ez-prod init ezsystems/ezplatform ${{ matrix.ezversion }} --no-interaction -vvv
+            - name: Status Info
+              run: php bin/ez-prod ps
+            - name: Verification using Postman
+              run: docker run --net=host -v $(pwd)/tests/postman:/etc/newman -t postman/newman_ubuntu1404 run ${{ matrix.collection }}
+
+    ibexa:
+        name: Ibexa
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                php: [7.4, 8.0]
+                ezversion: [3.*]
+                collection: [collection-2x.json]
+        steps:
+            - uses: actions/checkout@v1
+            - name: Setup PHP
+              uses: shivammathur/setup-php@master
+              with:
+                  php-version: ${{ matrix.php }}
+              id: php
+            - name: Install dependencies
+              run: composer install --prefer-dist --no-progress --no-suggest --no-interaction
+            - name: Initialization
+              run: php bin/ez-prod init ibexa/oss ${{ matrix.ezversion }} --no-interaction -vvv
             - name: Status Info
               run: php bin/ez-prod ps
             - name: Verification using Postman

@@ -56,10 +56,19 @@ class Initialize extends Command
         );
     }
 
-    private function getEzPlataformMajorVersion(InputInterface $input): int
+    private function isIbexa(InputInterface $input): bool
+    {
+        return false !== strpos($input->getArgument('repository'), 'ibexa');
+    }
+
+    private function getEzPlatformMajorVersion(InputInterface $input): int
     {
         $normalizedVersion = trim($input->getArgument('version'), 'v');
-        $normalizedProvider = explode('/', $input->getArgument('repository'))[0];
+        $normalizedProvider = explode(
+            '/',
+            $input->hasArgument('repository') ?
+            $input->getArgument('repository') : ''
+        )[0];
         $normalizedMajorVersion = (int) str_replace(['^', '~'], '', $normalizedVersion);
         $isNetgenMedia = 'netgen' === $normalizedProvider;
 
@@ -103,7 +112,7 @@ class Initialize extends Command
 
         unset($selectedServices);
 
-        $eZMajorVersion = $this->getEzPlataformMajorVersion($input);
+        $eZMajorVersion = $this->getEzPlatformMajorVersion($input);
 
         // eZ Platform 1.x specific versions
         if (1 === $eZMajorVersion) {
@@ -159,6 +168,20 @@ class Initialize extends Command
         // no need for v2 nginx on v3
         if ($eZMajorVersion >= 3) {
             unlink("{$provisioningFolder}/dev/nginx/nginx_v2.conf");
+        }
+
+        // Ibexa >= 3.3.x , update composer to v2
+        if ($this->isIbexa($input)) {
+            $engineEntryPointPath = "{$provisioningFolder}/dev/engine/entrypoint.bash";
+            $engineEntryPointContent = file_get_contents($engineEntryPointPath);
+            file_put_contents(
+                $engineEntryPointPath,
+                str_replace(
+                    'self-update --1',
+                    'self-update --2',
+                    $engineEntryPointContent
+                )
+            );
         }
 
         // Clean the Compose File
@@ -251,7 +274,16 @@ class Initialize extends Command
             $initialdata = (false !== strpos($repository, 'ezplatform-ee') ? 'ezplatform-ee-clean' : 'clean');
         }
 
-        $executor->eZInstall($normalizedVersion, $repository, $initialdata);
+        if (!$this->isIbexa($input)) {
+            $executor->eZInstall($normalizedVersion, $repository, $initialdata);
+        } else {
+            // for sure it is wrong with ibexa/* so we change it by defaultc
+            if ('ezplatform-install' === $initialdata) {
+                $initialdata = str_replace('/', '-', $repository);
+            }
+            $executor->ibexaInstall($normalizedVersion, $repository, $initialdata);
+        }
+
         if ($compose->hasService('solr')) {
             $executor->eZInstallSolr();
         }

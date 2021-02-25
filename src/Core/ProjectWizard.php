@@ -54,19 +54,21 @@ class ProjectWizard
     {
         $this->mode = $this->getInitializationMode();
 
-        $configuration = [
+        return $this->getConfigurations($compose);
+    }
+
+    public function getConfigurations(DockerCompose $compose): array
+    {
+        return [
             $this->getNetworkName(),
             $this->getNetworkTCPPort(),
             $this->getComposerHttpBasicCredentials(),
             $this->getSelectedServices(
                 $compose->getServices(),
                 ['varnish', 'solr', 'adminer', 'redisadmin']
-            ),
-            $this->getProvisioningFolderName(),
+            ), $this->getProvisioningFolderName(),
             $this->getComposeFileName(),
         ];
-
-        return $configuration;
     }
 
     public function getInitializationMode(): string
@@ -78,7 +80,7 @@ class ProjectWizard
 eZ Launchpad will install a new architecture for you.
  Three modes are available:
   - <fg=cyan>{$standard}</>: All the services, no composer auth
-  - <fg=cyan>{$withComposer}</>: Standard with ability to provide Composer Auth, useful for eZ Platform Enterprise
+  - <fg=cyan>{$withComposer}</>: Standard with ability to provide Composer Auth, useful for eZ Platform or Ibexa
   - <fg=cyan>{$expert}</>: All the questions will be asked and you can select the services you want only
  Please select your <fg=yellow;options=bold>Init</>ialization mode
 END;
@@ -259,11 +261,17 @@ END;
 
     protected function isStandardMode(): bool
     {
-        return self::INIT_STD == $this->mode;
+        return self::INIT_STD === $this->mode;
     }
 
     protected function requireComposerAuth(): bool
     {
         return self::INIT_STD !== $this->mode;
+    }
+
+    //check if the version is greater than or equal to Ibexa 3.3
+    public function isFullIbexaPackage(): bool
+    {
+        return false !== strpos($this->getMode(), 'ibexa');
     }
 }
