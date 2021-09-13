@@ -54,11 +54,6 @@ jobs:
                 php: [7.3, 7.4, 8.0]
                 ezversion: [2.*, 3.*]
                 collection: [collection-2x.json]
-                exclude:
-                    - ezversion: 2.*
-                      collection: collection-1x.json
-                    - ezversion: 3.*
-                      collection: collection-1x.json
         steps:
             - uses: actions/checkout@v1
             - name: Setup PHP
@@ -73,7 +68,8 @@ jobs:
             - name: Status Info
               run: php bin/ez-prod ps
             - name: Verification using Postman
-              run: docker run --net=host -v $(pwd)/tests/postman:/etc/newman -t postman/newman_ubuntu1404 run ${{ matrix.collection }}
+              run:
+                docker run --net=host -v $(pwd)/tests/postman:/etc/newman -t postman/newman run ${{ matrix.collection }}
 
     ibexa:
         name: Ibexa
@@ -97,4 +93,4 @@ jobs:
             - name: Status Info
               run: php bin/ez-prod ps
             - name: Verification using Postman
-              run: docker run --net=host -v $(pwd)/tests/postman:/etc/newman -t postman/newman_ubuntu1404 run ${{ matrix.collection }}
+              run: docker run --net=host -v $(pwd)/tests/postman:/etc/newman -t postman/newman run ${{ matrix.collection }}
