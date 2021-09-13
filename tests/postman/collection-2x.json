@@ -14,7 +14,6 @@
                     "script": {
                         "type": "text/javascript",
                         "exec": [
-                            "tests[\"Page loaded\"] = responseBody.has(\"eZ Platform\") || responseBody.has(\"Ibexa\");",
                             "tests[\"Status code is 200\"] = responseCode.code === 200;"
                         ]
                     }
@@ -48,9 +47,6 @@
                         "id": "19d338c4-e169-49b3-a383-766756df60ce",
                         "type": "text/javascript",
                         "exec": [
-                            "tests[\"Page loaded\"] = responseBody.has(\"eZ Platform\") || responseBody.has(\"Ibexa\") ;",
-                            "tests[\"Page loaded 3\"] = responseBody.has(\"Password\");",
-                            "tests[\"Page loaded 4\"] = responseBody.has(\"Username\");",
                             "tests[\"Status code is 200\"] = responseCode.code === 200;"
                         ]
                     }

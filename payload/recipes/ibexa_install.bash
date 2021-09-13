@@ -31,7 +31,7 @@ echo "Installation Ibexa ($REPO - $VERSION) in the container"
 
 # Install ibexa/website-skeleton
 echo "Install ibexa/website-skeleton"
-$COMPOSER create-project --no-interaction ibexa/website-skeleton ezplatform $VERSION
+$COMPOSER create-project --no-interaction $REPO-skeleton ezplatform $VERSION
 cd ezplatform
 # Copy nginx conf
 echo "Getting the NGINX config"
@@ -50,25 +50,6 @@ echo "DATABASE_URL=\${DATABASE_PLATFORM}://\${DATABASE_USER}:\${DATABASE_PASSWOR
 if [ "$REPO" != "ibexa/oss" ]; then
     echo "configure auth updates.ibexa.co"
     $COMPOSER config repositories.ibexa composer https://updates.ibexa.co
-fi
-# Install package ( oss or content or commerce or experience )
-echo "Install package $REPO"
-$COMPOSER require $REPO
-
-# recipes:install ( content or commerce or experience )
-echo "recipes:install $REPO"
-# SUPER ULTRA TRICK
-# recipes:install  needs GIT!!!
-if [ ! -d .git ]; then
-    git init
-    git add .
-    git config user.email "ezlaunchpad@ibexa.co"
-    git config user.name "eZ Launchpad"
-    git commit -m "Fake commit that will be removed"
-    $COMPOSER recipes:install $REPO --force
-    rm -rf .git
-else
-    echo "There is a .git we don't take the risk to override it."
 fi
 
 MAJOR_VERSION=`echo $VERSION | cut -c 1-2`
