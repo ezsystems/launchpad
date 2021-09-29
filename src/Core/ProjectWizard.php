@@ -115,7 +115,7 @@ END;
 
         $message = 'What is the <fg=yellow;options=bold>host</> on which you want to add credentials?';
         $errorMessage = "The host MUST respect {$pattern}.";
-        $default = 'updates.ez.no';
+        $default = 'updates.ibexa.co';
         $host = $this->io->askQuestion($this->getQuestion($message, $default, $validatorHost, $errorMessage));
         $login = $this->io->askQuestion($this->getQuestion('Login?'));
         $password = $this->io->askQuestion($this->getQuestion('Password?'));
