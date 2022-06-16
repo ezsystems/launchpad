@@ -25,18 +25,13 @@ do
     mysql -h"${!DATABASE_HOST_VAR}" -u"${!DATABASE_USER_VAR}" -p"${!DATABASE_PASSWORD_VAR}" -e "CREATE DATABASE ${!DATABASE_NAME_VAR}"
 done
 
-if [ ! -d ezplatform ]; then
+if [ ! -d $PROJECTCMSROOT ]; then
     echo "Not managed yet."
     exit
 fi
 
-CONSOLE="bin/console"
-if [ -f ezplatform/app/console ]; then
-    CONSOLE="app/console"
-fi
-
 # Install
-cd ezplatform
+cd $PROJECTCMSROOT
 
 $COMPOSER install --no-interaction
 

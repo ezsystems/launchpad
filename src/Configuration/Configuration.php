@@ -58,6 +58,12 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
                 ->scalarNode('last_update_check')->defaultNull()->end()
+                ->arrayNode('project')
+                    ->addDefaultsIfNotSet()
+                        ->children()
+                            ->scalarNode('cms_version')->defaultValue('ibexa-4')->end()
+                    ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;

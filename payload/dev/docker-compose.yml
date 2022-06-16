@@ -5,7 +5,7 @@ services:
         volumes:
             - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro"
             - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/nginx/entrypoint.bash:/entrypoint.bash:ro"
-            - "${PROJECTCOMPOSEPATH}/ezplatform/doc/nginx/ez_params.d:/etc/nginx/ez_params.d:ro"
+            - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/nginx/include/ez_params.d:/etc/nginx/ez_params.d:ro"
         depends_on:
             - engine
         volumes_from:
@@ -27,7 +27,10 @@ services:
         shm_size: 754M
         environment:
             - COMPOSER_CACHE_DIR
+            - PROJECTCMSROOT
             - PROJECTMAPPINGFOLDER
+            - PROVISIONINGFOLDERNAME
+            - CONSOLE_PATH
             - DEV_UID
             - DEV_GID
             - XDEBUG_ENABLED
@@ -42,6 +45,7 @@ services:
             - "DATABASE_PASSWORD=ezplatform"
             - "SYMFONY_SECRET=eZlaunchpad20Secret09Dev83ModeZ"
             - "APP_SECRET=eZlaunchpad20Secret09Dev83ModeZ"
+            - "SOLR_VERSION=$SOLR_VERSION"
             - "DATABASE_HOST=db"
             - "CUSTOM_CACHE_POOL=singleredis"
             - "CACHE_HOST=redis"
@@ -54,7 +58,7 @@ services:
             - "APP_CACHE_DIR=/tmp/ezplatformcache/"
             - "APP_LOG_DIR=/tmp/ezplatformlogs/"
             - "HTTPCACHE_VARNISH_INVALIDATE_TOKEN=eZlaunchpad20Secret09Varnish"
-            - "SESSION_HANDLER_ID=ezplatform.core.session.handler.native_redis"
+            - "SESSION_HANDLER_ID=${PROJECT_SESSION_HANDLER_ID}"
             - "SESSION_SAVE_PATH=tcp://redis:6379"
     db:
         image: mariadb:10.3
@@ -73,7 +77,7 @@ services:
             - nginx
 
     solr:
-        image: solr:7.7
+        image: solr:$SOLR_VERSION
         volumes:
             - "${PROJECTCOMPOSEPATH}/${PROVISIONINGFOLDERNAME}/dev/solr/entrypoint.bash:/entrypoint.bash:ro"
         volumes_from:
@@ -86,7 +90,9 @@ services:
         environment:
             - DEV_UID
             - DEV_GID
+            - PROJECTCMSROOT
             - PROJECTMAPPINGFOLDER
+            - SOLR_VERSION=$SOLR_VERSION
             - SOLR_CORES=collection1
 
     # Mailcatcher

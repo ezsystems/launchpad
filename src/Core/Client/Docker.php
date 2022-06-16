@@ -45,6 +45,9 @@ class Docker
             'host-machine-mapping' => null,
             'provisioning-folder-name' => null,
             'composer-cache-dir' => null,
+            'project-cms-path-container' => '/var/www/html/project/ibexa',
+            'project-session-handler' => null,
+            'console-path' => '/var/www/html/project/ibexa/bin/console',
         ];
         $resolver->setDefaults($defaults);
         $resolver->setRequired(array_keys($defaults));
@@ -56,6 +59,9 @@ class Docker
         $resolver->setAllowedTypes('provisioning-folder-name', 'string');
         $resolver->setAllowedTypes('network-prefix-port', 'int');
         $resolver->setAllowedTypes('host-machine-mapping', ['null', 'string']);
+        $resolver->setAllowedTypes('project-cms-path-container', 'string');
+        $resolver->setAllowedTypes('project-session-handler', 'string');
+        $resolver->setAllowedTypes('console-path', 'string');
         $this->options = $resolver->resolve($options);
         $this->runner = $runner;
         $this->optimizer = $optimizer;
@@ -106,6 +112,21 @@ class Docker
     protected function getMachineMountPath(): string
     {
         return explode(':', $this->options['host-machine-mapping'])[1];
+    }
+
+    public function getProjectCmsPathContainer(): string
+    {
+        return $this->options['project-cms-path-container'];
+    }
+
+    protected function getProjectSessionHandler(): string
+    {
+        return $this->options['project-session-handler'];
+    }
+
+    public function getConsolePath(): string
+    {
+        return $this->options['console-path'];
     }
 
     public function start(string $service = '')
@@ -196,6 +217,9 @@ class Docker
                 'COMPOSER_CACHE_DIR' => '/var/www/composer_cache',
                 // where to mount the project root directory in the container - (will be mapped to host:project-path)
                 'PROJECTMAPPINGFOLDER' => $this->getProjectPathContainer(),
+                'PROJECTCMSROOT' => $this->getProjectCmsPathContainer(),
+                'PROJECT_SESSION_HANDLER_ID' => $this->getProjectSessionHandler(),
+                'CONSOLE_PATH' => $this->getConsolePath(),
                 // pass the Blackfire env variable here
                 'BLACKFIRE_CLIENT_ID' => getenv('BLACKFIRE_CLIENT_ID'),
                 'BLACKFIRE_CLIENT_TOKEN' => getenv('BLACKFIRE_CLIENT_TOKEN'),

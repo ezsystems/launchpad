@@ -77,7 +77,7 @@ jobs:
         strategy:
             matrix:
                 php: [7.4, 8.0]
-                ezversion: [3.*]
+                ezversion: [3.*, 4.*]
                 collection: [collection-2x.json]
         steps:
             - uses: actions/checkout@v1

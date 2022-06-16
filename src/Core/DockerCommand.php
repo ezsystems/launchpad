@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace eZ\Launchpad\Core;
 
+use eZ\Launchpad\Configuration\CmsVersionRegistry;
 use eZ\Launchpad\Core\Client\Docker;
 use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
@@ -33,6 +34,17 @@ abstract class DockerCommand extends Command
      */
     protected $taskExecutor;
 
+    /**
+     * @var CmsVersionRegistry
+     */
+    protected $cmsVersionRegistry;
+
+    public function __construct(CmsVersionRegistry $cmsVersionRegistry)
+    {
+        $this->cmsVersionRegistry = $cmsVersionRegistry;
+        parent::__construct();
+    }
+
     protected function configure(): void
     {
         $this->addOption('env', 'e', InputOption::VALUE_REQUIRED, 'The Environment name.', 'dev');
@@ -55,6 +67,8 @@ abstract class DockerCommand extends Command
         parent::initialize($input, $output);
         $this->environment = $input->getOption('env');
         $this->projectConfiguration->setEnvironment($this->environment);
+        $versionConfig = $this->cmsVersionRegistry->getVersion($this->projectConfiguration->get('project.cms_version'));
+
         $fs = new Filesystem();
         $currentPwd = $this->projectPath;
         $provisioningFolder = $this->projectConfiguration->get('provisioning.folder_name');
@@ -74,6 +88,9 @@ abstract class DockerCommand extends Command
             'project-path' => $this->projectPath,
             'provisioning-folder-name' => $provisioningFolder,
             'composer-cache-dir' => $this->projectConfiguration->get('docker.host_composer_cache_dir'),
+            'project-cms-path-container' => $versionConfig->cmsRoot,
+            'project-session-handler' => $versionConfig->sessionHandler,
+            'console-path' => $versionConfig->consolePath,
         ];
 
         $this->dockerClient = new Docker($options, new ProcessRunner(), $this->optimizer);

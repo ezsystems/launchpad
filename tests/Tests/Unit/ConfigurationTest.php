@@ -29,7 +29,10 @@ class ConfigurationTest extends TestCase
         "provisioning" => [
             "folder_name" => "provisioning"
         ],
-        "last_update_check" => null
+        "last_update_check" => null,
+        "project" => [
+            "cms_version" => 'ibexa-4'
+        ]
     ];
 
     protected function process($configs): array

@@ -9,12 +9,19 @@ declare(strict_types=1);
 
 namespace eZ\Launchpad\Tests\Command;
 
+use eZ\Launchpad\Configuration\CmsVersionRegistry;
 use eZ\Launchpad\Core\DockerCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class TestDockerClient extends DockerCommand
 {
+
+    public function __construct()
+    {
+        parent::__construct(new CmsVersionRegistry());
+    }
+
     protected function configure(): void
     {
         parent::configure();

@@ -173,15 +173,15 @@ class TaskExecutor
 
     public function runSymfomyCommand(string $arguments): Process
     {
-        $consolePath = $this->dockerClient->isEzPlatform2x() ? 'bin/console' : 'app/console';
+        $consolePath = $this->dockerClient->getConsolePath();
 
-        return $this->execute("ezplatform/{$consolePath} {$arguments}");
+        return $this->globalExecute("{$consolePath} {$arguments}");
     }
 
     public function runComposerCommand(string $arguments): Process
     {
         return $this->globalExecute(
-            '/usr/local/bin/composer --working-dir='.$this->dockerClient->getProjectPathContainer().'/ezplatform '.
+            '/usr/local/bin/composer --working-dir='.$this->dockerClient->getProjectCmsPathContainer().' '.
             $arguments
         );
     }

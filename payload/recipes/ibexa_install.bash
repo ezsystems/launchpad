@@ -8,7 +8,6 @@ REPO=$1
 VERSION=$2
 INIT_DATA=$3
 DATABASE_PREFIXES=${DATABASE_PREFIXES:-DATABASE}
-CONSOLE="bin/console"
 
 for prefix in $DATABASE_PREFIXES
 do
@@ -29,18 +28,18 @@ done
 
 echo "Installation Ibexa ($REPO - $VERSION) in the container"
 
-# Install ibexa/website-skeleton
-echo "Install ibexa/website-skeleton"
-$COMPOSER create-project --no-interaction $REPO-skeleton ezplatform $VERSION
-cd ezplatform
 # Copy nginx conf
 echo "Getting the NGINX config"
 wget https://github.com/ibexa/docker/archive/main.zip
 unzip main.zip
-mkdir -p doc
-cp -r docker-main/templates/nginx doc/
+cp -r docker-main/templates/nginx/ $PROJECTMAPPINGFOLDER/$PROVISIONINGFOLDERNAME/dev/nginx/include
 rm -rf docker-main
 rm main.zip
+
+# Install ibexa/website-skeleton
+echo "Install $REPO-skeleton"
+$COMPOSER create-project --no-interaction $REPO-skeleton $PROJECTCMSROOT $VERSION
+cd $PROJECTCMSROOT
 
 # Add .env.local to set database configuration
 echo "Add .env.local to set database configuration"
@@ -64,11 +63,11 @@ echo "Installation Ibexa $REPO OK"
 if $COMPOSER run-script -l | grep -q " $INIT_DATA "; then
    $COMPOSER run-script $INIT_DATA
 else
-    echo "php bin/console ibexa:install "
-    $PHP $CONSOLE ibexa:install $INIT_DATA
+    echo "php $CONSOLE_PATH ibexa:install "
+    $PHP $CONSOLE_PATH ibexa:install $INIT_DATA
 fi
-echo "php bin/console ibexa:graphql:generate-schema"
-$PHP $CONSOLE ibexa:graphql:generate-schema
+echo "php $CONSOLE_PATH ibexa:graphql:generate-schema"
+$PHP $CONSOLE_PATH ibexa:graphql:generate-schema
 echo "composer run post-update-cmd"
 $COMPOSER run-script post-install-cmd
 

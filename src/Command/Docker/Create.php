@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace eZ\Launchpad\Command\Docker;
 
+use eZ\Launchpad\Configuration\CmsVersionRegistry;
 use eZ\Launchpad\Core\DockerCommand;
 use eZ\Launchpad\Core\ProjectStatusDumper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,9 +22,9 @@ final class Create extends DockerCommand
      */
     protected $projectStatusDumper;
 
-    public function __construct(ProjectStatusDumper $projectStatusDumper)
+    public function __construct(CmsVersionRegistry $cmsVersionRegistry, ProjectStatusDumper $projectStatusDumper)
     {
-        parent::__construct();
+        parent::__construct($cmsVersionRegistry);
         $this->projectStatusDumper = $projectStatusDumper;
     }
 

@@ -43,24 +43,24 @@ fi
 
 STORAGE_FILE_PATH="$DUMP_DIR/$STORAGE_FILE_NAME.tar.gz"
 
-if [ ! -d ezplatform ]; then
+if [ ! -d $PROJECTCMSROOT ]; then
     echo "Not managed yet."
     exit
 fi
 
 if [ -f $STORAGE_FILE_PATH ]; then
-    if [ -d ezplatform/web ]; then
-        if [ -d "ezplatform/web/var" ]; then
-            rm -rf ezplatform/web/var
+    if [ -d $PROJECTCMSROOT/web ]; then
+        if [ -d "$PROJECTCMSROOT/web/var" ]; then
+            rm -rf $PROJECTCMSROOT/web/var
         fi
-        tar xvzf $STORAGE_FILE_PATH -C ezplatform/web/
+        tar xvzf $STORAGE_FILE_PATH -C $PROJECTCMSROOT/web/
         echo "Storage imported to web/."
     fi
-    if [ -d ezplatform/public ]; then
-        if [ -d "ezplatform/public/var" ]; then
-            rm -rf ezplatform/public/var
+    if [ -d $PROJECTCMSROOT/public ]; then
+        if [ -d "${PROJECTCMSROOT}/public/var" ]; then
+            rm -rf $PROJECTCMSROOT/public/var
         fi
-        tar xvzf $STORAGE_FILE_PATH -C ezplatform/public/
+        tar xvzf $STORAGE_FILE_PATH -C $PROJECTCMSROOT/public/
         echo "Storage imported to public/."
     fi
 fi
