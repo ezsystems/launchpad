@@ -4,9 +4,17 @@
 DESTINATION_EZ="/ezsolr/server/ez"
 DESTINATION_TEMPLATE="${DESTINATION_EZ}/template"
 if [ ! -d ${DESTINATION_TEMPLATE} ]; then
-    cd $PROJECTMAPPINGFOLDER/ezplatform
+    cd $PROJECTCMSROOT
     mkdir -p ${DESTINATION_TEMPLATE}
-    cp -R vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/* ${DESTINATION_TEMPLATE}
+
+    if [ -f ./vendor/ibexa/solr/bin/generate-solr-config.sh ]; then
+        ./vendor/ibexa/solr/bin/generate-solr-config.sh \
+          --destination-dir=$DESTINATION_TEMPLATE \
+          --solr-version=$SOLR_VERSION \
+          --force
+    else
+        cp -R vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/* ${DESTINATION_TEMPLATE}
+    fi
 fi
 
 # Check for solr config folder (changes btw 6 and 7)

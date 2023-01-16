@@ -91,6 +91,7 @@ class ProjectStatusDumper
     protected function dumpServiceAccess(): void
     {
         $portPrefix = $this->projectConfiguration->get('docker.network_prefix_port');
+        $cmsVersion = $this->projectConfiguration->get('project.cms_version');
         $dump = function ($title, $port, $suffix = '', $proto = 'http') use ($portPrefix) {
             $this->io->writeln(
                 "<fg=white;options=bold>{$title}: </>".
@@ -100,9 +101,9 @@ class ProjectStatusDumper
         };
         $this->io->title('Service Access');
 
-        $adminURI = '/ez';
-        if ($this->dockerClient->isEzPlatform2x()) {
-            $adminURI = '/admin';
+        $adminURI = '/admin';
+        if (1 === $cmsVersion) {
+            $adminURI = '/ez';
         }
         $services = $this->projectConfiguration->getDockerCompose()->getServices();
         if (isset($services['nginx'])) {

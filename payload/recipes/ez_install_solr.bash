@@ -9,9 +9,18 @@ PHP="php"
 
 if [ $ACTION == "COMPOSER_INSTALL" ]; then
     # it is run on the engine
-    cd $PROJECTMAPPINGFOLDER/ezplatform
+    cd $PROJECTCMSROOT
     mkdir -p $DESTINATION_TEMPLATE
-    cp -R vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/* $DESTINATION_TEMPLATE
+    if [ -f ./vendor/ibexa/solr/bin/generate-solr-config.sh ]; then
+        echo "Generating configuration for SOLR $SOLR_VERSION"
+        ./vendor/ibexa/solr/bin/generate-solr-config.sh \
+        --destination-dir=$DESTINATION_TEMPLATE \
+        --solr-version=$SOLR_VERSION \
+        --force
+    else
+        echo "Copying configuration for SOLR $SOLR_VERSION"
+        cp -R vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/* ${DESTINATION_TEMPLATE}
+    fi
     # simplest way to allow solr to add the conf here... from its own container
     # We could do better by extending the Dockerfile and build.. but it is also less "generic"
     chmod -R 777 $DESTINATION_EZ
@@ -26,12 +35,8 @@ if [ $ACTION == "INDEX" ]; then
     # wait cores
     sleep 15
     echo "Solr is running"
-    cd $PROJECTMAPPINGFOLDER/ezplatform
-    CONSOLE="bin/console"
-    if [ -f app/console ]; then
-        CONSOLE="app/console"
-    fi
-    $PHP $CONSOLE --env=prod ezplatform:reindex
+    cd $PROJECTCMSROOT
+    $PHP $CONSOLE_PATH --env=prod ezplatform:reindex
 fi
 
 if [ $ACTION == "CREATE_CORE" ]; then

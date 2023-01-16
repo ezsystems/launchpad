@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace eZ\Launchpad\Command\Docker;
 
+use eZ\Launchpad\Configuration\CmsVersionRegistry;
 use eZ\Launchpad\Console\Application;
 use eZ\Launchpad\Core\Client\Docker;
 use eZ\Launchpad\Core\Command;
@@ -29,10 +30,16 @@ class Initialize extends Command
      */
     protected $projectStatusDumper;
 
-    public function __construct(ProjectStatusDumper $projectStatusDumper)
+    /**
+     * @var CmsVersionRegistry
+     */
+    protected $cmsVersionRegistry;
+
+    public function __construct(ProjectStatusDumper $projectStatusDumper, CmsVersionRegistry $cmsVersionRegistry)
     {
         parent::__construct();
         $this->projectStatusDumper = $projectStatusDumper;
+        $this->cmsVersionRegistry = $cmsVersionRegistry;
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output): void
@@ -61,7 +68,7 @@ class Initialize extends Command
         return false !== strpos($input->getArgument('repository'), 'ibexa');
     }
 
-    private function getEzPlatformMajorVersion(InputInterface $input): int
+    private function getEzPlatformMajorVersion(InputInterface $input): string
     {
         $normalizedVersion = trim($input->getArgument('version'), 'v');
         $normalizedProvider = explode(
@@ -76,7 +83,7 @@ class Initialize extends Command
             ++$normalizedMajorVersion;
         }
 
-        return $normalizedMajorVersion;
+        return sprintf('%s-%d', $normalizedProvider, $normalizedMajorVersion);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -113,76 +120,65 @@ class Initialize extends Command
         unset($selectedServices);
 
         $eZMajorVersion = $this->getEzPlatformMajorVersion($input);
+        $this->projectConfiguration->setLocal('project.cms_version', $eZMajorVersion);
 
-        // eZ Platform 1.x specific versions
-        if (1 === $eZMajorVersion) {
-            // PHP 7.2
-            $enginDockerFilePath = "{$provisioningFolder}/dev/engine/Dockerfile";
-            $engineDockerFileContent = file_get_contents($enginDockerFilePath);
-            file_put_contents(
-                $enginDockerFilePath,
-                str_replace(
-                    'docker-php-ez-engine:7.4',
-                    'docker-php-ez-engine:7.2',
-                    $engineDockerFileContent
-                )
-            );
-        }
+        $versionConfig = $this->cmsVersionRegistry->getVersion($eZMajorVersion);
 
-        // eZ Platform 2.x specific versions
-        if (2 === $eZMajorVersion) {
-            // PHP 7.3
-            $enginDockerFilePath = "{$provisioningFolder}/dev/engine/Dockerfile";
-            $engineDockerFileContent = file_get_contents($enginDockerFilePath);
-            file_put_contents(
-                $enginDockerFilePath,
-                str_replace(
-                    'docker-php-ez-engine:7.4',
-                    'docker-php-ez-engine:7.3',
-                    $engineDockerFileContent
-                )
-            );
-        }
+        // Set php version according to CMS version
+        $enginDockerFilePath = "{$provisioningFolder}/dev/engine/Dockerfile";
+        $engineDockerFileContent = file_get_contents($enginDockerFilePath);
+        file_put_contents(
+            $enginDockerFilePath,
+            str_replace(
+                '$PHP_VERSION',
+                (string) $versionConfig->phpVersion,
+                $engineDockerFileContent
+            )
+        );
 
         // eZ Platform < 3 has another vhost
-        if ($eZMajorVersion < 3) {
-            rename("{$provisioningFolder}/dev/nginx/nginx_v2.conf", "{$provisioningFolder}/dev/nginx/nginx.conf");
+        $vhostConfFiles = [
+            'ezsystems-2' => "{$provisioningFolder}/dev/nginx/nginx_v2.conf",
+            'ezsystems-3' => "{$provisioningFolder}/dev/nginx/nginx_v2.conf",
+            'ibexa-3' => "{$provisioningFolder}/dev/nginx/nginx_v3.conf",
+            'ibexa-4' => "{$provisioningFolder}/dev/nginx/nginx_v4.conf",
+        ];
+        if (isset($vhostConfFiles[$eZMajorVersion])) {
+            rename($vhostConfFiles[$eZMajorVersion], "{$provisioningFolder}/dev/nginx/nginx.conf");
+        }
+        foreach ($vhostConfFiles as $vhostCmsVersion => $vhostConfFile) {
+            if ($vhostCmsVersion !== $eZMajorVersion && file_exists($vhostConfFile)) {
+                unlink($vhostConfFile);
+            }
         }
 
         // eZ Platform < 3 only support solr 6. Replace unsupported solr 7.7 by 6.6.2
-        if ($compose->hasService('solr') && ($eZMajorVersion < 3)) {
+        if ($compose->hasService('solr')) {
             $composeFilePath = "{$provisioningFolder}/dev/{$composeFileName}";
             $compose->dump($composeFilePath);
             $composeFileContent = file_get_contents($composeFilePath);
             file_put_contents(
                 $composeFilePath,
                 str_replace(
-                    'solr:7.7',
-                    'solr:6.6.2',
+                    '$SOLR_VERSION',
+                    (string) $versionConfig->solrVersion,
                     $composeFileContent
                 )
             );
             $compose = new DockerCompose($composeFilePath);
         }
 
-        // no need for v2 nginx on v3
-        if ($eZMajorVersion >= 3) {
-            unlink("{$provisioningFolder}/dev/nginx/nginx_v2.conf");
-        }
-
         // Ibexa >= 3.3.x , update composer to v2
-        if ($this->isIbexa($input)) {
-            $engineEntryPointPath = "{$provisioningFolder}/dev/engine/entrypoint.bash";
-            $engineEntryPointContent = file_get_contents($engineEntryPointPath);
-            file_put_contents(
-                $engineEntryPointPath,
-                str_replace(
-                    'self-update --1',
-                    'self-update --2',
-                    $engineEntryPointContent
-                )
-            );
-        }
+        $engineEntryPointPath = "{$provisioningFolder}/dev/engine/entrypoint.bash";
+        $engineEntryPointContent = file_get_contents($engineEntryPointPath);
+        file_put_contents(
+            $engineEntryPointPath,
+            str_replace(
+                '$COMPOSER_VERSION',
+                (string) $versionConfig->composerVersion,
+                $engineEntryPointContent
+            )
+        );
 
         // Clean the Compose File
         $compose->removeUselessEnvironmentsVariables();
@@ -216,6 +212,10 @@ class Initialize extends Command
             'provisioning-folder-name' => $provisioningName,
             'host-machine-mapping' => $this->projectConfiguration->get('docker.host_machine_mapping'),
             'composer-cache-dir' => $this->projectConfiguration->get('docker.host_composer_cache_dir'),
+            'project-cms-path-container' => $versionConfig->cmsRoot,
+            'project-session-handler' => $versionConfig->sessionHandler,
+            'project-session-handler' => $versionConfig->sessionHandler,
+            'console-path' => $versionConfig->consolePath,
         ];
         $dockerClient = new Docker($options, new ProcessRunner(), $this->optimizer);
         $this->projectStatusDumper->setDockerClient($dockerClient);

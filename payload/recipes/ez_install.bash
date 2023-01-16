@@ -29,8 +29,10 @@ done
 echo "Installation eZ Platform ($REPO:$VERSION:$INIT_DATA) in the container"
 
 # Install
-$COMPOSER create-project --no-interaction $REPO ezplatform $VERSION
-cd ezplatform
+$COMPOSER create-project --no-interaction $REPO $PROJECTCMSROOT $VERSION
+cd $PROJECTCMSROOT
+
+cp -r doc/nginx/ $PROJECTMAPPINGFOLDER/$PROVISIONINGFOLDERNAME/dev/nginx/include
 
 MAJOR_VERSION=`echo $VERSION | cut -c 1-2`
 
@@ -38,17 +40,11 @@ MAJOR_VERSION=`echo $VERSION | cut -c 1-2`
 ## Folder
 rm -rf bin/.ci bin/.travis
 
-CONSOLE="bin/console"
-if [ -f app/console ]; then
-    CONSOLE="app/console"
-fi
-
-
 # Prefer install via composer alias (added in v2.2, required for eZ Commerce)
 if $COMPOSER run-script -l | grep -q " $INIT_DATA "; then
    $COMPOSER run-script $INIT_DATA
 else
-    $PHP $CONSOLE ezplatform:install $INIT_DATA
+    $PHP $CONSOLE_PATH ezplatform:install $INIT_DATA
 fi
 
 

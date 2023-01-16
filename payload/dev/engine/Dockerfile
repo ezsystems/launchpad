@@ -1,4 +1,4 @@
-FROM plopix/docker-php-ez-engine:7.4
+FROM plopix/docker-php-ez-engine:$PHP_VERSION
 MAINTAINER Plopix
 
 ENV XDEBUG_ENABLED=0

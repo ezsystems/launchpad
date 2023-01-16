@@ -1,6 +1,47 @@
 ---
 parameters:
     github_release_url: "https://api.github.com/repos/ezsystems/launchpad/releases?draft=false&prerelease=false"
+    cms_version_configs:
+        ezsystems-1:
+            php_version: "7.2"
+            solr_version: "6.6.2"
+            composer_version: 1
+            cms_root: /var/www/html/project/ezplatform
+            document_root: /var/www/html/project/ezplatform/web
+            console_path: /var/www/html/project/ezplatform/app/console
+            session_handler: 'ezplatform.core.session.handler.native_redis'
+        ezsystems-2:
+            php_version: "7.3"
+            solr_version: "6.6.2"
+            composer_version: 1
+            cms_root: /var/www/html/project/ezplatform
+            document_root: /var/www/html/project/ezplatform/web
+            console_path: /var/www/html/project/ezplatform/bin/console
+            session_handler: 'ezplatform.core.session.handler.native_redis'
+        ezsystems-3:
+            php_version: "7.3"
+            solr_version: "6.6.2"
+            composer_version: 1
+            cms_root: /var/www/html/project/ezplatform
+            document_root: /var/www/html/project/ezplatform/web
+            console_path: /var/www/html/project/ezplatform/bin/console
+            session_handler: 'ezplatform.core.session.handler.native_redis'
+        ibexa-3:
+            php_version: "7.4"
+            solr_version: "7.7.3"
+            composer_version: 2
+            cms_root: /var/www/html/project/ezplatform
+            document_root: /var/www/html/project/ezplatform/public
+            console_path: /var/www/html/project/ezplatform/bin/console
+            session_handler: 'ezplatform.core.session.handler.native_redis'
+        ibexa-4:
+            php_version: "8.1"
+            solr_version: "7.7.3"
+            composer_version: 2
+            cms_root: /var/www/html/project/ibexa
+            document_root: /var/www/html/project/ibexa/public
+            console_path: /var/www/html/project/ibexa/bin/console
+            session_handler: 'Ibexa\Bundle\Core\Session\Handler\NativeSessionHandler'
 
 services:
 
@@ -41,3 +82,7 @@ services:
 
     eZ\Launchpad\Core\OSX\Optimizer\NFSVolumes:
         tags: [ezlaunchpad.osx.optimizer]
+
+    eZ\Launchpad\Configuration\CmsVersionRegistry:
+        arguments:
+            $config: '%cms_version_configs%'

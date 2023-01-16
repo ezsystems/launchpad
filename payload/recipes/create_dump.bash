@@ -20,16 +20,16 @@ do
     DATABASE_HOST_VAR=${prefix}_HOST
     DATABASE_USER_VAR=${prefix}_USER
     DATABASE_PASSWORD_VAR=${prefix}_PASSWORD
-    
+
     # Wait for the DB
     while ! mysqladmin ping -h"${!DATABASE_HOST_VAR}" -u"${!DATABASE_USER_VAR}" -p"${!DATABASE_PASSWORD_VAR}" --silent; do
         echo -n "."
         sleep 1
     done
     echo ""
-    
+
     DB_FILE_NAME="${!DATABASE_NAME_VAR}"
-    
+
     MYSQLDUMP="mysqldump -h${!DATABASE_HOST_VAR} -u${!DATABASE_USER_VAR} -p${!DATABASE_PASSWORD_VAR}"
 
     echo "Dumping ${!DATABASE_NAME_VAR} database."
@@ -45,15 +45,15 @@ if [ "$2" != "" ]; then
     STORAGE_FILE_NAME="$2_storage"
 fi
 
-if [ -d $PROJECTMAPPINGFOLDER/ezplatform/web/var ]; then
-    cd $PROJECTMAPPINGFOLDER/ezplatform/web
+if [ -d $PROJECTCMSROOT/web/var ]; then
+    cd $PROJECTCMSROOT/web
     tar czvf $DUMP_DIR/$STORAGE_FILE_NAME.tar.gz var/
     cd -
     echo "Storage dumped from web/."
 fi
 
-if [ -d $PROJECTMAPPINGFOLDER/ezplatform/public/var ]; then
-    cd $PROJECTMAPPINGFOLDER/ezplatform/public
+if [ -d $PROJECTCMSROOT/public/var ]; then
+    cd $PROJECTCMSROOT/public
     tar czvf $DUMP_DIR/$STORAGE_FILE_NAME.tar.gz var/
     cd -
     echo "Storage dumped from public/."
